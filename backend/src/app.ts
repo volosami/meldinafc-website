@@ -3,7 +3,7 @@ import cors from "cors";
 import { pinoHttp } from "pino-http";
 import { logger } from "./config/logger.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
-import { healthRouter } from "./routes/health.routes.js";
+import { apiRouter } from "./routes/index.js";
 
 export const app = express();
 
@@ -26,8 +26,8 @@ app.use(
   })
 );
 
-// Rotas Base
-app.use("/api", healthRouter);
+// Rotas Base da API
+app.use("/api", apiRouter);
 
 // Handler global de erros
 app.use(errorHandler);
