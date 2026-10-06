@@ -1,8 +1,91 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Topbar } from "./components/layout/Topbar";
+import { Header } from "./components/layout/Header";
+import { Footer } from "./components/layout/Footer";
+import { CartDrawer } from "./components/layout/CartDrawer";
+import { CartProvider } from "./context/CartContext";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
+
+// Páginas Públicas
+import { Home } from "./pages/Home";
+import { Clube } from "./pages/Clube";
+import { Elenco } from "./pages/Elenco";
+import { Jogos } from "./pages/Jogos";
+import { Noticias } from "./pages/Noticias";
+import { NoticiaDetalhe } from "./pages/NoticiaDetalhe";
+import { Socio } from "./pages/Socio";
+import { Loja } from "./pages/Loja";
+import { Tv } from "./pages/Tv";
+
+// Painel Admin
+import { AdminLogin } from "./pages/admin/AdminLogin";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
+import { AdminNoticias } from "./pages/admin/AdminNoticias";
+import { AdminJogos } from "./pages/admin/AdminJogos";
+import { AdminElenco } from "./pages/admin/AdminElenco";
+import { AdminSocios } from "./pages/admin/AdminSocios";
+import { AdminLayout } from "./components/admin/AdminLayout";
+import { ProtectedRoute } from "./components/admin/ProtectedRoute";
+
+const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
+  if (isAdmin) {
+    return <>{children}</>;
+  }
+
+  return (
+    <>
+      <Topbar />
+      <Header />
+      <main>{children}</main>
+      <Footer />
+      <CartDrawer />
+    </>
+  );
+};
+
 export function App() {
   return (
-    <div className="min-h-screen bg-noite text-white flex flex-col items-center justify-center">
-      <h1 className="font-display text-5xl text-ouro uppercase tracking-wider">Meldina FC</h1>
-      <p className="font-regal text-sm text-ouro-2 mt-2">Muito além do jogo</p>
-    </div>
+    <AdminAuthProvider>
+      <CartProvider>
+        <Router>
+          <PublicLayout>
+            <Routes>
+              {/* Rotas Públicas */}
+              <Route path="/" element={<Home />} />
+              <Route path="/clube" element={<Clube />} />
+              <Route path="/elenco" element={<Elenco />} />
+              <Route path="/jogos" element={<Jogos />} />
+              <Route path="/noticias" element={<Noticias />} />
+              <Route path="/noticias/:slug" element={<NoticiaDetalhe />} />
+              <Route path="/socio" element={<Socio />} />
+              <Route path="/loja" element={<Loja />} />
+              <Route path="/tv" element={<Tv />} />
+
+              {/* Rota de Login Admin */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+
+              {/* Rotas Administrativas Protegidas */}
+              <Route path="/admin" element={<ProtectedRoute />}>
+                <Route element={<AdminLayout />}>
+                  <Route index element={<Navigate to="/admin/dashboard" replace />} />
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="noticias" element={<AdminNoticias />} />
+                  <Route path="jogos" element={<AdminJogos />} />
+                  <Route path="elenco" element={<AdminElenco />} />
+                  <Route path="socios" element={<AdminSocios />} />
+                </Route>
+              </Route>
+
+              {/* Fallback */}
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+          </PublicLayout>
+        </Router>
+      </CartProvider>
+    </AdminAuthProvider>
   );
 }
