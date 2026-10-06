@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jogos e Classificação | Meldina FC</title>
+  <meta name="description" content="Calendário, resultados e classificação do Meldina FC.">
+  <meta name="theme-color" content="#040720">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@600;700&family=DM+Serif+Display&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="jogos">
+  <div id="site-header"></div>
+  <main>
+    <section class="page-hero">
+      <img class="page-hero__mark" src="assets/img/monograma-outline.png" alt="">
+      <div class="wrap">
+        <nav class="breadcrumb" aria-label="Você está em"><a href="index.html">Início</a><span>/</span><span>Jogos</span></nav>
+        <p class="eyebrow">Temporada 2026</p>
+        <h1 class="display">Jogos</h1>
+        <p>Calendário completo, resultados e a classificação da Série A do Pro Clubs. Garanta seu ingresso para os jogos na Lovebomb Arena.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="flex-between" style="margin-bottom:32px">
+          <div class="tabs" id="fxTabs">
+            <button class="tab is-active" data-f="cal">Próximos jogos</button>
+            <button class="tab" data-f="res">Resultados</button>
+          </div>
+          <span class="muted" style="font-size:.84rem">Horários de Brasília · sujeitos a alteração</span>
+        </div>
+        <div class="fixtures" id="fixtures"></div>
+      </div>
+    </section>
+
+    <section class="section" id="classificacao" style="background:var(--noite-2)">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">Série A · após a 6ª rodada</p><h2 class="display">Pro Clubs</h2></div>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead><tr><th>#</th><th>Clube</th><th>Pts</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>Últimos 5</th></tr></thead>
+            <tbody id="standings"></tbody>
+          </table>
+        </div>
+        <div class="legend">
+          <span><i style="background:#1f8a4c"></i> Classificação aos playoffs do título</span>
+          <span><i style="background:var(--grena-2)"></i> Rebaixamento</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <div class="cta-band__img"><img src="assets/players/lacerda-78.jpg" alt=""></div>
+      <div class="wrap">
+        <p class="eyebrow">Lovebomb Arena · Vamo Meldina</p>
+        <h2 class="display">Seu lugar é na arquibancada</h2>
+        <p>membros do Clube Meldina compram antes e pagam até 50% menos. Faça parte e nunca mais fique de fora de um jogo em casa.</p>
+        <a class="btn" href="socio.html">Quero ser sócio <span data-icon="arrow"></span></a>
+      </div>
+    </section>
+  </main>
+  <div id="site-footer"></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

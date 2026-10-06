@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meldina FC | Site Oficial</title>
+  <meta name="description" content="Site oficial do Meldina Futebol Clube. Notícias, jogos, elenco, Meldina TV, loja oficial e Clube Meldina.">
+  <meta name="theme-color" content="#040720">
+  <link rel="icon" href="assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Cinzel:wght@600;700&family=DM+Serif+Display&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="inicio">
+  <div id="site-header"></div>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="hero" aria-label="Destaques">
+      <img class="hero__bgmark" src="assets/img/monograma-outline.png" alt="">
+      <div class="hero__grain"></div>
+      <div class="hero__slides wrap">
+        <article class="hero__slide">
+          <div class="hero__copy">
+            <p class="eyebrow">Pro Clubs · Série A 2026</p>
+            <h1 class="display">Muito além<br><em>do jogo</em></h1>
+            <p>Campeão da Série B em 2025, o Meldina perdeu a estreia na elite — e respondeu com cinco vitórias seguidas e a liderança. No domingo, 4 de outubro, tem clássico contra o vice-líder De Sola.</p>
+            <div class="hero__actions">
+              <a class="btn" href="noticia.html?id=vitoria-sete-lagos">Leia o relato <span data-icon="arrow"></span></a>
+              <a class="btn btn--ghost" href="jogos.html">Próximos jogos</a>
+            </div>
+          </div>
+          <div class="hero__media"><span class="hero__number">9</span><img src="assets/players/almeida-9.jpg" alt="Almeida, camisa 9 do Meldina FC"></div>
+        </article>
+        <article class="hero__slide">
+          <div class="hero__copy">
+            <p class="eyebrow">Nova camisa II · Lider</p>
+            <h2 class="display">A coroa<br><em>pesa</em></h2>
+            <p>Branca, com gola e punhos em grená e ouro. A nova camisa II do Meldina chegou para a estreia na elite — já à venda na Loja Oficial.</p>
+            <div class="hero__actions">
+              <a class="btn" href="loja.html">Comprar agora <span data-icon="arrow"></span></a>
+              <a class="btn btn--ghost" href="noticia.html?id=camisa-2026">Conheça os detalhes</a>
+            </div>
+          </div>
+          <div class="hero__media hero__media--photo"><span class="hero__number">II</span><img src="assets/img/camisa-2-modelo.jpg" alt="Jogador do Meldina com a nova camisa II branca"></div>
+        </article>
+        <article class="hero__slide">
+          <div class="hero__copy">
+            <p class="eyebrow">Programa oficial de sócios</p>
+            <h2 class="display">Clube<br><em>Meldina</em></h2>
+            <p>Prioridade na compra de ingressos, até 50% de desconto nos jogos, 15% off na loja e experiências exclusivas com o elenco.</p>
+            <div class="hero__actions">
+              <a class="btn" href="socio.html">Quero ser sócio <span data-icon="arrow"></span></a>
+              <a class="btn btn--ghost" href="socio.html#planos">Ver planos</a>
+            </div>
+          </div>
+          <div class="hero__media"><span class="hero__number">10</span><img src="assets/players/carrijo-10.jpg" alt="Carrijo, camisa 10 do Meldina FC"></div>
+        </article>
+      </div>
+      <div class="hero__nav">
+        <div class="wrap">
+          <button class="hero__tab"><small>Futebol</small><span>Campeão da Série B, líder na elite</span></button>
+          <button class="hero__tab"><small>Loja</small><span>Nova camisa II: a coroa pesa</span></button>
+          <button class="hero__tab"><small>Clube Meldina</small><span>Planos desde R$ 19,90</span></button>
+        </div>
+      </div>
+    </section>
+
+    <div class="ticker" aria-hidden="true"><div class="ticker__track" id="ticker"></div></div>
+
+    <!-- MATCH CENTER -->
+    <section class="matchbar" aria-label="Central de jogos"><div class="wrap" id="matchcenter"></div></section>
+
+    <!-- TROFÉU -->
+    <a class="champ-band" href="clube.html#trofeus">
+      <div class="wrap">
+        <span class="champ-band__cup" data-trophy></span>
+        <span><small>Pro Clubs · 2025</small><b>Campeão da Série B</b></span>
+        <span class="champ-band__txt">O primeiro título da nossa história. Agora, a elite.</span>
+        <span class="link-arrow">Sala de troféus <span data-icon="arrow"></span></span>
+      </div>
+    </a>
+
+    <!-- NOTÍCIAS -->
+    <section class="section section--creme">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">Últimas</p><h2 class="display">Notícias</h2></div>
+          <a class="link-arrow" href="noticias.html">Todas as notícias <span data-icon="arrow"></span></a>
+        </div>
+        <div class="news-grid" id="homeNews"></div>
+      </div>
+    </section>
+
+    <!-- ELENCO -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">Temporada 2026</p><h2 class="display">Nosso elenco</h2></div>
+          <a class="link-arrow" href="elenco.html">Elenco completo <span data-icon="arrow"></span></a>
+        </div>
+        <div class="squad-rail" id="homeSquad"></div>
+      </div>
+    </section>
+
+    <!-- MELDINA TV -->
+    <section class="section tv">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <img class="tv__logo" src="assets/img/mtv-white.png" alt="Meldina TV">
+            <p class="muted" style="margin:14px 0 0;max-width:460px">MFC News, Meldcast, bastidores e melhores momentos. O canal oficial do Meldina FC no YouTube.</p>
+          </div>
+          <a class="btn" href="https://www.youtube.com/@MeldinaTV" target="_blank" rel="noopener"><span data-icon="yt"></span> Inscreva-se</a>
+        </div>
+        <div class="video-grid">
+          <div id="tvMain"></div>
+          <div class="video-list" id="tvSide"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOJA -->
+    <section class="section section--creme">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">Loja oficial</p><h2 class="display">Nova camisa II</h2></div>
+          <a class="link-arrow" href="loja.html">Ver toda a loja <span data-icon="arrow"></span></a>
+        </div>
+        <div class="kit-feature">
+          <a class="kit kit--store reveal" href="loja.html">
+            <img src="assets/img/camisa-2-loja.jpg" alt="Camisa II branca do Meldina FC 2026">
+            <span class="kit__badge">Lançamento</span>
+            <div class="kit__body">
+              <p class="eyebrow">Lançamento · 2026</p>
+              <h3 class="display">Camisa II</h3>
+              <p class="kit__price">R$ 249,90</p>
+              <span class="btn btn--sm">Comprar</span>
+            </div>
+          </a>
+          <a class="kit kit--home reveal reveal-d1" href="loja.html">
+            <img src="assets/img/camisa-1.jpg" alt="Camisa I grená do Meldina FC 2026">
+            <div class="kit__body">
+              <p class="eyebrow" style="color:var(--ouro)">Temporada 2026</p>
+              <h3 class="display">Camisa I</h3>
+              <p class="kit__price">R$ 249,90</p>
+              <span class="btn btn--sm">Comprar</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- SÓCIO -->
+    <section class="cta-band">
+      <div class="cta-band__img"><img src="assets/players/gaab-12.jpg" alt=""></div>
+      <div class="wrap">
+        <p class="eyebrow">Clube Meldina</p>
+        <h2 class="display">Vamo Meldina</h2>
+        <p>Mais de mil torcedores já fazem parte da família Meldina. Escolha seu plano e garanta seu lugar na Arena.</p>
+        <div class="stat-row">
+          <div><b>50%</b><small>off em ingressos</small></div>
+          <div><b>15%</b><small>off na loja</small></div>
+          <div><b>1.000+</b><small>sócios</small></div>
+        </div>
+        <a class="btn" href="socio.html">Associe-se agora <span data-icon="arrow"></span></a>
+      </div>
+    </section>
+
+    <!-- INSTAGRAM -->
+    <section class="section section--tight">
+      <div class="wrap">
+        <div class="section-head">
+          <div><p class="eyebrow">Instagram <span class="live-dot" id="instaLive" hidden>Ao vivo</span></p><h2 class="display">@meldinafc</h2></div>
+          <a class="btn btn--ghost" href="https://www.instagram.com/meldinafc/" target="_blank" rel="noopener"><span data-icon="ig"></span> Seguir</a>
+        </div>
+      </div>
+      <div class="wrap"><div class="insta-grid" id="insta" data-count="8"></div></div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter section--tight">
+      <img class="newsletter__mark" src="assets/img/monograma-outline.png" alt="">
+      <div class="wrap">
+        <div>
+          <h2 class="display" data-keep-marks>Receba tudo<br>em primeira mão</h2>
+          <p>Escalações, ingressos, lançamentos da loja e conteúdos exclusivos da Meldina TV. Vamo Meldina!</p>
+        </div>
+        <div>
+          <form class="nl-form" data-fake data-title="Inscrição confirmada!" data-msg="Bem-vindo à família Meldina.">
+            <label class="sr-only" for="nl-email">Seu e-mail</label>
+            <input id="nl-email" type="email" placeholder="Seu melhor e-mail" required>
+            <button class="btn" type="submit">Inscrever</button>
+          </form>
+          <p class="nl-note">Ao se inscrever, você concorda com a Política de Privacidade do Meldina FC.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
