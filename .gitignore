@@ -6,3 +6,4 @@ build/
 *.log
 .superpowers/
 .DS_Store
+public/
