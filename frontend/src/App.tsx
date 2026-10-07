@@ -20,10 +20,12 @@ import { Tv } from "./pages/Tv";
 
 // Painel Admin
 import { AdminLogin } from "./pages/admin/AdminLogin";
+import { AdminRegister } from "./pages/admin/AdminRegister";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
 import { AdminNoticias } from "./pages/admin/AdminNoticias";
 import { AdminJogos } from "./pages/admin/AdminJogos";
 import { AdminElenco } from "./pages/admin/AdminElenco";
+import { AdminClube } from "./pages/admin/AdminClube";
 import { AdminSocios } from "./pages/admin/AdminSocios";
 import { AdminLayout } from "./components/admin/AdminLayout";
 import { ProtectedRoute } from "./components/admin/ProtectedRoute";
@@ -65,8 +67,9 @@ export function App() {
               <Route path="/loja" element={<Loja />} />
               <Route path="/tv" element={<Tv />} />
 
-              {/* Rota de Login Admin */}
+              {/* Rotas de Autenticação Admin */}
               <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/register" element={<AdminRegister />} />
 
               {/* Rotas Administrativas Protegidas */}
               <Route path="/admin" element={<ProtectedRoute />}>
@@ -76,6 +79,7 @@ export function App() {
                   <Route path="noticias" element={<AdminNoticias />} />
                   <Route path="jogos" element={<AdminJogos />} />
                   <Route path="elenco" element={<AdminElenco />} />
+                  <Route path="clube" element={<AdminClube />} />
                   <Route path="socios" element={<AdminSocios />} />
                 </Route>
               </Route>

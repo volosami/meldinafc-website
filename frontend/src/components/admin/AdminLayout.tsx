@@ -12,6 +12,7 @@ export const AdminLayout: React.FC = () => {
     { label: "Notícias", path: "/admin/noticias", icon: "📰" },
     { label: "Jogos & Placares", path: "/admin/jogos", icon: "⚽" },
     { label: "Elenco", path: "/admin/elenco", icon: "🏃" },
+    { label: "Clube & Estádio", path: "/admin/clube", icon: "🏛️" },
     { label: "Sócios Torcedores", path: "/admin/socios", icon: "👑" },
   ];
 

@@ -119,9 +119,24 @@ export const api = {
     return res.data;
   },
 
+  async register(data: { name: string; email: string; password: string; adminKey: string }) {
+    const res = await apiClient.post("/auth/register", data);
+    return res.data;
+  },
+
   async getAdminProfile() {
     const res = await apiClient.get("/auth/me");
     return res.data;
+  },
+
+  // Upload de Imagens (Local ou Supabase)
+  async uploadImage(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await apiClient.post<{ success: boolean; url: string }>("/upload", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data.url;
   },
 
   // Operações Admin (CRUDs)
@@ -147,6 +162,26 @@ export const api = {
 
   async updatePlayerStats(id: string, stats: { matches?: number; goals?: number; assists?: number }) {
     const res = await apiClient.patch(`/players/${id}/stats`, stats);
+    return res.data;
+  },
+
+  async updatePlayer(id: string, data: Partial<Player>) {
+    const res = await apiClient.put(`/players/${id}`, data);
+    return res.data;
+  },
+
+  // Informações do Clube
+  async getClubInfo() {
+    try {
+      const res = await apiClient.get<{ success: boolean; data: any }>("/club");
+      return res.data.data;
+    } catch {
+      return null;
+    }
+  },
+
+  async updateClubInfo(data: any) {
+    const res = await apiClient.put("/club", data);
     return res.data;
   },
 };

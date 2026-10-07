@@ -72,8 +72,11 @@ export const AdminLogin: React.FC = () => {
           </button>
         </form>
 
-        <div className="text-center mt-6">
-          <a href="/" className="text-xs text-gray-500 hover:text-ouro">
+        <div className="flex flex-col items-center gap-2 mt-6 text-xs text-gray-500">
+          <a href="/admin/register" className="text-gray-400 hover:text-ouro transition-colors">
+            Novo na diretoria? Cadastrar administrador
+          </a>
+          <a href="/" className="hover:text-ouro transition-colors">
             ← Voltar ao site oficial
           </a>
         </div>
