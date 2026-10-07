@@ -27,6 +27,17 @@ export class UserRepository {
       return null;
     }
   }
+
+  async create(data: { name: string; email: string; passwordHash: string; role?: string }) {
+    return await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        passwordHash: data.passwordHash,
+        role: data.role || "ADMIN",
+      },
+    });
+  }
 }
 
 export const userRepository = new UserRepository();

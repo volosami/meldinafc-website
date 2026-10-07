@@ -48,7 +48,7 @@ describe("Meldina FC API - MVC Endpoints", () => {
     const memberData = {
       name: "Torcedor Meldina Teste",
       email: `torcedor.${Date.now()}@teste.com`,
-      cpf: "12345678901",
+      cpf: String(Math.floor(10000000000 + Math.random() * 89999999999)),
       phone: "11999999999",
       plan: "OURO",
     };
@@ -92,18 +92,61 @@ describe("Meldina FC API - MVC Endpoints", () => {
   });
 
   it("POST /api/news with admin token should create news successfully", async () => {
+    const testSlug = `noticia-teste-${Date.now()}`;
     const res = await request(app)
       .post("/api/news")
       .set("Authorization", `Bearer ${adminToken}`)
       .send({
         title: "Notícia Teste Automatizado",
-        slug: "noticia-teste-auto",
+        slug: testSlug,
         summary: "Resumo da notícia de teste automatizado",
         content: "Conteúdo completo da notícia criada durante a suite de testes automatizados.",
         category: "clube",
       });
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
-    expect(res.body.data.slug).toBe("noticia-teste-auto");
+    expect(res.body.data.slug).toBe(testSlug);
+  });
+
+  it("POST /api/auth/register with invalid admin key should fail", async () => {
+    const res = await request(app).post("/api/auth/register").send({
+      name: "Novo Admin",
+      email: "novo.admin@teste.com",
+      password: "senha123456",
+      adminKey: "chave-errada-123",
+    });
+    expect(res.status).toBeGreaterThanOrEqual(400);
+  });
+
+  it("POST /api/auth/register with valid admin key should create admin user", async () => {
+    const email = `admin.${Date.now()}@teste.com`;
+    const res = await request(app).post("/api/auth/register").send({
+      name: "Novo Diretor",
+      email,
+      password: "senha123456",
+      adminKey: process.env.ADMIN_REGISTRATION_KEY || "meldina-admin-2026-secret",
+    });
+    expect(res.status).toBe(201);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty("token");
+    expect(res.body.data.user.email).toBe(email);
+  });
+
+  it("GET /api/club should return club information", async () => {
+    const res = await request(app).get("/api/club");
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data).toHaveProperty("stadium");
+  });
+
+  it("POST /api/upload with admin token should upload image", async () => {
+    const buffer = Buffer.from("fake-image-bytes");
+    const res = await request(app)
+      .post("/api/upload")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .attach("file", buffer, "test-pic.jpg");
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.url).toBeDefined();
   });
 });

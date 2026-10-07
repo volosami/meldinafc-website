@@ -12,3 +12,6 @@ playersRouter.get("/:id", (req, res, next) => playersController.getById(req, res
 playersRouter.patch("/:id/stats", authMiddleware, (req, res, next) =>
   playersController.updateStats(req, res, next)
 );
+playersRouter.put("/:id", authMiddleware, (req, res, next) =>
+  playersController.update(req, res, next)
+);

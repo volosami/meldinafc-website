@@ -14,7 +14,7 @@ export class NewsController {
 
   async getBySlug(req: Request, res: Response, next: NextFunction) {
     try {
-      const { slug } = req.params;
+      const slug = req.params.slug as string;
       const news = await newsService.getNewsBySlug(slug);
       res.status(200).json({ success: true, data: news });
     } catch (err) {
@@ -34,7 +34,7 @@ export class NewsController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const { slug } = req.params;
+      const slug = req.params.slug as string;
       const validated = updateNewsSchema.parse(req.body);
       const updated = await newsService.updateNews(slug, validated);
       res.status(200).json({ success: true, data: updated });
@@ -45,7 +45,7 @@ export class NewsController {
 
   async remove(req: Request, res: Response, next: NextFunction) {
     try {
-      const { slug } = req.params;
+      const slug = req.params.slug as string;
       await newsService.deleteNews(slug);
       res.status(200).json({ success: true, message: "Notícia removida com sucesso" });
     } catch (err) {

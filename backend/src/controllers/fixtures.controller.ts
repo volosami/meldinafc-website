@@ -28,7 +28,7 @@ export class FixturesController {
 
   async updateScore(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params;
+      const id = req.params.id as string;
       const { homeScore, awayScore } = updateScoreSchema.parse(req.body);
       const updated = await fixturesService.updateScore(id, homeScore, awayScore);
       res.status(200).json({ success: true, data: updated });

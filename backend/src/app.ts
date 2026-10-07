@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import { pinoHttp } from "pino-http";
+import path from "path";
 import { logger } from "./config/logger.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { apiRouter } from "./routes/index.js";
@@ -17,14 +17,23 @@ app.use(
 
 app.use(express.json());
 
-app.use(
-  pinoHttp({
-    logger,
-    autoLogging: {
-      ignore: (req) => req.url === "/api/health",
-    },
-  })
-);
+// Servir arquivos estáticos de uploads locais
+app.use("/uploads", express.static(path.resolve(process.cwd(), "public", "uploads")));
+
+// Middleware de log HTTP enxuto em 1 linha: [HH:MM:ss] METHOD /url STATUS - Xms
+app.use((req, res, next) => {
+  if (req.url === "/api/health") return next();
+  const start = Date.now();
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    const time = new Date().toLocaleTimeString("pt-BR", { hour12: false });
+    const method = req.method;
+    const url = req.originalUrl || req.url;
+    const status = res.statusCode;
+    logger.info(`[${time}] ${method} ${url} ${status} - ${duration}ms`);
+  });
+  next();
+});
 
 // Rotas Base da API
 app.use("/api", apiRouter);

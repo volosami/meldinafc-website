@@ -35,6 +35,19 @@ export class PlayersRepository {
       return { ...p, ...stats };
     }
   }
+
+  async update(id: string, data: any) {
+    try {
+      return await prisma.player.update({
+        where: { id },
+        data,
+      });
+    } catch {
+      const p = FALLBACK_PLAYERS.find((pl) => pl.id === id);
+      if (!p) return null;
+      return { ...p, ...data };
+    }
+  }
 }
 
 export const playersRepository = new PlayersRepository();

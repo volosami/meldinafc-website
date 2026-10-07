@@ -20,6 +20,14 @@ export class PlayersService {
     }
     return player;
   }
+
+  async updatePlayer(id: string, data: any) {
+    const player = await playersRepository.update(id, data);
+    if (!player) {
+      throw new Error("Jogador não encontrado");
+    }
+    return player;
+  }
 }
 
 export const playersService = new PlayersService();
