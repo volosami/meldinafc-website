@@ -5,7 +5,7 @@ const MFC = {
   youtube: "https://www.youtube.com/@MeldinaTV",
   estadio: "Lovebomb Arena",
   temporada: 2026,
-  fundacao: 2024,
+  fundacao: 2017,
   tecnico: "Celso Roth",
   presidente: "André Almeida",
   liga: "Pro Clubs",
@@ -29,7 +29,7 @@ const PLAYERS = [
     bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Série B para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
   { id: "kiki", nome: "Kiki", num: 2, pos: "Lateral-direito", grupo: "Defensores", img: "kiki-2.jpg", pe: "Direito", desde: 2024,
     j: 8, g: 0, a: 2, extra: ["Desarmes", 19],
-    bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki está no Meldina desde a fundação e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
+    bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
   { id: "jonga", nome: "Jonga", num: 6, pos: "Lateral-esquerdo", grupo: "Defensores", img: "jonga-6.jpg", pe: "Esquerdo", desde: 2024,
     j: 7, g: 0, a: 1, extra: ["Cruzamentos certos", 15],
     bio: "O técnico da linha defensiva. Jonga resolve com a bola no pé: domínio limpo, passe preciso e leitura de jogo que faz a saída de bola do Meldina funcionar desde 2024." },
@@ -114,9 +114,28 @@ const STANDINGS = [
 const INSTAGRAM_POSTS = [];
 
 /* ---------------- Sala de troféus ---------------- */
+/* n = número de títulos; temporadas = edição do jogo e temporada de cada conquista */
 const TROPHIES = [
-  { titulo: "Série B", comp: "Pro Clubs", anos: [2025],
-    desc: "O primeiro título da história. Campeão da Série B do Pro Clubs em 2025, o Meldina garantiu o acesso à elite do futebol." },
+  { titulo: "Primeira Divisão", comp: "Pro Clubs", sigla: "1ª", n: 10,
+    temporadas: ["FIFA 21 · 2020/21 — 3×", "FIFA 23 · 2022/23 — 7×"],
+    desc: "A maior marca da história do clube. Tricampeão da primeira divisão no FIFA 21 e, duas temporadas depois, uma sequência histórica de sete títulos no FIFA 23." },
+  { titulo: "Copa EA", comp: "EA Sports", sigla: "EA", n: 1,
+    temporadas: ["FIFA 19 · 2018/19"],
+    desc: "A primeira taça da história do Meldina, conquistada na segunda temporada do clube." },
+  { titulo: "Série B", comp: "Pro Clubs", sigla: "B", n: 1, link: "campeao-serie-b",
+    temporadas: ["FC 25 · 2025"],
+    desc: "O título da reconstrução. Com a nova geração formada em 2024, o Meldina venceu a Série B e garantiu o retorno à elite em 2026." },
+];
+
+/* Linha do tempo do clube, por edição do jogo */
+const HISTORY = [
+  { ano: "2017", jogo: "FIFA 18", titulo: "A fundação", texto: "Na temporada 2017/18 nasce o Meldina Futebol Clube: um grupo de amigos, um escudo com coroa e monograma e as cores grená, ouro e marinho." },
+  { ano: "2019", jogo: "FIFA 19", titulo: "Campeão da Copa EA", texto: "Na segunda temporada, a primeira taça: o Meldina conquista a Copa EA e passa a ser respeitado no cenário do Pro Clubs." },
+  { ano: "2021", jogo: "FIFA 21", titulo: "Tricampeão da primeira divisão", texto: "Três títulos da primeira divisão em uma única edição. O Meldina se firma entre os grandes." },
+  { ano: "2023", jogo: "FIFA 23", titulo: "Sete vezes campeão", texto: "A era de ouro: sete títulos da primeira divisão no FIFA 23, a maior sequência da história do clube. São 10 títulos da elite no total." },
+  { ano: "2024", jogo: "FC 24", titulo: "Novo sistema, nova geração", texto: "A EA troca as temporadas com troféus por um campeonato contínuo, sem início nem fim. O Meldina se reinventa: uma nova geração assume o elenco e o clube recomeça na Série B." },
+  { ano: "2025", jogo: "FC 25", titulo: "Campeão da Série B", texto: "Pelo acesso, o Meldina supera os playoffs e conquista a Série B — o título que marca o retorno do clube à elite." },
+  { ano: "2026", jogo: "FC 26", titulo: "De volta à primeira divisão", texto: "O Meldina volta à Série A. Depois da derrota na estreia, cinco vitórias seguidas e a liderança. Em setembro, a presidência apresenta o lema oficial: Muito além do jogo." },
 ];
 
 /* ---------------- Notícias ----------------
@@ -263,7 +282,7 @@ const NEWS = [
     corpo: [
       "Horas antes do último playoff do ano, o lateral-direito Kiki resumiu o sentimento do vestiário. Depois da derrota polêmica no jogo anterior, o elenco quer transformar a revolta em entrega.",
       "QUOTE:Hoje vamos deixar nossos corações em campo.|Kiki, lateral-direito do Meldina FC",
-      "No Meldina desde a fundação, em 2024, Kiki é um dos jogadores mais queridos do elenco e uma das vozes do grupo nos jogos grandes. “A gente sabe o que aconteceu no último jogo. Não dá para mudar. O que dá é fazer diferente hoje”, completou.",
+      "No Meldina desde 2024, Kiki é um dos jogadores mais queridos do elenco e uma das vozes do grupo nos jogos grandes. “A gente sabe o que aconteceu no último jogo. Não dá para mudar. O que dá é fazer diferente hoje”, completou.",
       "A bola rola às 22h, na Lovebomb Arena.",
     ],
   },
@@ -340,12 +359,12 @@ const NEWS = [
   },
   {
     id: "campeao-serie-b", tag: "Clube", data: "2025-12-14", img: "news/pelo-acesso.jpg", pos: "center 25%", poster: true,
-    titulo: "Campeão! Meldina conquista a Série B e garante vaga na elite do Pro Clubs",
-    resumo: "Primeiro título da história do clube coroa uma campanha de entrega total. Em 2026, o Meldina joga a Série A.",
+    titulo: "Campeão! Meldina conquista a Série B e garante a volta à elite do Pro Clubs",
+    resumo: "Título da reconstrução coroa a nova geração do clube. Em 2026, o Meldina volta a jogar a primeira divisão.",
     corpo: [
-      "Está escrito na história: o Meldina FC é campeão da Série B do Pro Clubs. Um ano depois da fundação, o clube conquistou seu primeiro título e garantiu o acesso à primeira divisão.",
+      "Está escrito na história: o Meldina FC é campeão da Série B do Pro Clubs. Com a nova geração que assumiu o elenco em 2024, o clube conquistou o título e garantiu a volta à primeira divisão — onde já foi campeão dez vezes.",
       "A campanha foi construída com uma defesa sólida, um ataque decisivo e, principalmente, um grupo fechado. Pelo acesso, o time superou os playoffs e confirmou a taça diante da torcida.",
-      "A taça da Série B passa a ocupar lugar de honra na sala de troféus do clube. Em 2026, o desafio é outro: a elite. Muito além do jogo. Meldina pra sempre.",
+      "A taça da Série B se junta à Copa EA e aos dez títulos da primeira divisão na sala de troféus. Em 2026, o desafio é reencontrar a glória na elite. Muito além do jogo. Meldina pra sempre.",
     ],
   },
 ];

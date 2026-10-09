@@ -37,10 +37,7 @@ export const Footer: React.FC = () => {
           <div className="footer__top">
             <div className="footer__brand">
               <img src="/assets/img/escudo.png" alt="Meldina FC" />
-              <p>
-                Meldina Futebol Clube. Grená, ouro e marinho. Fundado em {MFC_INFO.fundacao}. Muito além do jogo.{" "}
-                <em>Meldina pra sempre.</em>
-              </p>
+              <p>Meldina Futebol Clube: Muito Além do Jogo</p>
               <div className="socials">
                 <a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
