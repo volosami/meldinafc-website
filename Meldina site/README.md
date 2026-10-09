@@ -1,4 +1,4 @@
 # Meldina FC — site oficial
 
-Static site (HTML/CSS/JS) in Brazilian Portuguese. The only back-end is the Instagram feed.
+Official site for fictional association football club Meldina Futebol Clube.
 
