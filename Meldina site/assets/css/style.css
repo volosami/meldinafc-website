@@ -916,3 +916,9 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .kit--store img { object-fit: contain; object-position: center 20%; padding: 4% 8% 22%; }
 .kit--home img { object-fit: contain; object-position: center 20%; padding: 0 4% 18%; background: #fff; }
 .product__img img.photo[src$='.png'] { object-fit: contain; background: #fff; }
+
+/* Sala de troféus: total e edição do jogo na linha do tempo */
+.trophy-total { font-family: var(--f-regal); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); margin: 0 0 24px; }
+.trophy-total b { font-family: var(--f-display); font-size: 2.6rem; color: var(--ouro); letter-spacing: 0; margin-right: 8px; }
+#trophies { display: grid; gap: 24px; }
+.tl__y small { display: block; font-family: var(--f-body); font-size: .7rem; letter-spacing: .14em; color: rgba(255,255,255,.55); margin-top: 6px; }

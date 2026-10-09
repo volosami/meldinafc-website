@@ -7,7 +7,7 @@ export const MFC_INFO = {
   twitch: "https://www.twitch.tv/meldinatv", // somente jogos ao vivo
   estadio: "Lovebomb Arena",
   temporada: 2026,
-  fundacao: 2024,
+  fundacao: 2017,
   tecnico: "Celso Roth",
   presidente: "André Almeida",
   liga: "Pro Clubs",
@@ -26,7 +26,7 @@ export const MFC_INFO = {
 
 export const STATIC_PLAYERS: Player[] = [
   { id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "/assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026, matches: 8, goals: 0, assists: 0, extraKey: "Jogos sem sofrer gols", extraValue: "1", bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Série B para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
-  { id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "/assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024, matches: 8, goals: 0, assists: 2, extraKey: "Desarmes", extraValue: "19", bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki está no Meldina desde a fundação e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
+  { id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "/assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024, matches: 8, goals: 0, assists: 2, extraKey: "Desarmes", extraValue: "19", bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
   { id: "jonga", name: "Jonga", number: 6, position: "Lateral-esquerdo", group: "Defensores", photoUrl: "/assets/players/jonga-6.jpg", preferredFoot: "Esquerdo", joinedYear: 2024, matches: 7, goals: 0, assists: 1, extraKey: "Cruzamentos certos", extraValue: "15", bio: "O técnico da linha defensiva. Jonga resolve com a bola no pé: domínio limpo, passe preciso e leitura de jogo que faz a saída de bola do Meldina funcionar desde 2024." },
   { id: "gaab", name: "Gaab", number: 12, position: "Zagueiro", group: "Defensores", photoUrl: "/assets/players/gaab-12.jpg", preferredFoot: "Direito", joinedYear: 2024, matches: 8, goals: 0, assists: 0, extraKey: "Interceptações", extraValue: "22", bio: "O showman do Meldina. Carismático, energia lá em cima e coração do time: Gaab puxa o grupo nos momentos difíceis e transforma cada desarme em festa na arquibancada." },
   { id: "lacerda", name: "Lacerda", number: 78, position: "Zagueiro", group: "Defensores", photoUrl: "/assets/players/lacerda-78.jpg", preferredFoot: "Esquerdo", joinedYear: 2024, matches: 8, goals: 1, assists: 0, extraKey: "Duelos aéreos vencidos", extraValue: "27", bio: "O criativo do time. Zagueiro canhoto que pensa o jogo de trás, Lacerda arrisca o passe que ninguém vê e ainda aparece na área adversária — marcou contra o Castelo AC, fora de casa." },
@@ -141,4 +141,34 @@ export const STATIC_PRODUCTS: Product[] = [
   { id: "caneca-clube", name: "Caneca de Cerâmica Oficial", category: "Colecionáveis", price: 44.9, image: "/assets/img/produto-caneca.jpg", desc: "Caneca cerâmica 350ml com escudo e lema." },
   { id: "cachecol-estadio", name: "Cachecol de Arquibancada", category: "Acessórios", price: 69.9, image: "/assets/img/produto-cachecol.jpg", desc: "Tecido duplo com franjas e frase 'Muito além do jogo'." },
   { id: "chaveiro-metal", name: "Chaveiro Brasão de Metal", category: "Colecionáveis", price: 29.9, image: "/assets/img/produto-chaveiro.jpg", desc: "Em metal polido com banho de ouro envelhecido." },
+];
+
+/* Sala de troféus. count = número de títulos; seasons = edição do jogo e temporada de cada conquista */
+export const TROPHIES = [
+  {
+    id: "primeira-divisao", title: "Primeira Divisão", competition: "Pro Clubs", mark: "1ª", count: 10,
+    seasons: ["FIFA 21 · 2020/21 — 3×", "FIFA 23 · 2022/23 — 7×"],
+    desc: "A maior marca da história do clube. Tricampeão da primeira divisão no FIFA 21 e, duas temporadas depois, uma sequência histórica de sete títulos no FIFA 23.",
+  },
+  {
+    id: "copa-ea", title: "Copa EA", competition: "EA Sports", mark: "EA", count: 1,
+    seasons: ["FIFA 19 · 2018/19"],
+    desc: "A primeira taça da história do Meldina, conquistada na segunda temporada do clube.",
+  },
+  {
+    id: "serie-b", title: "Série B", competition: "Pro Clubs", mark: "B", count: 1,
+    seasons: ["FC 25 · 2025"],
+    desc: "O título da reconstrução. Com a nova geração formada em 2024, o Meldina venceu a Série B e garantiu o retorno à elite em 2026.",
+  },
+];
+
+/* Linha do tempo do clube, por edição do jogo */
+export const HISTORY = [
+  { year: "2017", game: "FIFA 18", title: "A fundação", text: "Na temporada 2017/18 nasce o Meldina Futebol Clube: um grupo de amigos, um escudo com coroa e monograma e as cores grená, ouro e marinho." },
+  { year: "2019", game: "FIFA 19", title: "Campeão da Copa EA", text: "Na segunda temporada, a primeira taça: o Meldina conquista a Copa EA e passa a ser respeitado no cenário do Pro Clubs." },
+  { year: "2021", game: "FIFA 21", title: "Tricampeão da primeira divisão", text: "Três títulos da primeira divisão em uma única edição. O Meldina se firma entre os grandes." },
+  { year: "2023", game: "FIFA 23", title: "Sete vezes campeão", text: "A era de ouro: sete títulos da primeira divisão no FIFA 23, a maior sequência da história do clube. São 10 títulos da elite no total." },
+  { year: "2024", game: "FC 24", title: "Novo sistema, nova geração", text: "A EA troca as temporadas com troféus por um campeonato contínuo, sem início nem fim. O Meldina se reinventa: uma nova geração assume o elenco e o clube recomeça na Série B." },
+  { year: "2025", game: "FC 25", title: "Campeão da Série B", text: "Pelo acesso, o Meldina supera os playoffs e conquista a Série B — o título que marca o retorno do clube à elite." },
+  { year: "2026", game: "FC 26", title: "De volta à primeira divisão", text: "O Meldina volta à Série A. Depois da derrota na estreia, cinco vitórias seguidas e a liderança. Em setembro, a presidência apresenta o lema oficial: Muito além do jogo." },
 ];

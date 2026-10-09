@@ -138,7 +138,7 @@
           <div class="footer__top">
             <div class="footer__brand">
               <img src="${asset("img/escudo.png")}" alt="Meldina FC">
-              <p>Meldina Futebol Clube. Grená, ouro e marinho. Fundado em ${MFC.fundacao}. Muito além do jogo. <em>Meldina pra sempre.</em></p>
+              <p>Meldina Futebol Clube: Muito Além do Jogo</p>
               <div class="socials">
                 <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram">${I.ig}</a>
                 <a href="${MFC.youtube}" target="_blank" rel="noopener" aria-label="YouTube">${I.yt}</a>
@@ -538,17 +538,21 @@
   function renderTrophies() {
     const el = $("#trophies");
     if (!el) return;
-    el.innerHTML = TROPHIES.map((t) => `<article class="trophy reveal">
-      <div class="trophy__art">${TROPHY_SVG}<span class="trophy__count">${t.anos.length}×</span></div>
-      <div class="trophy__body"><p class="eyebrow">${t.comp}</p><h3 class="display">Campeão ${t.titulo}</h3>
-        <div class="trophy__years">${t.anos.map((y) => `<span>${y}</span>`).join("")}</div><p>${t.desc}</p>
-        <a class="link-arrow" href="noticia.html?id=campeao-serie-b">Relembre a conquista ${I.arrow}</a></div></article>`).join("");
+    const total = TROPHIES.reduce((n, t) => n + t.n, 0);
+    el.innerHTML = `<p class="trophy-total"><b>${total}</b> títulos na história</p>` + TROPHIES.map((t) => `<article class="trophy reveal">
+      <div class="trophy__art">${trophySvg(t.sigla)}<span class="trophy__count">${t.n}×</span></div>
+      <div class="trophy__body"><p class="eyebrow">${t.comp}</p><h3 class="display">${t.titulo}</h3>
+        <div class="trophy__years">${t.temporadas.map((y) => `<span>${y}</span>`).join("")}</div><p>${t.desc}</p>
+        ${t.link ? `<a class="link-arrow" href="noticia.html?id=${t.link}">Relembre a conquista ${I.arrow}</a>` : ""}</div></article>`).join("");
+    const tl = $("#history");
+    if (tl) tl.innerHTML = HISTORY.map((h) => `<div class="tl reveal"><span class="tl__y">${h.ano}<small>${h.jogo}</small></span><div><h3>${h.titulo}</h3><p>${h.texto}</p></div></div>`).join("");
   }
-  const TROPHY_SVG = `<svg viewBox="0 0 120 150" aria-hidden="true"><defs><linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset=".45" stop-color="#efaa19"/><stop offset="1" stop-color="#9a6a06"/></linearGradient></defs>
+  const trophySvg = (sigla = "") => `<svg viewBox="0 0 120 150" aria-hidden="true"><defs><linearGradient id="gold" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffe08a"/><stop offset=".45" stop-color="#efaa19"/><stop offset="1" stop-color="#9a6a06"/></linearGradient></defs>
     <path d="M30 14h60v30c0 22-13 38-30 42-17-4-30-20-30-42Z" fill="url(#gold)"/>
     <path d="M30 22H14c0 20 8 30 20 32M90 22h16c0 20-8 30-20 32" fill="none" stroke="url(#gold)" stroke-width="6" stroke-linecap="round"/>
     <path d="M54 86h12v22H54Z" fill="url(#gold)"/><path d="M38 108h44l6 16H32Z" fill="url(#gold)"/><rect x="26" y="124" width="68" height="16" rx="2" fill="#5a000a"/>
-    <path d="m46 4 6 8 8-9 8 9 6-8v10H46Z" fill="url(#gold)"/><text x="60" y="54" text-anchor="middle" font-family="Cinzel, serif" font-weight="700" font-size="26" fill="#5a000a">B</text></svg>`;
+    <path d="m46 4 6 8 8-9 8 9 6-8v10H46Z" fill="url(#gold)"/><text x="60" y="54" text-anchor="middle" font-family="Cinzel, serif" font-weight="700" font-size="${sigla.length > 1 ? 20 : 26}" fill="#5a000a">${sigla}</text></svg>`;
+  const TROPHY_SVG = trophySvg("B");
 
   function renderSquadPage() {
     const el = $("#squad");

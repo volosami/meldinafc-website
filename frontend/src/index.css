@@ -947,3 +947,8 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 /* ---------- Logo no page-hero (Meldina TV) ---------- */
 .page-hero__logo { position: relative; margin: 0; line-height: 0; }
 .page-hero__logo img { height: clamp(90px, 14vw, 160px); width: auto; }
+
+/* ---------- Sala de troféus: total e edição do jogo na linha do tempo ---------- */
+.trophy-total { font-family: var(--f-regal); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); margin: 0; }
+.trophy-total b { font-family: var(--f-display); font-size: 2.6rem; color: var(--ouro); letter-spacing: 0; margin-right: 8px; }
+.tl__y small { display: block; font-family: var(--f-body); font-size: .7rem; letter-spacing: .14em; color: rgba(255,255,255,.55); margin-top: 6px; }

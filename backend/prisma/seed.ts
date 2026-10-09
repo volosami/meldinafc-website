@@ -27,7 +27,7 @@ async function main() {
       id: "meldina-main",
       stadium: "Lovebomb Arena",
       season: 2026,
-      foundationYear: 2024,
+      foundationYear: 2017,
       coach: "Celso Roth",
       president: "André Almeida",
       league: "Pro Clubs",
@@ -71,7 +71,7 @@ async function main() {
     {
       id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024,
       matches: 8, goals: 0, assists: 2, extraKey: "Desarmes", extraValue: "19",
-      bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki está no Meldina desde a fundação e é daqueles jogadores que ninguém quer enfrentar.",
+      bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar.",
     },
     {
       id: "jonga", name: "Jonga", number: 6, position: "Lateral-esquerdo", group: "Defensores", photoUrl: "assets/players/jonga-6.jpg", preferredFoot: "Esquerdo", joinedYear: 2024,

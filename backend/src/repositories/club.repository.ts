@@ -4,7 +4,7 @@ const DEFAULT_CLUB_INFO = {
   id: "meldina-main",
   stadium: "Lovebomb Arena",
   season: 2026,
-  foundationYear: 2024,
+  foundationYear: 2017,
   coach: "Celso Roth",
   president: "André Almeida",
   league: "Pro Clubs",
