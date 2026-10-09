@@ -7,3 +7,5 @@ build/
 .superpowers/
 .DS_Store
 public/
+.vercel
+!frontend/public/
