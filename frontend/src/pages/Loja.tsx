@@ -28,10 +28,7 @@ export const Loja: React.FC = () => {
             <a href="/">Início</a> <span>/</span> <span>Loja Oficial</span>
           </div>
           <p className="eyebrow">Mantos & Acessórios</p>
-          <h1 className="display">
-            A armadura<br />
-            <em>da realeza</em>
-          </h1>
+          <h1 className="display">Loja Oficial</h1>
           <p>
             Vista as cores da nossa história. Camisas oficiais da temporada 2026, bonés, canecas e produtos exclusivos com entrega para todo o Brasil.
           </p>

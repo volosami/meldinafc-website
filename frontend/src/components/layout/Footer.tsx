@@ -4,62 +4,96 @@ import { MFC_INFO } from "../../data/staticData";
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="footer bg-noite border-t border-linha-escura pt-16 pb-12">
-      <div className="wrap">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
-          {/* Coluna 1: Identidade */}
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <img src="/assets/img/escudo.png" alt="Meldina FC" className="h-14 w-auto" />
-              <div>
-                <span className="font-display text-2xl uppercase tracking-wider block">Meldina FC</span>
-                <span className="font-regal text-xs text-ouro tracking-widest font-bold">Fundado em {MFC_INFO.fundacao}</span>
+    <>
+      {/* Parceiros */}
+      <section className="partners" aria-label="Parceiros">
+        <div className="wrap">
+          <div className="partner">
+            <small>Patrocinador oficial</small>
+            <img className="nufut" src="/assets/img/nufut.png" alt="nuFUT" />
+          </div>
+          <div className="partner">
+            <small>Fornecedor oficial</small>
+            <img className="lider-logo" src="/assets/img/lider.png" alt="Lider Sport" />
+          </div>
+          <div className="partner">
+            <small>Mídia oficial</small>
+            <img className="mtv" src="/assets/img/mtv-white.png" alt="Meldina TV" />
+          </div>
+          <div className="partner">
+            <small>Programa oficial</small>
+            <span className="lider" style={{ fontFamily: "var(--f-regal)", fontSize: "1.3rem", letterSpacing: ".18em" }}>
+              <svg style={{ width: 26, height: 26, color: "var(--ouro)" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M3 7l4.5 4L12 5l4.5 6L21 7l-2 11H5L3 7Z" />
+              </svg>
+              CLUBE MELDINA
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <div className="wrap">
+          <div className="footer__top">
+            <div className="footer__brand">
+              <img src="/assets/img/escudo.png" alt="Meldina FC" />
+              <p>
+                Meldina Futebol Clube. Grená, ouro e marinho. Fundado em {MFC_INFO.fundacao}. Muito além do jogo.{" "}
+                <em>Meldina pra sempre.</em>
+              </p>
+              <div className="socials">
+                <a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                    <rect x="3" y="3" width="18" height="18" rx="5" />
+                    <circle cx="12" cy="12" r="4.2" />
+                    <circle cx="17.4" cy="6.6" r="1" fill="currentColor" stroke="none" />
+                  </svg>
+                </a>
+                <a href={MFC_INFO.youtube} target="_blank" rel="noopener noreferrer" aria-label="YouTube">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23 7.2a3 3 0 0 0-2.1-2.1C19 4.6 12 4.6 12 4.6s-7 0-8.9.5A3 3 0 0 0 1 7.2 31 31 0 0 0 .5 12a31 31 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.1c1.9.5 8.9.5 8.9.5s7 0 8.9-.5a3 3 0 0 0 2.1-2.1 31 31 0 0 0 .5-4.8 31 31 0 0 0-.5-4.8ZM9.7 15.1V8.9L15.5 12l-5.8 3.1Z" />
+                  </svg>
+                </a>
+                <a href={MFC_INFO.twitch} target="_blank" rel="noopener noreferrer" aria-label="Twitch">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
+                  </svg>
+                </a>
               </div>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              Meldina Futebol Clube: Muito Além do Jogo
-            </p>
-          </div>
-
-          {/* Coluna 2: Navegação Rápida */}
-          <div>
-            <h4 className="font-regal text-ouro text-xs tracking-widest uppercase font-bold mb-4">Navegação</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/clube" className="hover:text-ouro transition-colors">História & Diretoria</Link></li>
-              <li><Link to="/elenco" className="hover:text-ouro transition-colors">Elenco Profissional</Link></li>
-              <li><Link to="/jogos" className="hover:text-ouro transition-colors">Calendário & Tabela</Link></li>
-              <li><Link to="/noticias" className="hover:text-ouro transition-colors">Notícias do Clube</Link></li>
-              <li><Link to="/tv" className="hover:text-ouro transition-colors">Meldina TV</Link></li>
-              <li><Link to="/loja" className="hover:text-ouro transition-colors">Loja Oficial</Link></li>
-            </ul>
-          </div>
-
-          {/* Coluna 3: Sócio & Ingressos */}
-          <div>
-            <h4 className="font-regal text-ouro text-xs tracking-widest uppercase font-bold mb-4">Torcedor</h4>
-            <ul className="space-y-2 text-sm text-gray-300">
-              <li><Link to="/socio" className="hover:text-ouro transition-colors">Clube Meldina (Sócio)</Link></li>
-              <li><a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-ouro transition-colors">Instagram Oficial</a></li>
-              <li><a href={MFC_INFO.twitch} target="_blank" rel="noopener noreferrer" className="hover:text-ouro transition-colors">Jogos ao Vivo (Twitch)</a></li>
-              <li><a href={MFC_INFO.youtube} target="_blank" rel="noopener noreferrer" className="hover:text-ouro transition-colors">Meldina TV (YouTube)</a></li>
-              <li><Link to="/admin/login" className="text-gray-500 hover:text-gray-300 transition-colors">Área da Diretoria</Link></li>
-            </ul>
-          </div>
-
-          {/* Coluna 4: Patrocínio */}
-          <div>
-            <h4 className="font-regal text-ouro text-xs tracking-widest uppercase font-bold mb-4">Patrocinador Master</h4>
-            <div className="bg-white/5 border border-linha-escura p-6 rounded flex items-center justify-center">
-              <img src="/assets/img/nufut.png" alt="nuFUT" className="h-10 w-auto" />
+            <div>
+              <h4>Clube</h4>
+              <ul>
+                <li><Link to="/clube">História</Link></li>
+                <li><Link to="/clube#trofeus">Sala de troféus</Link></li>
+                <li><Link to="/elenco">Elenco</Link></li>
+                <li><Link to="/admin/login">Área da Diretoria</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Futebol</h4>
+              <ul>
+                <li><Link to="/jogos">Calendário</Link></li>
+                <li><Link to="/jogos">Classificação</Link></li>
+                <li><Link to="/noticias">Notícias</Link></li>
+                <li><Link to="/tv">Meldina TV</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4>Torcedor</h4>
+              <ul>
+                <li><Link to="/socio">Clube Meldina</Link></li>
+                <li><Link to="/loja">Loja Oficial</Link></li>
+                <li><a href={MFC_INFO.twitch} target="_blank" rel="noopener noreferrer">Jogos ao vivo (Twitch)</a></li>
+                <li><a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer">@meldinafc</a></li>
+              </ul>
             </div>
           </div>
         </div>
-
-        <div className="border-t border-linha-escura pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <p>© {MFC_INFO.temporada} Meldina Futebol Clube. Todos os direitos reservados.</p>
-          <p>Desenvolvido com excelência para a torcida grená e ouro.</p>
+        <div className="wrap footer__bottom">
+          <span>© {MFC_INFO.temporada} Meldina Futebol Clube. Todos os direitos reservados.</span>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 };

@@ -406,18 +406,32 @@ export const Home: React.FC = () => {
       </section>
 
       {/* 8. SÓCIO CTA */}
-      <section className="bg-grena-deep text-white py-20 border-t border-ouro/30">
-        <div className="wrap text-center max-w-3xl mx-auto">
-          <p className="eyebrow justify-center">Clube Meldina</p>
-          <h2 className="display text-5xl md:text-7xl mb-6">
+      <section className="cta-band cta-band--socio">
+        <div className="cta-band__img">
+          <img src="/assets/players/gaab-12.jpg" alt="" />
+        </div>
+        <img className="cta-band__crown" src="/assets/img/monograma-outline.png" alt="" />
+        <div className="wrap">
+          <p className="eyebrow">Clube Meldina</p>
+          <h2 className="display">
             Jogue junto com o <em>Meldina</em>
           </h2>
-          <p className="text-gray-300 text-lg mb-8">
+          <p>
             Faça parte da nossa história. Descontos em camisas oficiais, prioridade em ingressos e conteúdos exclusivos direto no WhatsApp.
           </p>
-          <Link to="/socio" className="btn btn--grena text-lg px-8 py-4">
-            Escolher Plano de Sócio →
-          </Link>
+          <div className="stat-row">
+            <div><b>20%</b><small>off em ingressos</small></div>
+            <div><b>20%</b><small>off na loja</small></div>
+            <div><b>R$ 14,90</b><small>a partir de / mês</small></div>
+          </div>
+          <div className="cta-band__actions">
+            <Link to="/socio" className="btn btn--pulse">
+              Quero ser sócio →
+            </Link>
+            <Link to="/socio" className="btn btn--ghost">
+              Ver planos
+            </Link>
+          </div>
         </div>
       </section>
 
