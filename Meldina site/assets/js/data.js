@@ -86,12 +86,11 @@ const FIXTURES = [
   { d: "2026-09-13T20:30", comp: "Pro Clubs · Série A", fase: "4ª rodada", casa: false, adv: "ventura", placar: [1, 2], local: "Estádio Ventura", relato: "vitoria-ventura" },
   { d: "2026-09-18T20:00", comp: "Pro Clubs · Série A", fase: "5ª rodada", casa: true, adv: "aurora", placar: [3, 1], relato: "vitoria-aurora" },
   { d: "2026-09-21T22:00", comp: "Pro Clubs · Série A", fase: "6ª rodada", casa: true, adv: "setelagos", placar: [3, 0], relato: "vitoria-sete-lagos" },
-  { d: "2026-10-04T20:30", comp: "Pro Clubs · Série A", fase: "7ª rodada · Clássico (adiado)", casa: true, adv: "desola" },
-  { d: "2026-10-09T22:00", comp: "Pro Clubs · Série A", fase: "8ª rodada", casa: false, adv: "tupinamba", local: "Arena Tupinambá" },
-  { d: "2026-10-11T20:30", comp: "Pro Clubs · Série A", fase: "9ª rodada", casa: false, adv: "solaris", local: "Arena Solaris" },
-  { d: "2026-10-16T22:00", comp: "Pro Clubs · Série A", fase: "10ª rodada", casa: true, adv: "ventura" },
-  { d: "2026-10-18T20:30", comp: "Pro Clubs · Série A", fase: "11ª rodada", casa: false, adv: "leoes", local: "Estádio da Serra" },
-  { d: "2026-10-23T22:00", comp: "Pro Clubs · Série A", fase: "12ª rodada", casa: true, adv: "castelo" },
+  { d: "2026-10-06T22:00", comp: "Pro Clubs · Série A", fase: "7ª rodada", casa: true, adv: "tupinamba", relato: "hoje-tem-meldina-tupinamba" },
+  { d: "2026-10-11T20:30", comp: "Pro Clubs · Série A", fase: "8ª rodada", casa: false, adv: "solaris", local: "Arena Solaris" },
+  { d: "2026-10-16T22:00", comp: "Pro Clubs · Série A", fase: "9ª rodada", casa: true, adv: "ventura" },
+  { d: "2026-10-18T20:30", comp: "Pro Clubs · Série A", fase: "10ª rodada", casa: false, adv: "leoes", local: "Estádio da Serra" },
+  { d: "2026-10-23T22:00", comp: "Pro Clubs · Série A", fase: "11ª rodada", casa: true, adv: "castelo" },
 ];
 
 /* ---------------- Classificação (Série A, após 6 rodadas) ---------------- */
@@ -124,28 +123,31 @@ const TROPHIES = [
    poster: true = arte do Instagram (4:5) exibida inteira na página da notícia */
 const NEWS = [
   {
-    id: "classico-adiado", tag: "Ingressos", data: "2026-09-26", img: "news/hoje-tem-meldina-group.jpg", pos: "center top", poster: true,
-    titulo: "Clássico adiado: Meldina x De Sola FC passa para domingo, 4 de outubro",
-    resumo: "Duelo entre líder e vice-líder da Série A muda de data. Ingressos já adquiridos continuam válidos.",
+    id: "hoje-tem-meldina-tupinamba", tag: "Futebol", data: "2026-10-06", img: "news/kiki-tunel.jpg", pos: "center 15%", poster: true,
+    titulo: "Hoje tem Meldina: líder recebe o Tupinambá na Lovebomb Arena, com a nuFUT no peito",
+    resumo: "Terça-feira, 22h, pela 7ª rodada da Série A. Pela primeira vez, a camisa I entra em campo com a marca da nova patrocinadora.",
     corpo: [
-      "O clássico entre Meldina FC e De Sola FC, válido pela 7ª rodada da Série A do Pro Clubs, foi adiado. A partida, que aconteceria neste domingo, 27 de setembro, passa para o domingo, 4 de outubro, às 20h30, na Lovebomb Arena.",
-      "O duelo coloca frente a frente o líder e o vice-líder da competição: o Meldina soma 15 pontos, dois a mais que o rival.",
-      "Os ingressos já adquiridos continuam válidos para a nova data, sem necessidade de troca. Membros do Clube Meldina mantêm a prioridade na compra dos ingressos restantes.",
-      "Vamo Meldina!",
+      "É dia de jogo na Lovebomb Arena. Nesta terça-feira, 6 de outubro, às 22h, o Meldina FC recebe o Tupinambá EC pela 7ª rodada da Série A do Pro Clubs.",
+      "O líder chega embalado por cinco vitórias seguidas e com a defesa como uma das armas da campanha. Do outro lado, o Tupinambá tenta se afastar da parte de baixo da tabela.",
+      "A noite também marca um momento especial fora das quatro linhas: pela primeira vez, a camisa I entra em campo com a marca da nuFUT, nova patrocinadora do clube, estampada no peito. Coube a Kiki puxar a fila no túnel em direção ao gramado.",
+      "QUOTE:Toda vez que a gente sai desse túnel é a mesma coisa: a torcida, a camisa, o peso da coroa. Hoje não vai ser diferente.|Kiki, lateral-direito do Meldina FC",
+      "A comissão técnica de Celso Roth deve manter a base da equipe que vem vencendo. Os portões da Lovebomb Arena abrem às 20h, e membros do Clube Meldina têm prioridade e desconto nos ingressos. Muito além do jogo. Vamo Meldina!",
     ],
   },
+
   {
     id: "celso-classico", tag: "Futebol", data: "2026-09-25", img: "news/quotes-celso-2.jpg", pos: "center top", poster: true,
-    titulo: "Às vésperas do clássico, Celso Roth reforça: “O time está unido, e a intenção é continuar assim”",
-    resumo: "Técnico falou sobre a rivalidade com o De Sola, a sequência de cinco vitórias e a importância de manter o elenco que conquistou a Série B.",
+    titulo: "Celso Roth sobre a liderança: “O time está unido, e a intenção é continuar assim”",
+    resumo: "Técnico falou sobre a sequência de cinco vitórias, o peso da liderança na Série A e a importância de manter o elenco que conquistou a Série B.",
     corpo: [
-      "A semana na Lovebomb Arena foi de preparação especial. O clássico Meldina x De Sola FC, pela 7ª rodada da Série A do Pro Clubs, é o jogo mais aguardado do ano — e agora vale ainda mais: o De Sola é o vice-líder, dois pontos atrás. Durante a semana, o técnico Celso Roth falou à imprensa sobre o momento da equipe.",
-      "Depois da derrota na estreia, o Meldina emendou cinco vitórias seguidas e chegou à liderança. Para o treinador, a virada de chave foi coletiva. “Não precisamos reinventar nada. Precisamos ser quem somos”, disse.",
+      "Com cinco vitórias seguidas e a liderança da Série A do Pro Clubs, o Meldina viveu uma semana de trabalho tranquilo na Lovebomb Arena. Em entrevista coletiva, o técnico Celso Roth falou sobre o momento da equipe.",
+      "Depois da derrota na estreia, o time reagiu rápido e chegou à ponta da tabela. Para o treinador, a virada de chave foi coletiva. “Não precisamos reinventar nada. Precisamos ser quem somos”, disse.",
       "QUOTE:O time está unido, e a intenção é continuar assim.|Celso Roth, técnico do Meldina FC",
-      "Sobre a rivalidade, Celso pediu respeito ao adversário e apoio total da torcida. “O De Sola vai vir forte, como sempre. Mas em casa, com o nosso povo, a coroa pesa para quem vem nos enfrentar.”",
-      "A comissão técnica deve repetir a equipe que venceu o Sete Lagos. Os ingressos seguem à venda, com prioridade e desconto para os membros do Clube Meldina. Vamo Meldina!",
+      "Celso lembrou que o grupo atual é praticamente o mesmo que conquistou a Série B em 2025 e pediu pés no chão. “A tabela só vale no fim. Estamos felizes, mas a Série A não perdoa. Cada jogo é uma final.”",
+      "Membros do Clube Meldina têm prioridade e desconto na compra de ingressos para os próximos jogos em casa. Vamo Meldina!",
     ],
   },
+
   {
     id: "nota-presidencia", tag: "Nota oficial", data: "2026-09-24", img: "news/story-meldina-alem-do-jogo.jpg", pos: "center 30%", poster: true,
     titulo: "Nota oficial da Presidência: Meldina FC adota o lema “Muito além do jogo”",
@@ -170,22 +172,13 @@ const NEWS = [
     titulo: "Novo patrocinador: nuFUT é a nova parceira oficial do Meldina FC",
     resumo: "O game de futebol chega ao clube para a sequência da Série A, com ações para a torcida e conteúdos especiais na Meldina TV.",
     corpo: [
-      "O Meldina FC tem um novo patrocinador: a nuFUT, game de futebol que passa a estampar sua marca nos canais oficiais do clube a partir do clássico contra o De Sola FC.",
+      "O Meldina FC tem um novo patrocinador: a nuFUT, game de futebol que passa a estampar sua marca nos canais oficiais do clube a partir da 7ª rodada da Série A.",
       "A parceria prevê ações exclusivas para membros do Clube Meldina, conteúdos especiais na Meldina TV e ativações em dias de jogo na Lovebomb Arena.",
       "QUOTE:A nuFUT nasceu para quem vive o futebol muito além do jogo. Não existe parceiro mais natural do que o Meldina.|nuFUT",
       "O acordo se soma à parceria com a Lider, fornecedora oficial de material esportivo, e reforça o crescimento do clube dentro e fora de campo. Vamo Meldina!",
     ],
   },
-  {
-    id: "ingressos-classico", tag: "Ingressos", data: "2026-09-22", img: "news/hoje-tem-meldina-group.jpg", pos: "center top", poster: true,
-    titulo: "Clássico na Lovebomb Arena: ingressos à venda para Meldina x De Sola FC",
-    resumo: "Adiado, o jogo da 7ª rodada da Série A acontece no domingo, 4 de outubro, às 20h30. Membros do Clube Meldina têm prioridade e até 50% de desconto.",
-    corpo: [
-      "Estão abertas as vendas de ingressos para Meldina FC x De Sola FC, partida válida pela 7ª rodada da Série A do Pro Clubs. O jogo, adiado, acontece no domingo, 4 de outubro, às 20h30, na Lovebomb Arena. Os ingressos já adquiridos continuam válidos para a nova data.",
-      "Membros do Clube Meldina têm acesso antecipado e descontos de 20% a 50%, de acordo com o plano. A venda geral começa na terça-feira.",
-      "Os portões serão abertos duas horas antes da partida. Recomendamos que o torcedor chegue com antecedência. Vamo Meldina!",
-    ],
-  },
+
   {
     id: "vitoria-sete-lagos", tag: "Futebol", data: "2026-09-21", img: "news/escalacao-carrijo.jpg", pos: "center top", poster: true,
     titulo: "Adiado para segunda, jogo contra o Sete Lagos termina em 3 a 0 e Meldina segue líder",
@@ -194,7 +187,7 @@ const NEWS = [
       "Depois de uma semana de expectativa — e de um fim de semana de interrogações, com a partida transferida de domingo para segunda-feira —, o Meldina recebeu o Sete Lagos EC na Lovebomb Arena e venceu por 3 a 0.",
       "Com a nova camisa II, o time controlou o jogo do início ao fim. Almeida abriu o placar no primeiro tempo, Caio ampliou após jogada de Carrijo e Kristhian fechou a conta em chute de fora da área.",
       "Foi a primeira partida sem sofrer gols de Muralha na Série A e a quinta vitória seguida do Meldina, que mantém a liderança isolada com 15 pontos.",
-      "QUOTE:Cinco vitórias seguidas não caem do céu. É trabalho, é grupo. Agora é o clássico.|Almeida, capitão do Meldina FC",
+      "QUOTE:Cinco vitórias seguidas não caem do céu. É trabalho, é grupo. Agora é seguir.|Almeida, capitão do Meldina FC",
     ],
   },
   {

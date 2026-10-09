@@ -3,7 +3,8 @@ import { Player, Team, Fixture, Standing, NewsArticle, Product } from "../types"
 export const MFC_INFO = {
   nome: "Meldina FC",
   instagram: "https://www.instagram.com/meldinafc/",
-  youtube: "https://www.youtube.com/@MeldinaTV",
+  youtube: "https://www.youtube.com/@MeldinaTV", // podcasts, bastidores e conteúdos
+  twitch: "https://www.twitch.tv/meldinatv", // somente jogos ao vivo
   estadio: "Lovebomb Arena",
   temporada: 2026,
   fundacao: 2024,
@@ -134,8 +135,8 @@ export const STATIC_NEWS: NewsArticle[] = [
 ];
 
 export const STATIC_PRODUCTS: Product[] = [
-  { id: "camisa-1", name: "Camisa I Oficial 2026", category: "Uniformes", price: 199.9, image: "/assets/img/camisa-1.jpg", badge: "Oficial", sizes: ["P", "M", "G", "GG"], desc: "Grená tradicional com detalhes em ouro e marinho." },
-  { id: "camisa-2", name: "Camisa II Oficial 2026", category: "Uniformes", price: 199.9, image: "/assets/img/camisa-2.jpg", badge: "Lançamento", sizes: ["P", "M", "G", "GG"], desc: "Branca com escudo bordado e acabamento premium." },
+  { id: "camisa-1", name: "Camisa I Oficial 2026", category: "Uniformes", price: 199.9, image: "/assets/img/camisa-1-produto.jpg", badge: "Oficial", sizes: ["P", "M", "G", "GG"], desc: "Grená tradicional com detalhes em ouro e marinho." },
+  { id: "camisa-2", name: "Camisa II Oficial 2026", category: "Uniformes", price: 199.9, image: "/assets/img/camisa-2-produto.jpg", badge: "Lançamento", sizes: ["P", "M", "G", "GG"], desc: "Branca com escudo bordado e acabamento premium." },
   { id: "bone-oficial", name: "Boné Meldina Snapback", category: "Acessórios", price: 79.9, image: "/assets/img/produto-bone.jpg", badge: "Exclusivo", desc: "Aba reta com bordado em relevo de alta definição." },
   { id: "caneca-clube", name: "Caneca de Cerâmica Oficial", category: "Colecionáveis", price: 44.9, image: "/assets/img/produto-caneca.jpg", desc: "Caneca cerâmica 350ml com escudo e lema." },
   { id: "cachecol-estadio", name: "Cachecol de Arquibancada", category: "Acessórios", price: 69.9, image: "/assets/img/produto-cachecol.jpg", desc: "Tecido duplo com franjas e frase 'Muito além do jogo'." },

@@ -921,3 +921,15 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .kit--home img { object-fit: contain; object-position: center 20%; padding: 0 4% 18%; background: #fff; }
 .product__img img.photo[src$='.png'] { object-fit: contain; background: #fff; }
 
+
+/* ---------- Loja: cartões de camisa com foto de produto em escala igual ---------- */
+.kit--product { display: flex; flex-direction: column; align-items: stretch; background: #fff; min-height: 0; }
+.kit--product img { position: static; width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; }
+.kit--product .kit__body { background: #fff; color: var(--tinta); padding-top: 8px; }
+
+/* ---------- Meldina TV: faixa de jogos ao vivo (Twitch) ---------- */
+.live-band { background: linear-gradient(90deg, #2a0d4d, var(--noite)); border-bottom: 1px solid var(--linha-escura); }
+.live-band__inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.live-band h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
+.btn--twitch { --bg: #9146ff; --fg: #fff; }
+.btn--twitch:hover { background: #a970ff; border-color: #a970ff; }
