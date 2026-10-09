@@ -345,17 +345,27 @@ export const Home: React.FC = () => {
             <div>
               <img className="tv__logo" src="/assets/img/mtv-white.png" alt="Meldina TV" />
               <p className="text-gray-300 text-sm mt-3 max-w-md">
-                MFC News, Meldcast, bastidores e melhores momentos. O canal oficial do Meldina FC no YouTube.
+                MFC News, Meldcast, bastidores e melhores momentos no YouTube. Jogos ao vivo na Twitch.
               </p>
             </div>
-            <a
-              className="btn"
-              href={MFC_INFO.youtube}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Inscreva-se no YouTube
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a
+                className="btn"
+                href={MFC_INFO.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Inscreva-se no YouTube
+              </a>
+              <a
+                className="btn btn--ghost"
+                href={MFC_INFO.twitch}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Jogos ao vivo na Twitch
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -373,8 +383,8 @@ export const Home: React.FC = () => {
             </Link>
           </div>
           <div className="kit-feature">
-            <Link className="kit" to="/loja">
-              <img src="/assets/img/camisa-2-loja.jpg" alt="Camisa II" />
+            <Link className="kit kit--product" to="/loja">
+              <img src="/assets/img/camisa-2-produto.jpg" alt="Camisa II" />
               <div className="kit__body">
                 <p className="eyebrow">Lançamento · 2026</p>
                 <h3 className="display">Camisa II Oficial</h3>
@@ -382,10 +392,10 @@ export const Home: React.FC = () => {
                 <span className="btn btn--sm">Comprar</span>
               </div>
             </Link>
-            <Link className="kit kit--home" to="/loja">
-              <img src="/assets/img/camisa-1.jpg" alt="Camisa I" />
+            <Link className="kit kit--product" to="/loja">
+              <img src="/assets/img/camisa-1-produto.jpg" alt="Camisa I" />
               <div className="kit__body">
-                <p className="eyebrow" style={{ color: "var(--ouro)" }}>Temporada 2026</p>
+                <p className="eyebrow">Temporada 2026</p>
                 <h3 className="display">Camisa I Oficial</h3>
                 <p className="kit__price">R$ 199,90</p>
                 <span className="btn btn--sm">Comprar</span>

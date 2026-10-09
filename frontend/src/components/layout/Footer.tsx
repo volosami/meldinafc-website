@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
               </div>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              O clube de futebol mais apaixonante do Pro Clubs. Campeão da Série B 2025 e em busca da glória na elite.
+              Meldina Futebol Clube: Muito Além do Jogo
             </p>
           </div>
 
@@ -40,7 +40,8 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2 text-sm text-gray-300">
               <li><Link to="/socio" className="hover:text-ouro transition-colors">Clube Meldina (Sócio)</Link></li>
               <li><a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer" className="hover:text-ouro transition-colors">Instagram Oficial</a></li>
-              <li><a href={MFC_INFO.youtube} target="_blank" rel="noopener noreferrer" className="hover:text-ouro transition-colors">Transmissões ao Vivo</a></li>
+              <li><a href={MFC_INFO.twitch} target="_blank" rel="noopener noreferrer" className="hover:text-ouro transition-colors">Jogos ao Vivo (Twitch)</a></li>
+              <li><a href={MFC_INFO.youtube} target="_blank" rel="noopener noreferrer" className="hover:text-ouro transition-colors">Meldina TV (YouTube)</a></li>
               <li><Link to="/admin/login" className="text-gray-500 hover:text-gray-300 transition-colors">Área da Diretoria</Link></li>
             </ul>
           </div>
@@ -48,13 +49,9 @@ export const Footer: React.FC = () => {
           {/* Coluna 4: Patrocínio */}
           <div>
             <h4 className="font-regal text-ouro text-xs tracking-widest uppercase font-bold mb-4">Patrocinador Master</h4>
-            <div className="bg-white/5 border border-linha-escura p-4 rounded text-center">
-              <span className="font-display text-2xl text-ouro tracking-wider block">NuFut</span>
-              <span className="text-xs text-gray-400">Parceiro Oficial de Tecnologia & Finanças</span>
+            <div className="bg-white/5 border border-linha-escura p-6 rounded flex items-center justify-center">
+              <img src="/assets/img/nufut.png" alt="nuFUT" className="h-10 w-auto" />
             </div>
-            <p className="font-serif italic text-sm text-gray-400 mt-4 text-center">
-              "{MFC_INFO.lema}"
-            </p>
           </div>
         </div>
 

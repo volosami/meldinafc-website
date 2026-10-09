@@ -51,8 +51,31 @@ export const Tv: React.FC = () => {
             <em>do vestiário</em>
           </h1>
           <p>
-            Assista aos bastidores, entrevistas exclusivas, transmissões de jogos e resenhas no canal oficial do Meldina FC no YouTube.
+            Bastidores, entrevistas, podcasts e resenhas no YouTube. Os jogos do Meldina FC são transmitidos ao vivo na Twitch.
           </p>
+        </div>
+      </section>
+
+      <section className="section section--tight live-band">
+        <div className="wrap live-band__inner">
+          <div>
+            <p className="eyebrow">Ao vivo · Twitch</p>
+            <h2 className="display">Todos os jogos, ao vivo</h2>
+            <p className="text-gray-300 text-sm mt-3 max-w-xl">
+              As partidas do Meldina FC são transmitidas exclusivamente no canal twitch.tv/meldinatv. Podcasts, bastidores e demais conteúdos seguem no YouTube.
+            </p>
+          </div>
+          <a
+            className="btn btn--twitch"
+            href={MFC_INFO.twitch}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+              <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
+            </svg>
+            Assistir na Twitch
+          </a>
         </div>
       </section>
 
