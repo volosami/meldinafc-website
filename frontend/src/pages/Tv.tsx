@@ -45,10 +45,8 @@ export const Tv: React.FC = () => {
           <div className="breadcrumb">
             <a href="/">Início</a> <span>/</span> <span>Meldina TV</span>
           </div>
-          <p className="eyebrow">Canal Oficial</p>
-          <h1 className="display">
-            A voz<br />
-            <em>do vestiário</em>
+          <h1 className="page-hero__logo">
+            <img src="/assets/img/mtv-white.png" alt="Meldina TV" />
           </h1>
           <p>
             Bastidores, entrevistas, podcasts e resenhas no YouTube. Os jogos do Meldina FC são transmitidos ao vivo na Twitch.
@@ -62,7 +60,7 @@ export const Tv: React.FC = () => {
             <p className="eyebrow">Ao vivo · Twitch</p>
             <h2 className="display">Todos os jogos, ao vivo</h2>
             <p className="text-gray-300 text-sm mt-3 max-w-xl">
-              As partidas do Meldina FC são transmitidas exclusivamente no canal twitch.tv/meldinatv. Podcasts, bastidores e demais conteúdos seguem no YouTube.
+              Acompanhe as partidas do Meldina FC exclusivamente no canal da Twitch.
             </p>
           </div>
           <a

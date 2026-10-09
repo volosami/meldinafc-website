@@ -10,11 +10,8 @@ export const Clube: React.FC = () => {
           <div className="breadcrumb">
             <a href="/">Início</a> <span>/</span> <span>O Clube</span>
           </div>
-          <p className="eyebrow">Institucional</p>
-          <h1 className="display">
-            A paixão<br />
-            <em>que move</em>
-          </h1>
+          <p className="eyebrow">Meldina Futebol Clube</p>
+          <h1 className="display">O Clube</h1>
           <p>
             Fundado em {MFC_INFO.fundacao}, o Meldina FC nasceu da união de torcedores apaixonados e conquistou o título da Série B de 2025 para chegar à elite do Pro Clubs.
           </p>

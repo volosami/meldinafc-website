@@ -23,10 +23,13 @@ export const Elenco: React.FC = () => {
     { key: "Atacantes", label: "Ataque" },
   ];
 
-  const filteredPlayers =
-    filter === "todos"
-      ? players
-      : players.filter((p) => p.group === filter);
+  const visibleGroups = groups
+    .filter((g) => g.key !== "todos" && (filter === "todos" || g.key === filter))
+    .map((g) => ({
+      ...g,
+      players: players.filter((p) => p.group === g.key).sort((a, b) => a.number - b.number),
+    }))
+    .filter((g) => g.players.length > 0);
 
   return (
     <div>
@@ -37,12 +40,9 @@ export const Elenco: React.FC = () => {
             <a href="/">Início</a> <span>/</span> <span>Elenco</span>
           </div>
           <p className="eyebrow">Temporada 2026</p>
-          <h1 className="display">
-            Guerreiros<br />
-            <em>em campo</em>
-          </h1>
+          <h1 className="display">Elenco</h1>
           <p>
-            Conheça os atletas que vestem a camisa grená e ouro na disputa da elite da Série A do Pro Clubs.
+            Os guerreiros que vestem o manto grená. Clique em um jogador para ver o perfil completo e as estatísticas da temporada.
           </p>
         </div>
       </section>
@@ -62,27 +62,38 @@ export const Elenco: React.FC = () => {
             ))}
           </div>
 
-          {/* Grid de Atletas */}
-          <div className="squad-grid">
-            {filteredPlayers.map((p) => (
-              <button
-                key={p.id}
-                className={`player-card ${p.position === "Goleiro" ? "player-card--gk" : ""}`}
-                onClick={() => setSelectedPlayer(p)}
-              >
-                <img src={p.photoUrl} alt={p.name} />
-                <span className="player-card__num">{p.number}</span>
-                <div className="player-card__info">
-                  <div>
-                    <span className="player-card__pos">{p.position}</span>
-                    <span className="player-card__name">{p.name}</span>
-                  </div>
-                  <span className="player-card__n">{p.number}</span>
-                </div>
-                <span className="player-card__bar"></span>
-              </button>
-            ))}
-          </div>
+          {/* Atletas por setor */}
+          {visibleGroups.map((g) => (
+            <React.Fragment key={g.key}>
+              <div className="group-title">
+                <h2 className="display">{g.key}</h2>
+                <span>
+                  {g.players.length} {g.players.length > 1 ? "JOGADORES" : "JOGADOR"}
+                </span>
+              </div>
+              <div className="squad-grid">
+                {g.players.map((p) => (
+                  <button
+                    key={p.id}
+                    className={`player-card ${p.position === "Goleiro" ? "player-card--gk" : ""}`}
+                    onClick={() => setSelectedPlayer(p)}
+                  >
+                    <img src={p.photoUrl} alt={p.name} />
+                    <span className="player-card__num">{p.number}</span>
+                    <div className="player-card__info">
+                      <div>
+                        {p.isCaptain && <span className="captain captain--sm">C</span>}
+                        <span className="player-card__pos">{p.position}</span>
+                        <span className="player-card__name">{p.name}</span>
+                      </div>
+                      <span className="player-card__n">{p.number}</span>
+                    </div>
+                    <span className="player-card__bar"></span>
+                  </button>
+                ))}
+              </div>
+            </React.Fragment>
+          ))}
         </div>
       </section>
 

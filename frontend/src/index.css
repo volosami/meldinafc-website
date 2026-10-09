@@ -809,7 +809,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .socials a { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--linha-escura); display: grid; place-items: center; transition: all 0.25s; }
 .socials a:hover { background: var(--ouro); color: var(--noite); border-color: var(--ouro); }
 .socials svg { width: 18px; height: 18px; }
-.footer__bottom { border-top: 1px solid var(--linha-escura); padding: 22px 0 28px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 0.76rem; color: rgba(255,255,255,0.45); }
+.footer__bottom { border-top: 1px solid var(--linha-escura); padding-top: 22px; padding-bottom: 28px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 0.76rem; color: rgba(255,255,255,0.45); }
 .footer__bottom a:hover { color: #fff; }
 .footer__bottom nav { display: flex; gap: 18px; flex-wrap: wrap; }
 @media (max-width: 900px) { .footer__top { grid-template-columns: 1fr 1fr; } .footer__brand { grid-column: 1 / -1; } }
@@ -933,3 +933,17 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .live-band h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
 .btn--twitch { --bg: #9146ff; --fg: #fff; }
 .btn--twitch:hover { background: #a970ff; border-color: #a970ff; }
+
+/* ---------- Sócio CTA (Início) ---------- */
+.cta-band--socio { border-top: 4px solid; border-image: linear-gradient(90deg, var(--grena) 0 33.3%, var(--ouro) 33.3% 66.6%, var(--marinho-2) 66.6%) 1; }
+.cta-band--socio::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: radial-gradient(ellipse 45% 70% at 20% 40%, rgba(239,170,25,0.18), transparent 70%); }
+.cta-band--socio h2 em { color: var(--ouro); }
+.cta-band__crown { position: absolute; left: -60px; bottom: -80px; width: 360px; opacity: 0.07; z-index: 1; pointer-events: none; animation: float 7s ease-in-out infinite; }
+.cta-band__actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn--pulse { font-size: 1rem; padding: 18px 34px; animation: ctaPulse 2.2s ease-out infinite; }
+@keyframes ctaPulse { 0% { box-shadow: 0 0 0 0 rgba(239,170,25,0.6); } 70% { box-shadow: 0 0 0 18px rgba(239,170,25,0); } 100% { box-shadow: 0 0 0 0 rgba(239,170,25,0); } }
+@media (prefers-reduced-motion: reduce) { .btn--pulse, .cta-band__crown { animation: none; } }
+
+/* ---------- Logo no page-hero (Meldina TV) ---------- */
+.page-hero__logo { position: relative; margin: 0; line-height: 0; }
+.page-hero__logo img { height: clamp(90px, 14vw, 160px); width: auto; }
