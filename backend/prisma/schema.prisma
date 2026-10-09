@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Player {
+  id            String   @id
+  name          String
+  number        Int
+  position      String
+  group         String
+  photoUrl      String
+  preferredFoot String   @default("Direito")
+  joinedYear    Int      @default(2024)
+  matches       Int      @default(0)
+  goals         Int      @default(0)
+  assists       Int      @default(0)
+  extraKey      String?
+  extraValue    String?
+  bio           String
+  isCaptain     Boolean  @default(false)
+  roleTitle     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Team {
+  id        String     @id
+  name      String
+  shortName String
+  acronym   String
+  logoUrl   String?
+  color1    String?
+  color2    String?
+  shape     String?
+  isUs      Boolean    @default(false)
+  isRival   Boolean    @default(false)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  standings Standing[]
+  fixtures  Fixture[]
+}
+
+model Fixture {
+  id          String   @id @default(uuid())
+  matchDate   DateTime
+  competition String
+  round       String
+  isHome      Boolean  @default(true)
+  opponentId  String
+  opponent    Team     @relation(fields: [opponentId], references: [id])
+  homeScore   Int?
+  awayScore   Int?
+  venue       String?
+  newsId      String?
+  isNext      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Standing {
+  id           String   @id @default(uuid())
+  teamId       String   @unique
+  team         Team     @relation(fields: [teamId], references: [id])
+  matches      Int      @default(0)
+  wins         Int      @default(0)
+  draws        Int      @default(0)
+  losses       Int      @default(0)
+  goalsFor     Int      @default(0)
+  goalsAgainst Int      @default(0)
+  form         String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model News {
+  id          String   @id
+  slug        String   @unique
+  title       String
+  summary     String
+  content     String
+  category    String   @default("geral")
+  imageUrl    String?
+  publishedAt DateTime @default(now())
+  author      String   @default("Redação Meldina")
+  isFeatured  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Member {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  cpf           String   @unique
+  phone         String
+  plan          String
+  status        String   @default("PENDING") // PENDING, ACTIVE, CANCELLED
+  paymentMethod String   @default("PIX")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ClubInfo {
+  id             String   @id @default("meldina-main")
+  stadium        String   @default("Lovebomb Arena")
+  season         Int      @default(2026)
+  foundationYear Int      @default(2024)
+  coach          String   @default("Celso Roth")
+  president      String   @default("André Almeida")
+  league         String   @default("Pro Clubs")
+  division       String   @default("Série A")
+  programName    String   @default("Clube Meldina")
+  motto          String   @default("Muito além do jogo")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
