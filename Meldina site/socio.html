@@ -78,7 +78,7 @@
         <div>
           <p class="eyebrow">Cadastro</p>
           <h2 class="display" style="font-size:clamp(2.8rem,6vw,4.8rem)">Vista a coroa</h2>
-          <p class="muted" style="max-width:440px;margin-top:18px">Preencha seus dados para iniciar a sua associação. Em poucos minutos você recebe sua carteirinha digital e já pode aproveitar os benefícios.</p>
+          <p class="muted" style="max-width:440px;margin-top:18px">Preencha seus dados para se associar ao Clube Meldina e aproveitar os benefícios do seu plano.</p>
           <div class="facts" style="grid-template-columns:1fr 1fr;margin-top:36px">
             <div class="fact"><b>1.000+</b><small>sócios ativos</small></div>
             <div class="fact"><b>3</b><small>planos</small></div>
@@ -86,19 +86,18 @@
         </div>
         <div class="form-card">
           <form class="form" data-fake data-success="#socioOk" data-title="Cadastro recebido!" data-msg="Bem-vindo à realeza.">
-            <div class="field full"><label for="s-nome">Nome completo</label><input id="s-nome" type="text" placeholder="Como está no seu documento" required><span class="err"></span></div>
-            <div class="field"><label for="s-email">E-mail</label><input id="s-email" type="email" placeholder="voce@email.com" required><span class="err"></span></div>
-            <div class="field"><label for="s-tel">Celular</label><input id="s-tel" type="tel" placeholder="(00) 00000-0000" required><span class="err"></span></div>
+            <div class="field full"><label for="s-nome">Nome completo</label><input id="s-nome" type="text" placeholder="Como está no seu documento" autocomplete="name" maxlength="120" required><span class="err"></span></div>
+            <div class="field"><label for="s-email">E-mail</label><input id="s-email" type="email" placeholder="voce@email.com" autocomplete="email" inputmode="email" maxlength="160" required><span class="err"></span></div>
+            <div class="field"><label for="s-tel">Celular</label><input id="s-tel" type="tel" placeholder="(00) 00000-0000" autocomplete="tel" inputmode="tel" maxlength="20" required><span class="err"></span></div>
             <div class="field"><label for="s-plano">Plano</label><select id="s-plano"><option>Coroa — R$ 19,90/mês</option><option selected>Realeza — R$ 49,90/mês</option><option>Majestade — R$ 99,90/mês</option></select></div>
             <div class="field"><label for="s-tam">Tamanho da camisa (kit)</label><select id="s-tam"><option>P</option><option selected>M</option><option>G</option><option>GG</option><option>XG</option></select></div>
             <label class="check full"><input type="checkbox" required><span>Li e aceito o regulamento do programa Clube Meldina e a Política de Privacidade.</span></label>
-            <label class="check full"><input type="checkbox"><span>Quero receber novidades do Meldina FC por e-mail.</span></label>
             <div class="full"><button class="btn btn--block" type="submit">Finalizar associação</button></div>
           </form>
           <div class="form-success" id="socioOk">
             <div class="form-success__icon" data-icon="crown"></div>
             <h3 class="display">Bem-vindo à realeza!</h3>
-            <p>Seu cadastro foi recebido. Em breve você receberá as instruções para ativar sua carteirinha digital de Clube Meldina.</p>
+            <p>Seu cadastro foi registrado. Agora você faz parte do Clube Meldina.</p>
             <a class="btn btn--ghost" style="margin-top:24px" href="index.html">Voltar ao início</a>
           </div>
         </div>

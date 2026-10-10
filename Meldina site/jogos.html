@@ -28,13 +28,13 @@
     <section class="section">
       <div class="wrap">
         <div class="flex-between" style="margin-bottom:32px">
-          <div class="tabs" id="fxTabs">
+          <div class="tabs" id="fxTabs" role="group" aria-label="Jogos ou resultados">
             <button class="tab is-active" data-f="cal">Próximos jogos</button>
             <button class="tab" data-f="res">Resultados</button>
           </div>
           <span class="muted" style="font-size:.84rem">Horários de Brasília · sujeitos a alteração</span>
         </div>
-        <div class="fixtures" id="fixtures"></div>
+        <ol class="fixtures" id="fixtures"></ol>
       </div>
     </section>
 
@@ -43,14 +43,15 @@
         <div class="section-head">
           <div><p class="eyebrow">Série A · após a 6ª rodada</p><h2 class="display">Pro Clubs</h2></div>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap" tabindex="0" role="region" aria-label="Tabela da Série A, role para os lados">
           <table class="table">
-            <thead><tr><th>#</th><th>Clube</th><th>Pts</th><th>J</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th><th>Últimos 5</th></tr></thead>
+            <caption class="sr-only">Classificação da Série A do Pro Clubs</caption>
+            <thead><tr><th scope="col">#</th><th scope="col">Clube</th><th scope="col"><abbr title="Pontos">Pts</abbr></th><th scope="col"><abbr title="Jogos">J</abbr></th><th scope="col"><abbr title="Vitórias">V</abbr></th><th scope="col"><abbr title="Empates">E</abbr></th><th scope="col"><abbr title="Derrotas">D</abbr></th><th scope="col"><abbr title="Gols pró">GP</abbr></th><th scope="col"><abbr title="Gols contra">GC</abbr></th><th scope="col"><abbr title="Saldo de gols">SG</abbr></th><th scope="col">Últimos 5</th></tr></thead>
             <tbody id="standings"></tbody>
           </table>
         </div>
         <div class="legend">
-          <span><i style="background:#1f8a4c"></i> Classificação aos playoffs do título</span>
+          <span><i style="background:var(--vitoria)"></i> Classificação aos playoffs do título</span>
           <span><i style="background:var(--grena-2)"></i> Rebaixamento</span>
         </div>
       </div>

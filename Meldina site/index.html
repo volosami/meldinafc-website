@@ -17,7 +17,7 @@
 
   <main>
     <!-- HERO -->
-    <section class="hero" id="hero" aria-label="Destaques">
+    <section class="hero" id="hero" aria-roledescription="carrossel" aria-label="Destaques">
       <img class="hero__bgmark" src="assets/img/monograma-outline.png" alt="">
       <div class="hero__grain"></div>
       <div class="hero__slides wrap">
@@ -25,25 +25,25 @@
           <div class="hero__copy">
             <p class="eyebrow">Pro Clubs · Série A 2026</p>
             <h1 class="display">Muito além<br><em>do jogo</em></h1>
-            <p>Campeão da Segunda Divisão em 2025, o Meldina perdeu a estreia na elite — e respondeu com cinco vitórias seguidas e a liderança. Hoje tem Meldina na Lovebomb Arena: Tupinambá às 22h.</p>
+            <p>Campeão da Segunda Divisão em 2025, o Meldina perdeu a estreia na elite — e respondeu com cinco vitórias seguidas e a liderança.</p>
             <div class="hero__actions">
               <a class="btn" href="noticia.html?id=vitoria-sete-lagos">Leia o relato <span data-icon="arrow"></span></a>
               <a class="btn btn--ghost" href="jogos.html">Próximos jogos</a>
             </div>
           </div>
-          <div class="hero__media"><span class="hero__number">9</span><img src="assets/players/almeida-9.jpg" alt="Almeida, camisa 9 do Meldina FC"></div>
+          <div class="hero__media"><span class="hero__number" aria-hidden="true">9</span><img src="assets/players/almeida-9.jpg" alt="Almeida, camisa 9 do Meldina FC"></div>
         </article>
         <article class="hero__slide">
           <div class="hero__copy">
             <p class="eyebrow">Nova camisa II · Lider</p>
             <h2 class="display">A coroa<br><em>pesa</em></h2>
-            <p>Branca, com gola e punhos em grená e ouro. A nova camisa II do Meldina chegou para a estreia na elite — já à venda na Loja Oficial.</p>
+            <p>Branca, com gola e punhos em grená e ouro. A nova camisa II do Meldina chegou para a estreia na elite — já na Loja Oficial.</p>
             <div class="hero__actions">
-              <a class="btn" href="loja.html">Comprar agora <span data-icon="arrow"></span></a>
+              <a class="btn" href="loja.html">Ver na loja <span data-icon="arrow"></span></a>
               <a class="btn btn--ghost" href="noticia.html?id=camisa-2026">Conheça os detalhes</a>
             </div>
           </div>
-          <div class="hero__media hero__media--photo"><span class="hero__number">II</span><img src="assets/img/camisa-2-modelo.jpg" alt="Jogador do Meldina com a nova camisa II branca"></div>
+          <div class="hero__media hero__media--photo"><span class="hero__number" aria-hidden="true">II</span><img src="assets/img/camisa-2-modelo.jpg" alt="Jogador do Meldina com a nova camisa II branca"></div>
         </article>
         <article class="hero__slide">
           <div class="hero__copy">
@@ -55,14 +55,17 @@
               <a class="btn btn--ghost" href="socio.html#planos">Ver planos</a>
             </div>
           </div>
-          <div class="hero__media"><span class="hero__number">10</span><img src="assets/players/carrijo-10.jpg" alt="Carrijo, camisa 10 do Meldina FC"></div>
+          <div class="hero__media"><span class="hero__number" aria-hidden="true">10</span><img src="assets/players/carrijo-10.jpg" alt="Carrijo, camisa 10 do Meldina FC"></div>
         </article>
       </div>
       <div class="hero__nav">
         <div class="wrap">
-          <button class="hero__tab"><small>Futebol</small><span>Campeão da Segunda Divisão, líder na elite</span></button>
-          <button class="hero__tab"><small>Loja</small><span>Nova camisa II: a coroa pesa</span></button>
-          <button class="hero__tab"><small>Clube Meldina</small><span>Planos desde R$ 19,90</span></button>
+          <div class="hero__tabs" role="tablist" aria-label="Destaques">
+            <button class="hero__tab"><small>Futebol</small><span>Campeão da Segunda Divisão, líder na elite</span></button>
+            <button class="hero__tab"><small>Loja</small><span>Nova camisa II: a coroa pesa</span></button>
+            <button class="hero__tab"><small>Clube Meldina</small><span>Planos desde R$ 19,90</span></button>
+          </div>
+          <button type="button" class="hero__pause" aria-label="Pausar a troca automática dos destaques"></button>
         </div>
       </div>
     </section>
@@ -109,7 +112,7 @@
       <div class="wrap">
         <div class="section-head">
           <div>
-            <img class="tv__logo" src="assets/img/mtv-white.png" alt="Meldina TV">
+            <h2><img class="tv__logo" src="assets/img/mtv-white.png" alt="Meldina TV" loading="lazy"></h2>
             <p class="muted" style="margin:14px 0 0;max-width:460px">MFC News, Meldcast, bastidores e melhores momentos. O canal oficial do Meldina FC no YouTube.</p>
           </div>
           <a class="btn" href="https://www.youtube.com/@MeldinaTV" target="_blank" rel="noopener"><span data-icon="yt"></span> Inscreva-se</a>
@@ -129,23 +132,23 @@
           <a class="link-arrow" href="loja.html">Ver toda a loja <span data-icon="arrow"></span></a>
         </div>
         <div class="kit-feature">
-          <a class="kit kit--store reveal" href="loja.html">
-            <img src="assets/img/camisa-2-loja.jpg" alt="Camisa II branca do Meldina FC 2026">
-            <span class="kit__badge">Lançamento</span>
-            <div class="kit__body">
+          <a class="kit kit--store reveal" href="loja.html" aria-label="Camisa II, R$ 249,90. Ver na loja">
+            <img src="assets/img/camisa-2-loja.jpg" alt="" loading="lazy">
+            <span class="kit__badge" aria-hidden="true">Lançamento</span>
+            <div class="kit__body" aria-hidden="true">
               <p class="eyebrow">Lançamento · 2026</p>
               <h3 class="display">Camisa II</h3>
               <p class="kit__price">R$ 249,90</p>
-              <span class="btn btn--sm">Comprar</span>
+              <span class="btn btn--sm">Ver na loja</span>
             </div>
           </a>
-          <a class="kit kit--home reveal reveal-d1" href="loja.html">
-            <img src="assets/img/camisa-1.jpg" alt="Camisa I grená do Meldina FC 2026">
-            <div class="kit__body">
+          <a class="kit kit--home reveal reveal-d1" href="loja.html" aria-label="Camisa I, R$ 249,90. Ver na loja">
+            <img src="assets/img/camisa-1.jpg" alt="" loading="lazy">
+            <div class="kit__body" aria-hidden="true">
               <p class="eyebrow" style="color:var(--ouro)">Temporada 2026</p>
               <h3 class="display">Camisa I</h3>
               <p class="kit__price">R$ 249,90</p>
-              <span class="btn btn--sm">Comprar</span>
+              <span class="btn btn--sm">Ver na loja</span>
             </div>
           </a>
         </div>

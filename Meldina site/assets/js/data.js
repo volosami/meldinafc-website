@@ -3,6 +3,7 @@
 const MFC = {
   instagram: "https://www.instagram.com/meldinafc/",
   youtube: "https://www.youtube.com/@MeldinaTV",
+  twitch: "https://www.twitch.tv/meldinatv", // somente jogos ao vivo
   estadio: "Lovebomb Arena",
   temporada: 2026,
   fundacao: 2017,
