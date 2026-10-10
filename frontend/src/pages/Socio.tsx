@@ -56,10 +56,7 @@ export const Socio: React.FC = () => {
             <a href="/">Início</a> <span>/</span> <span>Clube Meldina</span>
           </div>
           <p className="eyebrow">Programa Oficial de Sócios</p>
-          <h1 className="display">
-            Muito além<br />
-            <em>da torcida</em>
-          </h1>
+          <h1 className="display">Clube Meldina</h1>
           <p>
             Seja sócio-torcedor do Meldina FC. Garanta descontos exclusivos em camisas, acesso prioritário aos jogos e ajude a fortalecer o nosso clube na Série A.
           </p>
@@ -88,11 +85,11 @@ export const Socio: React.FC = () => {
                 <small>/mês</small>
               </div>
               <ul>
-                <li>✓ Carteirinha digital de sócio</li>
-                <li>✓ 5% de desconto na Loja Oficial</li>
-                <li>✓ Acesso ao grupo oficial no WhatsApp</li>
-                <li className="off">✕ Desconto em ingressos de jogos</li>
-                <li className="off">✕ Camisa oficial autografada</li>
+                <li><span className="plan__ico">✓</span><span>Carteirinha digital de sócio</span></li>
+                <li><span className="plan__ico">✓</span><span>5% de desconto na Loja Oficial</span></li>
+                <li><span className="plan__ico">✓</span><span>Acesso ao grupo oficial no WhatsApp</span></li>
+                <li className="off"><span className="plan__ico">✕</span><span>Desconto em ingressos de jogos</span></li>
+                <li className="off"><span className="plan__ico">✕</span><span>Camisa oficial autografada</span></li>
               </ul>
               <button
                 className={`btn btn--block ${selectedPlan === "BRONZE" ? "btn--grena" : "btn--ghost"}`}
@@ -116,11 +113,11 @@ export const Socio: React.FC = () => {
                 <small>/mês</small>
               </div>
               <ul>
-                <li>✓ Carteirinha digital de sócio</li>
-                <li>✓ 10% de desconto na Loja Oficial</li>
-                <li>✓ 20% de desconto em ingressos</li>
-                <li>✓ Participação em sorteios mensais</li>
-                <li className="off">✕ Camisa oficial autografada</li>
+                <li><span className="plan__ico">✓</span><span>Carteirinha digital de sócio</span></li>
+                <li><span className="plan__ico">✓</span><span>10% de desconto na Loja Oficial</span></li>
+                <li><span className="plan__ico">✓</span><span>20% de desconto em ingressos</span></li>
+                <li><span className="plan__ico">✓</span><span>Participação em sorteios mensais</span></li>
+                <li className="off"><span className="plan__ico">✕</span><span>Camisa oficial autografada</span></li>
               </ul>
               <button
                 className={`btn btn--block ${selectedPlan === "PRATA" ? "btn--grena" : "btn--ghost"}`}
@@ -145,11 +142,11 @@ export const Socio: React.FC = () => {
                 <small>/mês</small>
               </div>
               <ul>
-                <li>✓ Todos os benefícios do Prata</li>
-                <li>✓ 20% de desconto na Loja Oficial</li>
-                <li>✓ Acesso VIP nos eventos do clube</li>
-                <li>✓ Sorteio de 1 Camisa Oficial por ano</li>
-                <li>✓ Nome gravado no Mural do Clube</li>
+                <li><span className="plan__ico">✓</span><span>Todos os benefícios do Prata</span></li>
+                <li><span className="plan__ico">✓</span><span>20% de desconto na Loja Oficial</span></li>
+                <li><span className="plan__ico">✓</span><span>Acesso VIP nos eventos do clube</span></li>
+                <li><span className="plan__ico">✓</span><span>Sorteio de 1 Camisa Oficial por ano</span></li>
+                <li><span className="plan__ico">✓</span><span>Nome gravado no Mural do Clube</span></li>
               </ul>
               <button
                 className="btn btn--block"

@@ -1,25 +1,6 @@
 import React from "react";
 import { MFC_INFO, TROPHIES, HISTORY } from "../data/staticData";
 
-const TrophyArt: React.FC<{ mark: string }> = ({ mark }) => (
-  <svg viewBox="0 0 120 150" aria-hidden="true">
-    <defs>
-      <linearGradient id="gold" x1="0" x2="1" y1="0" y2="1">
-        <stop offset="0" stopColor="#ffe08a" />
-        <stop offset=".45" stopColor="#efaa19" />
-        <stop offset="1" stopColor="#9a6a06" />
-      </linearGradient>
-    </defs>
-    <path d="M30 14h60v30c0 22-13 38-30 42-17-4-30-20-30-42Z" fill="url(#gold)" />
-    <path d="M30 22H14c0 20 8 30 20 32M90 22h16c0 20-8 30-20 32" fill="none" stroke="url(#gold)" strokeWidth="6" strokeLinecap="round" />
-    <path d="M54 86h12v22H54Z" fill="url(#gold)" />
-    <path d="M38 108h44l6 16H32Z" fill="url(#gold)" />
-    <rect x="26" y="124" width="68" height="16" rx="2" fill="#5a000a" />
-    <path d="m46 4 6 8 8-9 8 9 6-8v10H46Z" fill="url(#gold)" />
-    <text x="60" y="54" textAnchor="middle" fontFamily="Cinzel, serif" fontWeight="700" fontSize={mark.length > 1 ? 20 : 26} fill="#5a000a">{mark}</text>
-  </svg>
-);
-
 export const Clube: React.FC = () => {
   return (
     <div>
@@ -61,35 +42,6 @@ export const Clube: React.FC = () => {
         </div>
       </section>
 
-      {/* IDENTIDADE E CORES */}
-      <section className="section">
-        <div className="wrap">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Identidade Visual</p>
-              <h2 className="display">Cores Oficiais</h2>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-grena p-8 rounded border border-white/10">
-              <span className="font-display text-3xl uppercase tracking-wider block">Grená</span>
-              <span className="text-xs text-white/70 block mt-1 font-mono">#8F0010</span>
-              <p className="text-sm text-white/80 mt-4">Simboliza o sangue, a luta e a paixão inegociável da torcida.</p>
-            </div>
-            <div className="bg-ouro p-8 rounded text-noite">
-              <span className="font-display text-3xl uppercase tracking-wider block">Ouro</span>
-              <span className="text-xs text-noite/70 block mt-1 font-mono">#EFAA19</span>
-              <p className="text-sm text-noite/80 mt-4">A coroa, a glória e a busca incessante pelos títulos.</p>
-            </div>
-            <div className="bg-marinho p-8 rounded border border-white/10">
-              <span className="font-display text-3xl uppercase tracking-wider block">Marinho</span>
-              <span className="text-xs text-white/70 block mt-1 font-mono">#001065</span>
-              <p className="text-sm text-white/80 mt-4">A sobriedade, a tradição e a firmeza institucional do clube.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* SALA DE TROFÉUS */}
       <section className="section trophy-room" id="trofeus">
         <div className="wrap">
@@ -100,24 +52,29 @@ export const Clube: React.FC = () => {
             </div>
             <p className="trophy-total"><b>{TROPHIES.reduce((n, t) => n + t.count, 0)}</b> títulos na história</p>
           </div>
-          <div className="grid gap-6">
-            {TROPHIES.map((t) => (
-              <article key={t.id} className="trophy">
-                <div className="trophy__art">
-                  <TrophyArt mark={t.mark} />
-                  <span className="trophy__count">{t.count}×</span>
-                </div>
-                <div className="trophy__body">
-                  <p className="eyebrow">{t.competition}</p>
-                  <h3 className="display">{t.title}</h3>
-                  <div className="trophy__years">
-                    {t.seasons.map((s) => <span key={s}>{s}</span>)}
+          <ol className="trophy-tl">
+            {TROPHIES.map((t, i) => (
+              <li key={t.id} className={`trophy-tl__item ${i % 2 ? "is-left" : "is-right"}`}>
+                <svg className="trophy-tl__star" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m12 1.5 3.1 7.1 7.7.7-5.8 5.1 1.7 7.6L12 18l-6.7 4 1.7-7.6-5.8-5.1 7.7-.7Z" />
+                </svg>
+                <article className="trophy-card">
+                  <div className="trophy-card__media">
+                    <img src={t.image} alt={`Troféu ${t.title} ${t.game}`} loading="lazy" />
+                    {t.count > 1 && <span className="trophy-card__count">{t.count}×</span>}
                   </div>
-                  <p>{t.desc}</p>
-                </div>
-              </article>
+                  <div className="trophy-card__year">
+                    {t.year}
+                    <small>{t.game}</small>
+                  </div>
+                  <div className="trophy-card__title">
+                    {t.title}
+                    <small>{t.competition}</small>
+                  </div>
+                </article>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 

@@ -143,23 +143,12 @@ export const STATIC_PRODUCTS: Product[] = [
   { id: "chaveiro-metal", name: "Chaveiro Brasão de Metal", category: "Colecionáveis", price: 29.9, image: "/assets/img/produto-chaveiro.jpg", desc: "Em metal polido com banho de ouro envelhecido." },
 ];
 
-/* Sala de troféus. count = número de títulos; seasons = edição do jogo e temporada de cada conquista */
+/* Sala de troféus, da conquista mais recente para a mais antiga. count = títulos naquela edição do jogo */
 export const TROPHIES = [
-  {
-    id: "primeira-divisao", title: "Primeira Divisão", competition: "Pro Clubs", mark: "1ª", count: 10,
-    seasons: ["FIFA 21 · 2020/21 — 3×", "FIFA 23 · 2022/23 — 7×"],
-    desc: "A maior marca da história do clube. Tricampeão da primeira divisão no FIFA 21 e, duas temporadas depois, uma sequência histórica de sete títulos no FIFA 23.",
-  },
-  {
-    id: "copa-ea", title: "Copa EA", competition: "EA Sports", mark: "EA", count: 1,
-    seasons: ["FIFA 19 · 2018/19"],
-    desc: "A primeira taça da história do Meldina, conquistada na segunda temporada do clube.",
-  },
-  {
-    id: "serie-b", title: "Série B", competition: "Pro Clubs", mark: "B", count: 1,
-    seasons: ["FC 25 · 2025"],
-    desc: "O título da reconstrução. Com a nova geração formada em 2024, o Meldina venceu a Série B e garantiu o retorno à elite em 2026.",
-  },
+  { id: "serie-b-fc25", year: "2025", game: "FC 25", title: "Série B", competition: "Pro Clubs", count: 1, image: "/assets/img/trofeus/pro-clubs-eafc.webp" },
+  { id: "primeira-divisao-fifa23", year: "2023", game: "FIFA 23", title: "Primeira Divisão", competition: "Pro Clubs", count: 7, image: "/assets/img/trofeus/pro-clubs-fifa.webp" },
+  { id: "primeira-divisao-fifa21", year: "2021", game: "FIFA 21", title: "Primeira Divisão", competition: "Pro Clubs", count: 3, image: "/assets/img/trofeus/pro-clubs-fifa.webp" },
+  { id: "copa-ea-fifa19", year: "2019", game: "FIFA 19", title: "Copa EA", competition: "EA Sports", count: 1, image: "/assets/img/trofeus/copa-ea.webp" },
 ];
 
 /* Linha do tempo do clube, por edição do jogo */
