@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { Topbar } from "./components/layout/Topbar";
 import { Header } from "./components/layout/Header";
@@ -18,17 +18,34 @@ import { Socio } from "./pages/Socio";
 import { Loja } from "./pages/Loja";
 import { Tv } from "./pages/Tv";
 
-// Painel Admin
-import { AdminLogin } from "./pages/admin/AdminLogin";
-import { AdminRegister } from "./pages/admin/AdminRegister";
-import { AdminDashboard } from "./pages/admin/AdminDashboard";
-import { AdminNoticias } from "./pages/admin/AdminNoticias";
-import { AdminJogos } from "./pages/admin/AdminJogos";
-import { AdminElenco } from "./pages/admin/AdminElenco";
-import { AdminClube } from "./pages/admin/AdminClube";
-import { AdminSocios } from "./pages/admin/AdminSocios";
-import { AdminLayout } from "./components/admin/AdminLayout";
-import { ProtectedRoute } from "./components/admin/ProtectedRoute";
+// Painel Admin: carregado sob demanda, para não pesar no site público.
+const lazyNamed = <K extends string>(load: () => Promise<Record<K, React.ComponentType>>, name: K) =>
+  lazy(() => load().then((m) => ({ default: m[name] })));
+const AdminLogin = lazyNamed(() => import("./pages/admin/AdminLogin"), "AdminLogin");
+const AdminRegister = lazyNamed(() => import("./pages/admin/AdminRegister"), "AdminRegister");
+const AdminDashboard = lazyNamed(() => import("./pages/admin/AdminDashboard"), "AdminDashboard");
+const AdminNoticias = lazyNamed(() => import("./pages/admin/AdminNoticias"), "AdminNoticias");
+const AdminJogos = lazyNamed(() => import("./pages/admin/AdminJogos"), "AdminJogos");
+const AdminElenco = lazyNamed(() => import("./pages/admin/AdminElenco"), "AdminElenco");
+const AdminClube = lazyNamed(() => import("./pages/admin/AdminClube"), "AdminClube");
+const AdminSocios = lazyNamed(() => import("./pages/admin/AdminSocios"), "AdminSocios");
+const AdminLayout = lazyNamed(() => import("./components/admin/AdminLayout"), "AdminLayout");
+const ProtectedRoute = lazyNamed(() => import("./components/admin/ProtectedRoute"), "ProtectedRoute");
+
+const ScrollManager: React.FC = () => {
+  const { pathname, hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+      if (target) {
+        target.scrollIntoView();
+        return;
+      }
+    }
+    window.scrollTo(0, 0);
+  }, [pathname, hash]);
+  return null;
+};
 
 const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
@@ -40,9 +57,14 @@ const PublicLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
   return (
     <>
+      <a className="skip-link" href="#conteudo">
+        Pular para o conteúdo
+      </a>
       <Topbar />
       <Header />
-      <main>{children}</main>
+      <main id="conteudo" tabIndex={-1}>
+        {children}
+      </main>
       <Footer />
       <CartDrawer />
     </>
@@ -54,7 +76,9 @@ export function App() {
     <AdminAuthProvider>
       <CartProvider>
         <Router>
+          <ScrollManager />
           <PublicLayout>
+            <Suspense fallback={<p className="section wrap text-white/70" role="status">Carregando…</p>}>
             <Routes>
               {/* Rotas Públicas */}
               <Route path="/" element={<Home />} />
@@ -87,6 +111,7 @@ export function App() {
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            </Suspense>
           </PublicLayout>
         </Router>
       </CartProvider>

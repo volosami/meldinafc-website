@@ -1,5 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Play } from "lucide-react";
 import { MFC_INFO } from "../data/staticData";
+import { FallbackImage } from "../components/ui/FallbackImage";
+
+const NEW_TAB = <span className="sr-only"> (abre em nova aba)</span>;
 
 export const Tv: React.FC = () => {
   const videos = [
@@ -8,7 +13,7 @@ export const Tv: React.FC = () => {
       title: "Bastidores da Vitória Histórica sobre o Sete Lagos",
       show: "Meldina Inside",
       dur: "14:20",
-      thumb: "/assets/news/sete-lagos.jpg",
+      thumb: "/assets/news/escalacao-carrijo.jpg",
       date: "22 de Setembro, 2026",
     },
     {
@@ -32,7 +37,7 @@ export const Tv: React.FC = () => {
       title: "Apresentação do Manto II · Bastidores do ensaio oficial",
       show: "Especial",
       dur: "08:30",
-      thumb: "/assets/news/camisas.jpg",
+      thumb: "/assets/img/camisa-2.jpg",
       date: "20 de Setembro, 2026",
     },
   ];
@@ -42,9 +47,9 @@ export const Tv: React.FC = () => {
       <section className="page-hero">
         <img className="page-hero__mark" src="/assets/img/monograma-outline.png" alt="" />
         <div className="wrap">
-          <div className="breadcrumb">
-            <a href="/">Início</a> <span>/</span> <span>Meldina TV</span>
-          </div>
+          <nav className="breadcrumb" aria-label="Trilha">
+            <Link to="/">Início</Link> <span aria-hidden="true">/</span> <span aria-current="page">Meldina TV</span>
+          </nav>
           <h1 className="page-hero__logo">
             <img src="/assets/img/mtv-white.png" alt="Meldina TV" />
           </h1>
@@ -59,7 +64,7 @@ export const Tv: React.FC = () => {
           <div>
             <p className="eyebrow">Ao vivo · Twitch</p>
             <h2 className="display">Todos os jogos, ao vivo</h2>
-            <p className="text-gray-300 text-sm mt-3 max-w-xl">
+            <p className="text-white/75 text-sm mt-3 max-w-xl">
               Acompanhe as partidas do Meldina FC exclusivamente no canal da Twitch.
             </p>
           </div>
@@ -69,10 +74,11 @@ export const Tv: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+            <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4" aria-hidden="true">
               <path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z" />
             </svg>
             Assistir na Twitch
+            {NEW_TAB}
           </a>
         </div>
       </section>
@@ -81,8 +87,10 @@ export const Tv: React.FC = () => {
         <div className="wrap">
           <div className="section-head">
             <div>
-              <img className="tv__logo" src="/assets/img/mtv-white.png" alt="Meldina TV" />
-              <p className="text-gray-300 text-sm mt-3 max-w-md">
+              <h2>
+                <img className="tv__logo" src="/assets/img/mtv-white.png" alt="Vídeos da Meldina TV" loading="lazy" />
+              </h2>
+              <p className="text-white/75 text-sm mt-3 max-w-md">
                 Vídeos semanais com o elenco e comissão técnica.
               </p>
             </div>
@@ -92,7 +100,8 @@ export const Tv: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Canal no YouTube →
+              Canal no YouTube <ArrowRight aria-hidden="true" />
+              {NEW_TAB}
             </a>
           </div>
 
@@ -103,9 +112,10 @@ export const Tv: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="video"
+              aria-label={`${videos[0].title}, ${videos[0].show}, ${videos[0].dur}. Assistir no YouTube (abre em nova aba)`}
             >
               <div className="video__thumb">
-                <img src={videos[0].thumb} alt="" className="bg" />
+                <FallbackImage src={videos[0].thumb} alt="" className="bg" loading="lazy" />
                 <div className="video__overlay">
                   <span className="video__show">
                     <small>{videos[0].show}</small>
@@ -113,7 +123,7 @@ export const Tv: React.FC = () => {
                   </span>
                 </div>
                 <span className="video__dur">{videos[0].dur}</span>
-                <span className="video__play">▶</span>
+                <span className="video__play" aria-hidden="true"><Play /></span>
               </div>
               <div className="video__title">{videos[0].title}</div>
               <div className="video__meta">{videos[0].date}</div>
@@ -128,10 +138,11 @@ export const Tv: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="video video--row"
+                  aria-label={`${v.title}, ${v.show}, ${v.dur}. Assistir no YouTube (abre em nova aba)`}
                 >
                   <div className="video__thumb">
-                    <img src={v.thumb} alt="" className="bg" />
-                    <span className="video__play">▶</span>
+                    <FallbackImage src={v.thumb} alt="" className="bg" loading="lazy" />
+                    <span className="video__play" aria-hidden="true"><Play /></span>
                   </div>
                   <div>
                     <div className="video__show">

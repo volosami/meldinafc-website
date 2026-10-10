@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { api } from "../services/api";
 import { NewsArticle } from "../types";
+import { FallbackImage } from "../components/ui/FallbackImage";
+import { formatDateLong, safeDate } from "../lib/format";
 
 export const NoticiaDetalhe: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -9,20 +12,32 @@ export const NoticiaDetalhe: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function load() {
-      if (slug) {
-        const data = await api.getNewsBySlug(slug);
-        setArticle(data);
-      }
-      setLoading(false);
-    }
-    load();
+    let cancelled = false;
+    setLoading(true);
+    setArticle(null);
+    (slug ? api.getNewsBySlug(slug) : Promise.resolve(null))
+      .then((data) => !cancelled && setArticle(data && typeof data.title === "string" ? data : null))
+      .catch(() => !cancelled && setArticle(null))
+      .finally(() => !cancelled && setLoading(false));
+    return () => {
+      cancelled = true;
+    };
   }, [slug]);
+
+  // Título da aba acompanha a notícia aberta.
+  useEffect(() => {
+    if (!article) return;
+    const previous = document.title;
+    document.title = `${article.title} | Meldina FC`;
+    return () => {
+      document.title = previous;
+    };
+  }, [article]);
 
   if (loading) {
     return (
       <div className="section wrap text-center py-20">
-        <p className="text-gray-400">Carregando notícia...</p>
+        <p className="text-white/70" role="status">Carregando notícia…</p>
       </div>
     );
   }
@@ -30,25 +45,41 @@ export const NoticiaDetalhe: React.FC = () => {
   if (!article) {
     return (
       <div className="section wrap text-center py-20">
-        <h2 className="display text-3xl mb-4">Notícia não encontrada</h2>
+        <h1 className="display text-3xl mb-4">Notícia não encontrada</h1>
+        <p className="text-white/70 mb-8">O link pode estar errado ou a notícia foi retirada do ar.</p>
         <Link to="/noticias" className="btn btn--sm">
-          Voltar para Notícias
+          Ver todas as notícias
         </Link>
       </div>
     );
   }
 
+  const date = safeDate(article.publishedAt);
+  const paragraphs = (article.content || "")
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  const shareUrl = typeof window !== "undefined" ? window.location.href : "";
+
   return (
-    <div>
+    <article>
       <section className="page-hero">
         <div className="wrap max-w-4xl">
-          <div className="breadcrumb">
-            <Link to="/">Início</Link> <span>/</span> <Link to="/noticias">Notícias</Link> <span>/</span> <span>{article.category}</span>
-          </div>
+          <nav className="breadcrumb" aria-label="Trilha">
+            <Link to="/">Início</Link> <span aria-hidden="true">/</span> <Link to="/noticias">Notícias</Link>{" "}
+            <span aria-hidden="true">/</span> <span aria-current="page">{article.category}</span>
+          </nav>
           <p className="eyebrow">{article.category}</p>
           <h1 className="display text-3xl md:text-5xl">{article.title}</h1>
-          <p className="text-sm text-gray-300 mt-4">
-            Publicado em {new Date(article.publishedAt).toLocaleDateString("pt-BR")} por {article.author}
+          <p className="text-sm text-white/75 mt-4">
+            {date ? (
+              <>
+                Publicado em <time dateTime={article.publishedAt}>{formatDateLong(date)}</time>
+              </>
+            ) : (
+              "Publicado"
+            )}
+            {article.author ? ` por ${article.author}` : ""}
           </p>
         </div>
       </section>
@@ -56,48 +87,53 @@ export const NoticiaDetalhe: React.FC = () => {
       <section className="section section--creme">
         <div className="wrap max-w-3xl">
           {article.imageUrl && (
-            <div className="mb-10 rounded overflow-hidden shadow-lg">
-              <img
+            <figure className="article-figure mb-10 rounded overflow-hidden shadow-lg">
+              <FallbackImage
                 src={article.imageUrl}
-                alt={article.title}
+                alt=""
                 className="w-full h-auto object-cover max-h-[460px]"
+                fallbackClassName="article-figure__fallback"
               />
-            </div>
+            </figure>
           )}
 
           <div className="prose text-tinta leading-relaxed text-lg space-y-6">
-            <p className="font-serif italic text-xl text-gray-800 border-l-4 border-grena pl-4 py-1">
-              {article.summary}
-            </p>
-            <p>{article.content}</p>
+            {article.summary && (
+              <p className="font-serif italic text-xl text-tinta/85">
+                {article.summary}
+              </p>
+            )}
+            {paragraphs.map((p, i) => (
+              <p key={i}>{p}</p>
+            ))}
           </div>
 
-          <div className="mt-12 pt-8 border-t border-linha-clara flex justify-between items-center">
-            <Link to="/noticias" className="link-arrow text-grena font-bold">
-              ← Voltar para Notícias
+          <div className="mt-12 pt-8 border-t border-linha-clara flex flex-wrap gap-6 justify-between items-center">
+            <Link to="/noticias" className="link-arrow">
+              <ArrowLeft aria-hidden="true" /> Voltar para Notícias
             </Link>
-            <div className="flex gap-4 text-sm text-gray-600">
+            <div className="flex gap-4 text-sm text-tinta/75">
               <span>Compartilhar:</span>
               <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}`}
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(shareUrl)}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="text-grena hover:underline"
               >
-                Twitter
+                X (Twitter)<span className="sr-only"> (abre em nova aba)</span>
               </a>
               <a
-                href={`https://wa.me/?text=${encodeURIComponent(article.title + " " + window.location.href)}`}
+                href={`https://wa.me/?text=${encodeURIComponent(article.title + " " + shareUrl)}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="text-grena hover:underline"
               >
-                WhatsApp
+                WhatsApp<span className="sr-only"> (abre em nova aba)</span>
               </a>
             </div>
           </div>
         </div>
       </section>
-    </div>
+    </article>
   );
 };

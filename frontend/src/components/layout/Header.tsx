@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
@@ -6,6 +6,15 @@ export const Header: React.FC = () => {
   const [navOpen, setNavOpen] = useState(false);
   const location = useLocation();
   const { totalCount, openCart } = useCart();
+
+  // Fecha o menu ao trocar de página e com Esc.
+  useEffect(() => setNavOpen(false), [location.pathname]);
+  useEffect(() => {
+    if (!navOpen) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setNavOpen(false);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [navOpen]);
 
   const navLinks = [
     { label: "Início", path: "/" },
@@ -21,16 +30,19 @@ export const Header: React.FC = () => {
     <header className={`header ${navOpen ? "nav-open" : ""}`}>
       <div className="wrap">
         <Link to="/" className="brand" onClick={() => setNavOpen(false)}>
-          <img src="/assets/img/escudo.png" alt="Escudo do Meldina FC" />
+          <img src="/assets/img/escudo-sm.png" alt="Escudo do Meldina FC" />
           <div className="brand__txt">
             <span className="brand__name">Meldina FC</span>
             <span className="brand__tag">Muito além do jogo</span>
           </div>
         </Link>
 
-        <nav className="nav" aria-label="Navegação principal">
+        <nav className="nav" id="nav-principal" aria-label="Navegação principal">
           {navLinks.map((link) => {
-            const isActive = location.pathname === link.path;
+            const isActive =
+              link.path === "/"
+                ? location.pathname === "/"
+                : location.pathname === link.path || location.pathname.startsWith(`${link.path}/`);
             return (
               <Link
                 key={link.path}
@@ -47,15 +59,19 @@ export const Header: React.FC = () => {
         <div className="header__cta">
           <button
             className="cart-btn"
-            aria-label="Abrir carrinho"
+            aria-label={
+              totalCount > 0
+                ? `Abrir carrinho, ${totalCount} ${totalCount === 1 ? "item" : "itens"}`
+                : "Abrir carrinho, vazio"
+            }
             onClick={openCart}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
               <line x1="3" y1="6" x2="21" y2="6" />
               <path d="M16 10a4 4 0 0 1-8 0" />
             </svg>
-            <span className={`cart-btn__count ${totalCount > 0 ? "is-on" : ""}`}>
+            <span className={`cart-btn__count ${totalCount > 0 ? "is-on" : ""}`} aria-hidden="true">
               {totalCount}
             </span>
           </button>
@@ -66,7 +82,9 @@ export const Header: React.FC = () => {
 
           <button
             className="burger"
-            aria-label="Abrir menu"
+            aria-label={navOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={navOpen}
+            aria-controls="nav-principal"
             onClick={() => setNavOpen(!navOpen)}
           >
             <span></span>
