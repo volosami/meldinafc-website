@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { MFC_INFO, TROPHIES, HISTORY } from "../data/staticData";
 
 export const Clube: React.FC = () => {
@@ -7,9 +8,9 @@ export const Clube: React.FC = () => {
       <section className="page-hero">
         <img className="page-hero__mark" src="/assets/img/monograma-outline.png" alt="" />
         <div className="wrap">
-          <div className="breadcrumb">
-            <a href="/">Início</a> <span>/</span> <span>O Clube</span>
-          </div>
+          <nav className="breadcrumb" aria-label="Trilha">
+            <Link to="/">Início</Link> <span aria-hidden="true">/</span> <span aria-current="page">O Clube</span>
+          </nav>
           <p className="eyebrow">Meldina Futebol Clube</p>
           <h1 className="display">O Clube</h1>
           <p>

@@ -9,8 +9,26 @@ interface CartContextType {
   addItem: (product: Product, size?: string) => void;
   removeItem: (index: number) => void;
   updateQuantity: (index: number, delta: number) => void;
+  clearCart: () => void;
   totalCount: number;
   totalPrice: number;
+}
+
+const MAX_QTY = 20;
+
+// Descarta itens corrompidos ou de versões antigas salvos no navegador.
+function sanitizeCart(value: unknown): CartItem[] {
+  if (!Array.isArray(value)) return [];
+  return value.filter(
+    (it): it is CartItem =>
+      !!it &&
+      typeof it === "object" &&
+      typeof it.product?.id === "string" &&
+      typeof it.product?.name === "string" &&
+      typeof it.product?.price === "number" &&
+      Number.isInteger(it.quantity) &&
+      it.quantity > 0
+  );
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -19,7 +37,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [items, setItems] = useState<CartItem[]>(() => {
     try {
       const saved = localStorage.getItem("meldina_cart");
-      return saved ? JSON.parse(saved) : [];
+      return saved ? sanitizeCart(JSON.parse(saved)) : [];
     } catch {
       return [];
     }
@@ -27,7 +45,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("meldina_cart", JSON.stringify(items));
+    try {
+      localStorage.setItem("meldina_cart", JSON.stringify(items));
+    } catch {
+      // Modo privado ou cota cheia: o carrinho segue funcionando só nesta aba.
+    }
   }, [items]);
 
   const openCart = () => setIsOpen(true);
@@ -39,9 +61,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         (it) => it.product.id === product.id && it.size === size
       );
       if (existingIdx > -1) {
-        const next = [...prev];
-        next[existingIdx].quantity += 1;
-        return next;
+        return prev.map((it, i) =>
+          i === existingIdx ? { ...it, quantity: Math.min(it.quantity + 1, MAX_QTY) } : it
+        );
       }
       return [...prev, { product, size, quantity: 1 }];
     });
@@ -54,15 +76,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateQuantity = (index: number, delta: number) => {
     setItems((prev) => {
-      const next = [...prev];
-      const newQty = next[index].quantity + delta;
+      const current = prev[index];
+      if (!current) return prev;
+      const newQty = current.quantity + delta;
       if (newQty <= 0) {
         return prev.filter((_, i) => i !== index);
       }
-      next[index].quantity = newQty;
-      return next;
+      return prev.map((it, i) => (i === index ? { ...it, quantity: Math.min(newQty, MAX_QTY) } : it));
     });
   };
+
+  const clearCart = () => setItems([]);
 
   const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = items.reduce(
@@ -80,6 +104,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addItem,
         removeItem,
         updateQuantity,
+        clearCart,
         totalCount,
         totalPrice,
       }}

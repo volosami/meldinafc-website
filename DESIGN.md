@@ -16,7 +16,7 @@ colors:
   creme-2: "#e9e1cc"
   tinta: "#0b0d1c"
   cinza: "#6b6f86"
-  vitoria: "#1f8a4c"
+  vitoria: "#1a7a43"
   white: "#ffffff"
 typography:
   display:

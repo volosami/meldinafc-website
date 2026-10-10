@@ -1,6 +1,8 @@
 /* Meldina FC — interações do site.
    IMPORTANTE: não há back-end. Formulários apenas simulam o envio;
-   nenhum dado digitado é armazenado ou transmitido. */
+   nenhum dado digitado é armazenado ou transmitido.
+   Regra "ninguém paga" (PRODUCT.md): loja, ingressos e planos são só vitrine.
+   Nenhum fluxo pede ou exibe dados de pagamento; pedidos terminam numa confirmação. */
 
 (() => {
   "use strict";
@@ -22,6 +24,9 @@
     play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5-13-7.5Z"/></svg>',
     check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>',
     minus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 12h12"/></svg>',
+    plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v12M6 12h12"/></svg>',
+    pause: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>',
+    twitch: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>',
     ticket: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8a2 2 0 0 0 0 4v0a2 2 0 0 1 0 4v2h18v-2a2 2 0 0 1 0-4 2 2 0 0 1 0-4V6H3v2Z"/><path d="M14 6v12" stroke-dasharray="2 2"/></svg>',
     crown: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7l4.5 4L12 5l4.5 6L21 7l-2 11H5L3 7Z"/></svg>',
     star: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>',
@@ -30,6 +35,7 @@
     link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>',
     wa: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.4-.7-2.8-1.1-4.6-4-4.8-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3Z"/></svg>',
   };
+  Object.keys(I).forEach((k) => (I[k] = I[k].replace("<svg ", '<svg aria-hidden="true" focusable="false" ')));
   window.MFC_ICONS = I;
 
   /* Logo Lider Sport (vetor) */
@@ -53,7 +59,7 @@
   /* Escudos genéricos dos adversários (SVG) */
   function crest(key) {
     const t = TEAMS[key];
-    if (t.us) return `<img src="${asset("img/escudo.png")}" alt="${t.nome}">`;
+    if (t.us) return `<img src="${asset("img/escudo-sm.png")}" alt="${t.nome}">`;
     if (t.img) return `<img src="${asset(t.img)}" alt="${esc(t.nome)}">`;
     const txt = `<text x="50" y="${t.shape === "round" ? 58 : 60}" text-anchor="middle" font-family="Anton, Impact, sans-serif" font-size="${t.sigla.length > 2 ? 22 : 28}" fill="${t.c2}" letter-spacing="1">${t.sigla}</text>`;
     let body;
@@ -75,8 +81,13 @@
     const [h, a] = f.placar; const us = f.casa ? h : a, them = f.casa ? a : h;
     return us > them ? "w" : us < them ? "l" : "d";
   };
-  const nextFixture = () => FIXTURES.find((f) => !f.placar) || FIXTURES[FIXTURES.length - 1];
-  const lastResult = () => [...FIXTURES].reverse().find((f) => f.placar);
+  // Uma partida segue como "próxima" até 3h depois do início (jogo em andamento).
+  const MATCH_WINDOW = 3 * 60 * 60 * 1000;
+  const kick = (f) => parseD(f.d).getTime();
+  const isUpcoming = (f, now = Date.now()) => !f.placar && !Number.isNaN(kick(f)) && kick(f) + MATCH_WINDOW > now;
+  const nextFixture = () => FIXTURES.filter((f) => isUpcoming(f)).sort((a, b) => kick(a) - kick(b))[0] || null;
+  const lastResult = () => FIXTURES.filter((f) => f.placar).sort((a, b) => kick(b) - kick(a))[0] || null;
+  const outcomeLabel = (o) => (o === "w" ? "Vitória" : o === "d" ? "Empate" : "Derrota");
   const newsSorted = () => [...NEWS].sort((a, b) => (a.data < b.data ? 1 : -1));
 
   /* ---------------- Cabeçalho / rodapé ---------------- */
@@ -92,17 +103,18 @@
   ];
 
   function renderChrome() {
-    const nx = nextFixture();
     const header = `
+      <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <div class="topbar">
         <div class="wrap">
-          <div class="topbar__left">
-            <span>Próximo jogo: <strong>${TEAMS[home(nx)].curto} x ${TEAMS[away(nx)].curto}</strong> · ${fmtShort(nx.d)} · ${fmtTime(nx.d)}</span>
-            <span>Pro Clubs · Série A ${MFC.temporada} · Campeão da Segunda Divisão 2025</span>
+          <div class="topbar__left topbar__sponsors">
+            <img src="${asset("img/lider-mark.png")}" alt="Lider Sport" class="topbar__logo topbar__logo--lider">
+            <img src="${asset("img/nufut.png")}" alt="nuFUT" class="topbar__logo topbar__logo--nufut">
           </div>
           <div class="topbar__right">
-            <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram @meldinafc">${I.ig}<span class="hide-sm">@meldinafc</span></a>
-            <a href="${MFC.youtube}" target="_blank" rel="noopener" aria-label="YouTube Meldina TV">${I.yt}<span class="hide-sm">Meldina TV</span></a>
+            <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram @meldinafc">${I.ig}<span class="hide-sm">Instagram</span></a>
+            <a href="${MFC.youtube}" target="_blank" rel="noopener" aria-label="Meldina TV no YouTube">${I.yt}<span class="hide-sm">Meldina TV</span></a>
+            <a href="${MFC.twitch}" target="_blank" rel="noopener" aria-label="Jogos ao vivo na Twitch">${I.twitch}<span class="hide-sm">Ao vivo</span></a>
             <span class="topbar__lang">PT-BR</span>
           </div>
         </div>
@@ -110,7 +122,7 @@
       <header class="header" id="header">
         <div class="wrap">
           <a class="brand" href="index.html" aria-label="Meldina FC — página inicial">
-            <img src="${asset("img/escudo.png")}" alt="Escudo do Meldina FC">
+            <img src="${asset("img/escudo-sm.png")}" alt="Escudo do Meldina FC">
             <span class="brand__txt"><span class="brand__name">Meldina FC</span><span class="brand__tag">MUITO ALÉM DO JOGO</span></span>
           </a>
           <nav class="nav" id="nav" aria-label="Principal">
@@ -118,8 +130,8 @@
           </nav>
           <div class="header__cta">
             <a class="btn btn--sm" href="socio.html">Seja sócio</a>
-            <button class="cart-btn" id="cartBtn" aria-label="Abrir carrinho">${I.bag}<span class="cart-btn__count" id="cartCount">0</span></button>
-            <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+            <button class="cart-btn" id="cartBtn" aria-label="Abrir carrinho, vazio">${I.bag}<span class="cart-btn__count" id="cartCount" aria-hidden="true">0</span></button>
+            <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
           </div>
         </div>
       </header>`;
@@ -137,11 +149,12 @@
         <div class="wrap">
           <div class="footer__top">
             <div class="footer__brand">
-              <img src="${asset("img/escudo.png")}" alt="Meldina FC">
+              <img src="${asset("img/escudo-sm.png")}" alt="Meldina FC">
               <p>Meldina Futebol Clube: Muito Além do Jogo</p>
               <div class="socials">
                 <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram">${I.ig}</a>
                 <a href="${MFC.youtube}" target="_blank" rel="noopener" aria-label="YouTube">${I.yt}</a>
+                <a href="${MFC.twitch}" target="_blank" rel="noopener" aria-label="Twitch">${I.twitch}</a>
               </div>
             </div>
             <div><h4>Clube</h4><ul>
@@ -152,7 +165,7 @@
               <li><a href="noticias.html">Notícias</a></li><li><a href="tv.html">Meldina TV</a></li></ul></div>
             <div><h4>Torcedor</h4><ul>
               <li><a href="socio.html">Clube Meldina</a></li><li><a href="jogos.html">Ingressos</a></li>
-              <li><a href="loja.html">Loja Oficial</a></li><li><a href="${MFC.instagram}" target="_blank" rel="noopener">@meldinafc</a></li></ul></div>
+              <li><a href="loja.html">Loja Oficial</a></li><li><a href="${MFC.twitch}" target="_blank" rel="noopener">Jogos ao vivo (Twitch)</a></li><li><a href="${MFC.instagram}" target="_blank" rel="noopener">@meldinafc</a></li></ul></div>
           </div>
         </div>
         <div class="wrap footer__bottom">
@@ -163,15 +176,15 @@
       </footer>
       <div class="drawer" id="cart" aria-hidden="true">
         <div class="drawer__backdrop" data-close></div>
-        <aside class="drawer__panel" role="dialog" aria-label="Carrinho">
-          <div class="drawer__head"><h3 class="display">Seu carrinho</h3><button data-close aria-label="Fechar">${I.close}</button></div>
+        <aside class="drawer__panel" role="dialog" aria-modal="true" aria-labelledby="cartTitle">
+          <div class="drawer__head"><h2 class="display" id="cartTitle">Seu carrinho</h2><button data-close aria-label="Fechar carrinho">${I.close}</button></div>
           <div class="drawer__items" id="cartItems"></div>
           <div class="drawer__foot" id="cartFoot"></div>
         </aside>
       </div>
       <div class="modal" id="modal" aria-hidden="true">
         <div class="modal__backdrop" data-close></div>
-        <div class="modal__box" role="dialog" aria-modal="true"><button class="modal__close" data-close aria-label="Fechar">${I.close}</button><div id="modalBody"></div></div>
+        <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal__close" data-close aria-label="Fechar">${I.close}</button><div id="modalBody"></div></div>
       </div>
       <div class="toasts" id="toasts" aria-live="polite"></div>`;
 
@@ -190,11 +203,25 @@
   window.mfcToast = toast;
 
   /* ---------------- Modal ---------------- */
-  let lastFocus;
+  let lastFocus, cartFocus, lastTrigger;
+  // Safari não foca botões ao clicar: usa o último elemento clicado como origem do foco.
+  const opener = () => (document.activeElement && document.activeElement !== document.body ? document.activeElement : lastTrigger);
+  const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  // Prende o Tab dentro do diálogo aberto (modal ou carrinho).
+  function trapTab(e, container) {
+    const items = $$(FOCUSABLE, container).filter((el) => el.offsetParent !== null);
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (!container.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
   function openModal(html, small = false) {
     const m = $("#modal");
-    lastFocus = document.activeElement;
+    lastFocus = opener();
     $("#modalBody").innerHTML = html;
+    const heading = $("h1, h2, h3", $("#modalBody"));
+    if (heading) heading.id = "modalTitle";
     m.classList.toggle("modal--sm", small);
     m.classList.add("is-open");
     m.setAttribute("aria-hidden", "false");
@@ -203,19 +230,20 @@
   }
   function closeModal() {
     const m = $("#modal");
+    if (!m.classList.contains("is-open")) return;
     m.classList.remove("is-open");
     m.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
-    if (lastFocus) lastFocus.focus();
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
   }
   window.mfcModal = openModal;
 
   /* ---------------- Jogadores ---------------- */
   function playerCard(p, i = 0) {
-    return `<button class="player-card ${p.grupo === "Goleiros" ? "player-card--gk" : ""} reveal reveal-d${i % 4}" data-player="${p.id}" aria-label="Ver perfil de ${p.nome}">
-      <span class="player-card__num">${p.num}</span>
-      <img src="${asset("players/" + p.img)}" alt="${p.nome}" loading="lazy">
-      <span class="player-card__info">
+    return `<button class="player-card ${p.grupo === "Goleiros" ? "player-card--gk" : ""} reveal reveal-d${i % 4}" data-player="${p.id}" aria-haspopup="dialog" aria-label="${esc(p.nome)}, ${p.pos}, camisa ${p.num}${p.capitao ? ", capitão" : ""}. Ver perfil">
+      <span class="player-card__num" aria-hidden="true">${p.num}</span>
+      <img src="${asset("players/thumbs/" + p.img)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${asset("players/" + p.img)}'">
+      <span class="player-card__info" aria-hidden="true">
         <span>${p.capitao ? `<span class="captain captain--sm">C</span>` : ""}<span class="player-card__pos">${p.pos}</span><span class="player-card__name">${p.nome}</span></span>
         <span class="player-card__n">${p.num}</span>
       </span>
@@ -226,7 +254,7 @@
     const p = PLAYERS.find((x) => x.id === id);
     if (!p) return;
     openModal(`<div class="profile">
-      <div class="profile__media ${p.grupo === "Goleiros" ? "gk" : ""}"><span class="num">${p.num}</span><img src="${asset("players/" + p.img)}" alt="${p.nome}"></div>
+      <div class="profile__media ${p.grupo === "Goleiros" ? "gk" : ""}"><span class="num" aria-hidden="true">${p.num}</span><img src="${asset("players/" + p.img)}" alt=""></div>
       <div class="profile__body">
         <p class="eyebrow">${p.pos}</p>
         <h2 class="display">${p.nome} <span style="color:var(--ouro)">#${p.num}</span></h2>
@@ -249,7 +277,7 @@
         </div>
         <p class="profile__bio">${p.bio}</p>
         <div style="display:flex;gap:10px;margin-top:26px;flex-wrap:wrap">
-          <a class="btn btn--sm" href="loja.html">${I.bag} Camisa com nome ${p.nome}</a>
+          <a class="btn btn--sm" href="loja.html">${I.bag} Camisa ${p.nome} na loja</a>
           <a class="btn btn--sm btn--ghost" href="${MFC.instagram}" target="_blank" rel="noopener">${I.ig} @meldinafc</a>
         </div>
       </div></div>`);
@@ -279,19 +307,27 @@
   function fxRow(f, isNext) {
     const o = outcome(f);
     const mid = f.placar ? `<span class="fx__score">${f.placar[0]} - ${f.placar[1]}</span>` : `<span class="fx__score vs">${fmtTime(f.d)}</span>`;
-    const act = f.placar
-      ? `<span class="result-tag ${o}">${o === "w" ? "VITÓRIA" : o === "d" ? "EMPATE" : "DERROTA"}</span>${f.relato ? `<a class="fx__venue link-arrow" href="noticia.html?id=${f.relato}">Relato ${I.arrow}</a>` : `<span class="fx__venue">${venue(f)}</span>`}`
+    // Jogo que já passou e ainda não tem placar: sem ingressos, aguardando o resultado.
+    const pending = !f.placar && !isUpcoming(f);
+    const act = pending
+      ? `<span class="result-tag d">Resultado a confirmar</span><span class="fx__venue">${I.pin} ${venue(f)}</span>`
+      : f.placar
+      ? `<span class="result-tag ${o}">${outcomeLabel(o)}</span>${f.relato ? `<a class="fx__venue link-arrow" href="noticia.html?id=${f.relato}">Relato ${I.arrow}</a>` : `<span class="fx__venue">${venue(f)}</span>`}`
       : f.casa
-        ? `<button class="btn btn--sm" data-ticket="${f.d}">${I.ticket} Ingressos</button><span class="fx__venue">${venue(f)}</span>`
-        : `<button class="btn btn--sm btn--ghost" data-remind="${f.d}">Lembrar-me</button><span class="fx__venue">${venue(f)}</span>`;
-    return `<div class="fx ${isNext ? "is-next" : ""} reveal" data-comp="${f.comp}" data-state="${f.placar ? "res" : "cal"}">
-      <div class="fx__when"><b>${fmtShort(f.d)}</b><small>${f.placar ? "Encerrado" : fmtTime(f.d)} · ${f.fase}</small><span class="fx__comp">${f.comp}</span></div>
+        ? `<button class="btn btn--sm" data-ticket="${f.d}" aria-label="Ingressos para ${esc(TEAMS[home(f)].nome)} x ${esc(TEAMS[away(f)].nome)}">${I.ticket} Ingressos</button><span class="fx__venue">${I.pin} ${venue(f)}</span>`
+        : `<button class="btn btn--sm btn--ghost" data-remind="${f.d}" aria-label="Lembrar-me de ${esc(TEAMS[home(f)].nome)} x ${esc(TEAMS[away(f)].nome)}">Lembrar-me</button><span class="fx__venue">${I.pin} ${venue(f)}</span>`;
+    const summary = f.placar
+      ? `${TEAMS[home(f)].nome} ${f.placar[0]} a ${f.placar[1]} ${TEAMS[away(f)].nome}, ${outcomeLabel(o).toLowerCase()} do Meldina`
+      : `${TEAMS[home(f)].nome} contra ${TEAMS[away(f)].nome}`;
+    return `<li class="fx ${isNext ? "is-next" : ""} reveal" data-comp="${f.comp}" data-state="${f.placar ? "res" : "cal"}">
+      <div class="fx__when"><b>${fmtShort(f.d)}</b><small>${f.placar ? "Encerrado" : fmtTime(f.d)} · ${f.fase}</small><span class="fx__comp">${f.comp}</span>${isNext ? `<span class="result-tag t-next">Próximo jogo</span>` : ""}</div>
       <div class="fx__match">
-        <div class="fx__team">${TEAMS[home(f)].nome}${crest(home(f))}</div>
-        ${mid}
-        <div class="fx__team">${crest(away(f))}${TEAMS[away(f)].nome}</div>
+        <div class="fx__team" aria-hidden="true">${TEAMS[home(f)].nome}${crest(home(f))}</div>
+        <span aria-hidden="true">${mid}</span>
+        <div class="fx__team" aria-hidden="true">${crest(away(f))}${TEAMS[away(f)].nome}</div>
+        <span class="sr-only">${summary}</span>
       </div>
-      <div class="fx__act">${act}</div></div>`;
+      <div class="fx__act">${act}</div></li>`;
   }
 
   function standingsRows(limit) {
@@ -300,11 +336,11 @@
       const t = TEAMS[r.t]; const pts = r.v * 3 + r.e;
       const zone = i < 4 ? "zone-g" : i >= STANDINGS.length - 2 ? "zone-r" : "";
       return `<tr class="${t.us ? "is-us" : ""}">
-        <td><span class="pos-badge ${zone}">${i + 1}</span></td>
+        <td><span class="pos-badge ${zone}">${i + 1}</span>${zone === "zone-g" ? '<span class="sr-only"> (classificação aos playoffs)</span>' : zone === "zone-r" ? '<span class="sr-only"> (rebaixamento)</span>' : ""}</td>
         <td><span class="t">${crest(r.t)}${t.nome}</span></td>
         <td class="pts">${pts}</td><td>${r.j}</td><td>${r.v}</td><td>${r.e}</td><td>${r.d}</td>
         <td>${r.gp}</td><td>${r.gc}</td><td>${r.gp - r.gc > 0 ? "+" : ""}${r.gp - r.gc}</td>
-        <td><span class="form-dots">${[...r.f].map((c) => `<i class="${c === "W" ? "" : c === "D" ? "d" : "l"}">${c === "W" ? "V" : c === "D" ? "E" : "D"}</i>`).join("")}</span></td>
+        <td><span class="form-dots">${[...r.f].map((c) => { const k = c === "W" ? "w" : c === "D" ? "d" : "l"; return `<i class="${k === "w" ? "" : k}" title="${outcomeLabel(k)}"><span aria-hidden="true">${c === "W" ? "V" : c === "D" ? "E" : "D"}</span><span class="sr-only">${outcomeLabel(k)}</span></i>`; }).join("")}</span></td>
       </tr>`;
     }).join("");
   }
@@ -320,24 +356,28 @@
           <span style="display:flex;gap:12px;align-items:center"><input type="radio" name="setor" ${i === 0 ? "checked" : ""} style="accent-color:var(--ouro)"> <b style="font-weight:600">${s}</b></span>
           <span>${BRL(v)} <small class="muted">· Clube Meldina ${BRL(v / 2)}</small></span></label>`).join("")}
       </div>
-      <button class="btn btn--block" style="margin-top:22px" id="ticketGo">${I.ticket} Continuar</button>
+      <button class="btn btn--block" style="margin-top:22px" id="ticketGo">${I.ticket} Reservar</button>
       <p class="muted" style="font-size:.74rem;margin:12px 0 0;text-align:center">Membros do Clube Meldina têm até 50% de desconto e prioridade na compra.</p>`, true);
     $("#ticketGo").addEventListener("click", (e) => {
       fakeLoad(e.currentTarget, () => {
         closeModal();
-        toast("Ingresso reservado!", "Demonstração: nenhuma compra foi realizada.", I.ticket);
+        toast("Reserva registrada", `Seu lugar em ${TEAMS[home(f)].curto} x ${TEAMS[away(f)].curto} está reservado.`, I.ticket);
       });
     });
   }
 
   /* ---------------- Carrinho (somente no navegador) ---------------- */
-  let cart = [];
+  const MAX_QTY = 20;
+  let cart = [], orderDone = false;
   try { cart = JSON.parse(localStorage.getItem("mfc-cart") || "[]"); } catch (e) { cart = []; }
+  // Descarta linhas corrompidas ou de produtos que saíram da loja (evita quebrar o carrinho).
+  cart = Array.isArray(cart) ? cart.filter((l) => l && PRODUCTS.some((p) => p.id === l.id) && Number.isInteger(l.q) && l.q > 0) : [];
   const saveCart = () => { try { localStorage.setItem("mfc-cart", JSON.stringify(cart)); } catch (e) {} renderCart(); };
   function addToCart(id, size) {
     const key = id + (size ? "-" + size : "");
     const line = cart.find((l) => l.key === key);
-    if (line) line.q++; else cart.push({ key, id, size, q: 1 });
+    if (line) line.q = Math.min(line.q + 1, MAX_QTY); else cart.push({ key, id, size, q: 1 });
+    orderDone = false;
     saveCart();
     const p = PRODUCTS.find((x) => x.id === id);
     toast("Adicionado ao carrinho", `${p.nome}${size ? " · " + size : ""}`, I.bag);
@@ -346,35 +386,45 @@
     const count = cart.reduce((s, l) => s + l.q, 0);
     const c = $("#cartCount");
     if (c) { c.textContent = count; c.classList.toggle("is-on", count > 0); }
+    const cb = $("#cartBtn");
+    if (cb) cb.setAttribute("aria-label", count ? `Abrir carrinho, ${count} ${count === 1 ? "item" : "itens"}` : "Abrir carrinho, vazio");
     const items = $("#cartItems"), foot = $("#cartFoot");
     if (!items) return;
+    if (orderDone) {
+      items.innerHTML = `<div class="drawer__done"><div class="form-success__icon">${I.check}</div><h3 class="display">Pedido registrado</h3><p>Obrigado, torcedor. Seu pedido foi registrado na Loja Oficial do Meldina.</p><a class="btn btn--dark" href="loja.html">Continuar na loja</a></div>`;
+      foot.innerHTML = "";
+      return;
+    }
     if (!cart.length) {
       items.innerHTML = `<div class="drawer__empty"><img src="${asset("img/escudo-mono.png")}" alt=""><p><b>Seu carrinho está vazio.</b><br>Vista o manto da realeza.</p><a class="btn btn--grena btn--sm" href="loja.html">Ir para a loja</a></div>`;
       foot.innerHTML = "";
       return;
     }
     let sub = 0;
-    items.innerHTML = cart.map((l) => {
+    items.innerHTML = `<ul class="drawer__list">` + cart.map((l) => {
       const p = PRODUCTS.find((x) => x.id === l.id); sub += p.preco * l.q;
       const img = p.img ? `<img src="${asset(p.img)}" alt="">` : `<img class="art" src="${asset(p.art)}" alt="">`;
-      return `<div class="line"><div class="line__img" style="${p.bg ? `background:${p.bg}` : ""}">${img}</div>
+      return `<li class="line"><div class="line__img" style="${p.bg ? `background:${p.bg}` : ""}">${img}</div>
         <div><div class="line__name">${p.nome}</div><div class="line__sub">${l.size ? "Tamanho " + l.size : p.cat}</div>
-        <div class="qty"><button data-q="-1" data-k="${l.key}" aria-label="Diminuir">−</button><span>${l.q}</span><button data-q="1" data-k="${l.key}" aria-label="Aumentar">+</button></div></div>
-        <div class="line__price">${BRL(p.preco * l.q)}<button class="line__rm" data-rm="${l.key}">Remover</button></div></div>`;
-    }).join("");
+        <div class="qty" role="group" aria-label="Quantidade de ${esc(p.nome)}"><button data-q="-1" data-k="${l.key}" aria-label="${l.q === 1 ? `Remover ${esc(p.nome)}` : "Diminuir quantidade"}">${I.minus}</button><span>${l.q}</span><button data-q="1" data-k="${l.key}" aria-label="Aumentar quantidade"${l.q >= MAX_QTY ? " disabled" : ""}>${I.plus}</button></div></div>
+        <div class="line__price">${BRL(p.preco * l.q)}<button class="line__rm" data-rm="${l.key}" aria-label="Remover ${esc(p.nome)} do carrinho">Remover</button></div></li>`;
+    }).join("") + `</ul>`;
     const frete = sub >= 299 ? 0 : 24.9;
     foot.innerHTML = `<div class="drawer__row"><span>Subtotal</span><span>${BRL(sub)}</span></div>
       <div class="drawer__row"><span>Frete</span><span>${frete ? BRL(frete) : "Grátis"}</span></div>
       ${frete ? `<div class="drawer__row" style="font-size:.74rem;color:var(--grena)"><span>Faltam ${BRL(299 - sub)} para frete grátis</span></div>` : ""}
       <div class="drawer__row total"><span>Total</span><span>${BRL(sub + frete)}</span></div>
-      <button class="btn btn--grena btn--block" id="checkout">Finalizar compra</button>
-      <p style="font-size:.72rem;color:var(--cinza);text-align:center;margin:10px 0 0">Em até 6x sem juros · Clube Meldina tem 15% off</p>`;
+      <button class="btn btn--grena btn--block" id="checkout">Finalizar pedido</button>`;
   }
   function openCart(open = true) {
     const d = $("#cart");
+    if (d.classList.contains("is-open") === open) return;
+    if (open) { cartFocus = opener(); } else if (orderDone) { orderDone = false; renderCart(); }
     d.classList.toggle("is-open", open);
     d.setAttribute("aria-hidden", String(!open));
     document.body.style.overflow = open ? "hidden" : "";
+    if (open) setTimeout(() => $(".drawer__head button", d).focus(), 50);
+    else if (cartFocus && document.contains(cartFocus)) cartFocus.focus();
   }
 
   /* ---------------- Formulários simulados ---------------- */
@@ -390,10 +440,20 @@
       if (inp.type === "checkbox") bad = !inp.checked;
       else if (!inp.value.trim()) bad = true;
       else if (inp.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value)) bad = true;
-      if (f) { f.classList.toggle("has-error", bad); const e = $(".err", f); if (e) e.textContent = bad ? (inp.type === "email" && inp.value ? "E-mail inválido" : "Campo obrigatório") : ""; }
-      else if (bad) inp.focus();
+      if (f) {
+        f.classList.toggle("has-error", bad);
+        const e = $(".err", f);
+        if (e) {
+          if (!e.id) e.id = (inp.id || "campo") + "-err";
+          e.textContent = bad ? (inp.type === "email" && inp.value ? "Informe um e-mail válido, como nome@email.com." : "Preencha este campo.") : "";
+          if (bad) inp.setAttribute("aria-describedby", e.id); else inp.removeAttribute("aria-describedby");
+        }
+      }
+      if (bad) inp.setAttribute("aria-invalid", "true"); else inp.removeAttribute("aria-invalid");
       if (bad) ok = false;
     });
+    const firstBad = $("[aria-invalid=true]", form);
+    if (firstBad) firstBad.focus();
     return ok;
   }
   function bindFakeForms() {
@@ -420,40 +480,46 @@
     const tick = () => {
       let s = Math.max(0, Math.floor((t - Date.now()) / 1000));
       const d = Math.floor(s / 86400); s %= 86400; const h = Math.floor(s / 3600); s %= 3600; const m = Math.floor(s / 60); s %= 60;
-      el.innerHTML = [[d, "Dias"], [h, "Horas"], [m, "Min"], [s, "Seg"]].map(([v, l]) => `<div><b>${d2(v)}</b><small>${l}</small></div>`).join("");
+      el.innerHTML = [[d, "Dias"], [h, "Horas"], [m, "Min"], [s, "Seg"]].map(([v, l]) => `<div aria-hidden="true"><b>${d2(v)}</b><small>${l}</small></div>`).join("");
+      el.setAttribute("aria-label", `Faltam ${d} ${d === 1 ? "dia" : "dias"}, ${h} ${h === 1 ? "hora" : "horas"} e ${m} ${m === 1 ? "minuto" : "minutos"}`);
     };
     tick(); setInterval(tick, 1000);
   }
 
   /* ---------------- Renderizações por página ---------------- */
   function renderHome() {
-    const nx = nextFixture(), lr = lastResult(), o = outcome(lr);
+    const nx = nextFixture(), lr = lastResult(), o = lr ? outcome(lr) : null;
     const mc = $("#matchcenter");
-    if (mc) mc.innerHTML = `
-      <div class="matchbar__cell">
+    const nextCell = nx ? `
         <div class="mc-label"><span>Próximo jogo</span><b>${nx.comp} · ${nx.fase}</b></div>
         <div class="fixture">
           <div class="team">${crest(home(nx))}<span>${TEAMS[home(nx)].curto}</span></div>
-          <div class="fixture__mid"><div class="fixture__time">${fmtTime(nx.d)}</div><div class="fixture__date">${fmtShort(nx.d)}</div></div>
+          <div class="fixture__mid"><div class="fixture__time"><time datetime="${nx.d}">${fmtTime(nx.d)}</time></div><div class="fixture__date">${fmtShort(nx.d)}</div></div>
           <div class="team">${crest(away(nx))}<span>${TEAMS[away(nx)].curto}</span></div>
         </div>
-        <div class="countdown" data-to="${nx.d}"></div>
+        <div class="countdown" data-to="${nx.d}" role="timer"></div>
         <div class="fixture__venue">${I.pin}${venue(nx)}</div>
-        <div class="fixture__actions"><button class="btn btn--sm" data-ticket="${nx.d}">${I.ticket} Comprar ingresso</button><a class="btn btn--sm btn--ghost" href="jogos.html">Calendário</a></div>
-      </div>
-      <div class="matchbar__cell">
-        <div class="mc-label"><span>Último resultado</span><span class="result-tag ${o}">${o === "w" ? "VITÓRIA" : o === "d" ? "EMPATE" : "DERROTA"}</span></div>
+        <div class="fixture__actions">${nx.casa ? `<button class="btn btn--sm" data-ticket="${nx.d}">${I.ticket} Ingressos</button>` : ""}<a class="btn btn--sm btn--ghost" href="jogos.html">Calendário</a></div>`
+      : `<div class="mc-label"><span>Próximo jogo</span></div>
+        <div class="mc-empty"><p>Próximo jogo a definir.</p><a class="link-arrow" href="jogos.html">Ver calendário ${I.arrow}</a></div>`;
+    const lastCell = lr ? `
+        <div class="mc-label"><span>Último resultado</span><span class="result-tag ${o}">${outcomeLabel(o)}</span></div>
         <div class="fixture">
           <div class="team">${crest(home(lr))}<span>${TEAMS[home(lr)].curto}</span></div>
-          <div class="score">${lr.placar[0]}<i>–</i>${lr.placar[1]}</div>
+          <div class="score" aria-label="${lr.placar[0]} a ${lr.placar[1]}">${lr.placar[0]}<i aria-hidden="true">–</i>${lr.placar[1]}</div>
           <div class="team">${crest(away(lr))}<span>${TEAMS[away(lr)].curto}</span></div>
         </div>
         <div class="fixture__venue" style="margin-top:22px">${lr.comp} · ${lr.fase} · ${fmtShort(lr.d)}</div>
-        <div class="fixture__actions">${lr.relato ? `<a class="link-arrow" href="noticia.html?id=${lr.relato}">Ver relato ${I.arrow}</a>` : ""}</div>
+        <div class="fixture__actions">${lr.relato ? `<a class="link-arrow" href="noticia.html?id=${lr.relato}">Ver relato ${I.arrow}</a>` : ""}</div>`
+      : `<div class="mc-label"><span>Último resultado</span></div><div class="mc-empty"><p>Nenhum jogo disputado nesta temporada.</p></div>`;
+    if (mc) mc.innerHTML = `
+      <div class="matchbar__cell">${nextCell}
+      </div>
+      <div class="matchbar__cell">${lastCell}
       </div>
       <div class="matchbar__cell">
         <div class="mc-label"><span>Série A · Pro Clubs</span><a href="jogos.html#classificacao" class="link-arrow" style="font-size:.66rem">Tabela ${I.arrow}</a></div>
-        <table class="mini-table">${STANDINGS.slice(0, 5).map((r, i) => `<tr class="${TEAMS[r.t].us ? "is-us" : ""}"><td>${i + 1}</td><td><span class="t">${crest(r.t)}${TEAMS[r.t].curto}</span></td><td>${r.v * 3 + r.e}</td></tr>`).join("")}</table>
+        <table class="mini-table"><caption class="sr-only">Cinco primeiros colocados da Série A</caption>${STANDINGS.slice(0, 5).map((r, i) => `<tr class="${TEAMS[r.t].us ? "is-us" : ""}"><td>${i + 1}</td><td><span class="t">${crest(r.t)}${TEAMS[r.t].curto}</span></td><td>${r.v * 3 + r.e}</td></tr>`).join("")}</table>
       </div>`;
 
     const ns = newsSorted();
@@ -479,7 +545,7 @@
   function renderVideos(target, list) {
     const el = $(target);
     if (!el) return;
-    el.innerHTML = list.map((v, i) => `<a class="video ${i > 0 && el.dataset.layout === "list" ? "video--row" : ""} reveal" href="${MFC.youtube}" target="_blank" rel="noopener">
+    el.innerHTML = list.map((v, i) => `<a class="video ${i > 0 && el.dataset.layout === "list" ? "video--row" : ""} reveal" href="${MFC.youtube}" target="_blank" rel="noopener" aria-label="${esc(v.titulo)}, ${esc(v.show)}, ${v.dur}. Assistir no YouTube (abre em nova aba)">
       <div class="video__thumb"><img class="bg" src="${asset(v.img)}" alt="" loading="lazy">
         <div class="video__overlay"><div class="video__show"><small>${v.ep}</small>${v.show}</div></div>
         <span class="video__play">${I.play}</span><span class="video__dur">${v.dur}</span></div>
@@ -489,7 +555,7 @@
   function renderHomeTV() {
     const main = $("#tvMain"), side = $("#tvSide");
     if (!main) return;
-    const tmp = (v, row) => `<a class="video ${row ? "video--row" : ""} reveal" href="${MFC.youtube}" target="_blank" rel="noopener">
+    const tmp = (v, row) => `<a class="video ${row ? "video--row" : ""} reveal" href="${MFC.youtube}" target="_blank" rel="noopener" aria-label="${esc(v.titulo)}, ${esc(v.show)}, ${v.dur}. Assistir no YouTube (abre em nova aba)">
       <div class="video__thumb"><img class="bg" src="${asset(v.img)}" alt="" loading="lazy">
         <div class="video__overlay"><div class="video__show"><small>${v.ep}</small>${v.show}</div></div>
         <span class="video__play">${I.play}</span><span class="video__dur">${v.dur}</span></div>
@@ -509,7 +575,7 @@
     const follow = () => {
       el.classList.add("insta-grid--follow");
       el.innerHTML = `<a class="insta-follow" href="${MFC.instagram}" target="_blank" rel="noopener">
-        <span class="insta-follow__avatar"><img src="${asset("img/escudo.png")}" alt=""></span>
+        <span class="insta-follow__avatar"><img src="${asset("img/escudo-sm.png")}" alt=""></span>
         <span class="insta-follow__txt"><b>@meldinafc</b><span>Escalações, gols, bastidores e as artes oficiais do Meldina FC. Muito além do jogo.</span></span>
         <span class="btn">${I.ig} Seguir no Instagram</span></a>`;
     };
@@ -568,7 +634,7 @@
     };
     draw("Todos");
     $$("#squadTabs .tab").forEach((t) => t.addEventListener("click", () => {
-      $$("#squadTabs .tab").forEach((x) => x.classList.toggle("is-active", x === t));
+      $$("#squadTabs .tab").forEach((x) => { x.classList.toggle("is-active", x === t); x.setAttribute("aria-pressed", String(x === t)); });
       draw(t.dataset.f);
     }));
   }
@@ -580,12 +646,14 @@
     const draw = (mode) => {
       let list = FIXTURES.filter((f) => (mode === "res" ? f.placar : !f.placar));
       if (mode === "res") list = list.reverse();
-      el.innerHTML = list.map((f) => fxRow(f, f === nx)).join("");
+      el.innerHTML = list.length
+        ? list.map((f) => fxRow(f, f === nx)).join("")
+        : `<li class="muted">${mode === "res" ? "Nenhum resultado nesta temporada ainda." : "Nenhum jogo marcado no momento."}</li>`;
       observeReveal();
     };
     draw("cal");
     $$("#fxTabs .tab").forEach((t) => t.addEventListener("click", () => {
-      $$("#fxTabs .tab").forEach((x) => x.classList.toggle("is-active", x === t));
+      $$("#fxTabs .tab").forEach((x) => { x.classList.toggle("is-active", x === t); x.setAttribute("aria-pressed", String(x === t)); });
       draw(t.dataset.f);
     }));
     const tb = $("#standings");
@@ -598,12 +666,14 @@
     const all = newsSorted();
     const draw = (tag) => {
       const list = tag === "Todas" ? all : all.filter((n) => n.tag === tag);
-      el.innerHTML = list.map((n, i) => newsCard(n, i === 0 && tag === "Todas", i)).join("");
+      el.innerHTML = list.length
+        ? list.map((n, i) => newsCard(n, i === 0 && tag === "Todas", i)).join("")
+        : `<p class="news-empty">Nenhuma notícia nesta categoria por enquanto.</p>`;
       observeReveal();
     };
     draw("Todas");
     $$("#newsTabs .tab").forEach((t) => t.addEventListener("click", () => {
-      $$("#newsTabs .tab").forEach((x) => x.classList.toggle("is-active", x === t));
+      $$("#newsTabs .tab").forEach((x) => { x.classList.toggle("is-active", x === t); x.setAttribute("aria-pressed", String(x === t)); });
       draw(t.dataset.f);
     }));
   }
@@ -612,13 +682,21 @@
     const root = $("#article");
     if (!root) return;
     const id = new URLSearchParams(location.search).get("id");
-    const n = NEWS.find((x) => x.id === id) || newsSorted()[0];
+    const n = id ? NEWS.find((x) => x.id === id) : newsSorted()[0];
+    if (!n) {
+      document.title = "Notícia não encontrada | Meldina FC";
+      root.innerHTML = `<section class="section wrap" style="text-align:center;padding-top:120px">
+        <h1 class="display" style="font-size:clamp(2.4rem,6vw,4rem)">Notícia não encontrada</h1>
+        <p class="muted" style="margin:16px auto 32px;max-width:420px">O link pode estar errado ou a notícia foi retirada do ar.</p>
+        <a class="btn btn--sm" href="noticias.html">Ver todas as notícias</a></section>`;
+      return;
+    }
     document.title = `${n.titulo} | Meldina FC`;
     $("#artImg").src = asset(n.img);
     if (n.pos) $("#artImg").style.objectPosition = n.pos;
     if (n.poster) {
       root.classList.add("is-poster");
-      $("#artPoster").innerHTML = `<img src="${asset(n.img)}" alt="${esc(n.titulo)}">`;
+      $("#artPoster").innerHTML = `<img src="${asset(n.img)}" alt="">`;
     }
     $("#artTag").textContent = n.tag;
     $("#artTag").className = `news-card__tag ${tagClass(n.tag)}`;
@@ -643,38 +721,69 @@
       const list = cat === "Todos" ? PRODUCTS : PRODUCTS.filter((p) => p.cat === cat);
       el.innerHTML = list.map((p, i) => `<article class="product reveal reveal-d${i % 4}">
         <div class="product__img" style="${p.bg ? `background:${p.bg}` : ""}">
-          ${p.img ? `<img class="photo" src="${asset(p.img)}" alt="${p.nome}" loading="lazy">` : `<img class="art" src="${asset(p.art)}" alt="${p.nome}" loading="lazy">`}
+          ${p.img ? `<img class="photo" src="${asset(p.img)}" alt="" loading="lazy">` : `<img class="art" src="${asset(p.art)}" alt="" loading="lazy">`}
           ${p.badge ? `<span class="product__badge">${p.badge}</span>` : ""}
         </div>
         <div class="product__body">
           <span class="product__cat">${p.cat}</span>
-          <span class="product__name">${p.nome}</span>
-          ${p.tam ? `<div class="sizes" data-sizes>${["P", "M", "G", "GG", "XG"].map((s, i) => `<button type="button" class="${i === 1 ? "is-active" : ""}">${s}</button>`).join("")}</div>` : ""}
-          <span class="product__price">${BRL(p.preco)}<small>ou 6x de ${BRL(p.preco / 6)} sem juros</small></span>
-          <button class="btn btn--dark btn--sm btn--block" data-add="${p.id}">${I.bag} Adicionar</button>
+          <h3 class="product__name">${p.nome}</h3>
+          ${p.tam ? `<div class="sizes" data-sizes role="group" aria-label="Tamanho de ${esc(p.nome)}">${["P", "M", "G", "GG", "XG"].map((s, i) => `<button type="button" class="${i === 1 ? "is-active" : ""}" aria-pressed="${i === 1}">${s}</button>`).join("")}</div>` : ""}
+          <span class="product__price">${BRL(p.preco)}</span>
+          <button class="btn btn--dark btn--sm btn--block" data-add="${p.id}" aria-label="Adicionar ${esc(p.nome)} ao carrinho">${I.bag} Adicionar ao carrinho</button>
         </div></article>`).join("");
       observeReveal();
     };
     draw("Todos");
     $$("#shopTabs .tab").forEach((t) => t.addEventListener("click", () => {
-      $$("#shopTabs .tab").forEach((x) => x.classList.toggle("is-active", x === t));
+      $$("#shopTabs .tab").forEach((x) => { x.classList.toggle("is-active", x === t); x.setAttribute("aria-pressed", String(x === t)); });
       draw(t.dataset.f);
     }));
   }
 
   /* ---------------- Hero slider ---------------- */
+  // O avanço segue a animação da barra da aba ativa (tabfill, 7s): pausar a animação pausa o slider.
   function heroSlider() {
     const hero = $("#hero");
     if (!hero) return;
-    const slides = $$(".hero__slide", hero), tabs = $$(".hero__tab", hero);
-    let i = 0, timer;
-    const go = (n) => {
-      i = (n + slides.length) % slides.length;
-      slides.forEach((s, k) => s.classList.toggle("is-active", k === i));
-      tabs.forEach((t, k) => { t.classList.remove("is-active"); void t.offsetWidth; t.classList.toggle("is-active", k === i); });
-      clearTimeout(timer); timer = setTimeout(() => go(i + 1), 7000);
+    const slides = $$(".hero__slide", hero), tabs = $$(".hero__tab", hero), pauseBtn = $(".hero__pause", hero);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let i = 0, userPaused = false, hoverPaused = false;
+    const sync = () => {
+      const auto = !reduced.matches && !userPaused && !hoverPaused;
+      hero.classList.toggle("is-paused", !auto);
+      if (pauseBtn) {
+        pauseBtn.hidden = reduced.matches;
+        pauseBtn.innerHTML = userPaused ? I.play : I.pause;
+        pauseBtn.setAttribute("aria-label", userPaused ? "Retomar a troca automática dos destaques" : "Pausar a troca automática dos destaques");
+      }
+      return auto;
     };
-    tabs.forEach((t, k) => t.addEventListener("click", () => go(k)));
+    const go = (n, focus = false) => {
+      i = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => { s.classList.toggle("is-active", k === i); s.inert = k !== i; s.setAttribute("aria-hidden", String(k !== i)); });
+      tabs.forEach((t, k) => {
+        t.classList.remove("is-active"); void t.offsetWidth; t.classList.toggle("is-active", k === i);
+        t.setAttribute("aria-selected", String(k === i)); t.tabIndex = k === i ? 0 : -1;
+      });
+      if (focus) tabs[i].focus();
+    };
+    slides.forEach((s, k) => { s.id = `hero-slide-${k}`; s.setAttribute("role", "tabpanel"); s.setAttribute("aria-labelledby", `hero-tab-${k}`); });
+    tabs.forEach((t, k) => {
+      t.id = `hero-tab-${k}`; t.setAttribute("role", "tab"); t.setAttribute("aria-controls", `hero-slide-${k}`);
+      t.addEventListener("click", () => go(k));
+      t.addEventListener("animationend", (e) => { if (e.animationName === "tabfill" && sync()) go(i + 1); });
+    });
+    $(".hero__tabs", hero)?.addEventListener("keydown", (e) => {
+      const map = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: slides.length - 1 };
+      if (e.key in map) { e.preventDefault(); go(map[e.key], true); }
+    });
+    hero.addEventListener("mouseenter", () => { hoverPaused = true; sync(); });
+    hero.addEventListener("mouseleave", () => { hoverPaused = false; sync(); });
+    hero.addEventListener("focusin", () => { hoverPaused = true; sync(); });
+    hero.addEventListener("focusout", (e) => { if (!hero.contains(e.relatedTarget)) { hoverPaused = false; sync(); } });
+    pauseBtn?.addEventListener("click", () => { userPaused = !userPaused; sync(); });
+    reduced.addEventListener?.("change", sync);
+    sync();
     go(0);
   }
 
@@ -689,16 +798,19 @@
   /* ---------------- Eventos globais ---------------- */
   function bindGlobal() {
     const burger = $("#burger");
-    burger.addEventListener("click", () => {
+    const setNav = (open) => {
       document.documentElement.style.setProperty("--nav-top", $("#header").getBoundingClientRect().bottom + "px");
-      const open = document.body.classList.toggle("nav-open");
+      document.body.classList.toggle("nav-open", open);
       burger.setAttribute("aria-expanded", String(open));
+      burger.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
       document.body.style.overflow = open ? "hidden" : "";
-    });
+    };
+    burger.addEventListener("click", () => setNav(!document.body.classList.contains("nav-open")));
 
     document.addEventListener("click", (e) => {
       const t = e.target.closest("button, a, [data-close]");
       if (!t) return;
+      if (!t.closest("#modal, #cart")) lastTrigger = t;
       if (t.matches("[data-close]")) { if (t.closest("#cart")) openCart(false); else closeModal(); return; }
       if (t.id === "cartBtn") return openCart(true);
       if (t.dataset.player) return openPlayer(t.dataset.player);
@@ -714,11 +826,11 @@
         const s = card && $(".sizes .is-active", card);
         return addToCart(t.dataset.add, s ? s.textContent : null);
       }
-      if (t.closest("[data-sizes]")) { $$("button", t.parentElement).forEach((b) => b.classList.toggle("is-active", b === t)); return; }
-      if (t.dataset.q) { const l = cart.find((x) => x.key === t.dataset.k); l.q += +t.dataset.q; if (l.q <= 0) cart = cart.filter((x) => x !== l); return saveCart(); }
+      if (t.closest("[data-sizes]")) { $$("button", t.parentElement).forEach((b) => { b.classList.toggle("is-active", b === t); b.setAttribute("aria-pressed", String(b === t)); }); return; }
+      if (t.dataset.q) { const l = cart.find((x) => x.key === t.dataset.k); if (!l) return; l.q = Math.min(l.q + +t.dataset.q, MAX_QTY); if (l.q <= 0) cart = cart.filter((x) => x !== l); return saveCart(); }
       if (t.dataset.rm) { cart = cart.filter((x) => x.key !== t.dataset.rm); return saveCart(); }
       if (t.id === "checkout") {
-        return fakeLoad(t, () => { cart = []; saveCart(); openCart(false); toast("Pedido confirmado!", "Demonstração: nenhum pagamento foi processado.", I.bag); });
+        return fakeLoad(t, () => { cart = []; orderDone = true; saveCart(); const b = $(".drawer__head button"); if (b) b.focus(); });
       }
       if (t.dataset.share !== undefined) {
         e.preventDefault();
@@ -729,8 +841,28 @@
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") { closeModal(); openCart(false); }
+      if (e.key === "Escape") {
+        closeModal(); openCart(false);
+        if (document.body.classList.contains("nav-open")) { setNav(false); burger.focus(); }
+        return;
+      }
+      if (e.key !== "Tab") return;
+      if ($("#modal").classList.contains("is-open")) trapTab(e, $("#modal .modal__box"));
+      else if ($("#cart").classList.contains("is-open")) trapTab(e, $("#cart .drawer__panel"));
     });
+
+    // Imagem que falta ou falha vira um painel grená com o escudo.
+    document.addEventListener("error", (e) => {
+      const img = e.target;
+      if (!(img instanceof HTMLImageElement) || img.dataset.fallback) return;
+      if (!img.closest(".news-card__img, .video__thumb, .product__img, .line__img, .article-hero, .kit")) return;
+      img.dataset.fallback = "1";
+      const box = document.createElement("div");
+      box.className = "img-fallback";
+      box.setAttribute("aria-hidden", "true");
+      box.innerHTML = `<img src="${asset("img/escudo-mono.png")}" alt="">`;
+      img.replaceWith(box);
+    }, true);
 
     const header = $("#header");
     const onScroll = () => {
@@ -750,6 +882,23 @@
   };
   new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((nd) => nd.nodeType === 1 && stripMarks(nd.parentNode || nd)))).observe(document.body, { childList: true, subtree: true });
 
+  function a11yPass() {
+    const main = $("main");
+    if (main) { main.id = main.id || "conteudo"; main.tabIndex = -1; }
+    $$("nav.breadcrumb").forEach((nav) => {
+      nav.setAttribute("aria-label", "Trilha");
+      const parts = [...nav.children];
+      parts.forEach((el) => { if (el.tagName === "SPAN" && el.textContent.trim() === "/") el.setAttribute("aria-hidden", "true"); });
+      const last = parts[parts.length - 1];
+      if (last && last.tagName === "SPAN") last.setAttribute("aria-current", "page");
+    });
+    $$('a[target="_blank"]').forEach((a) => {
+      if (a.getAttribute("aria-label")) { if (!/nova aba/.test(a.getAttribute("aria-label"))) a.setAttribute("aria-label", a.getAttribute("aria-label") + " (abre em nova aba)"); }
+      else if (!$(".sr-only", a)) a.insertAdjacentHTML("beforeend", '<span class="sr-only"> (abre em nova aba)</span>');
+    });
+    $$(".tabs .tab").forEach((t) => t.setAttribute("aria-pressed", String(t.classList.contains("is-active"))));
+  }
+
   /* ---------------- Início ---------------- */
   renderChrome();
   renderHome();
@@ -767,6 +916,7 @@
   bindGlobal();
   bindFakeForms();
   $$(".countdown[data-to]").forEach(countdown);
+  a11yPass();
   $$("[data-icon]").forEach((el) => (el.innerHTML = I[el.dataset.icon] || ""));
   $$("[data-trophy]").forEach((el) => (el.innerHTML = TROPHY_SVG));
   stripMarks(document);

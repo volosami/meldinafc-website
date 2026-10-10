@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
         <div className="wrap">
           <div className="footer__top">
             <div className="footer__brand">
-              <img src="/assets/img/escudo.png" alt="Meldina FC" />
+              <img src="/assets/img/escudo-sm.png" alt="Meldina FC" />
               <p>Meldina Futebol Clube: Muito Além do Jogo</p>
               <div className="socials">
                 <a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
