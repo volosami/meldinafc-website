@@ -22,12 +22,7 @@ export const Footer: React.FC = () => {
           </div>
           <div className="partner">
             <small>Programa oficial</small>
-            <span className="lider" style={{ fontFamily: "var(--f-regal)", fontSize: "1.3rem", letterSpacing: ".18em" }}>
-              <svg style={{ width: 26, height: 26, color: "var(--ouro)" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
-                <path d="M3 7l4.5 4L12 5l4.5 6L21 7l-2 11H5L3 7Z" />
-              </svg>
-              CLUBE MELDINA
-            </span>
+            <img className="cm-logo cm-logo--partner" src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} loading="lazy" decoding="async" />
           </div>
         </div>
       </section>
