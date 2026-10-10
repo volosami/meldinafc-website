@@ -61,7 +61,7 @@ export const Home: React.FC = () => {
                 <em>do jogo</em>
               </h1>
               <p>
-                Campeão da Série B em 2025, o Meldina perdeu a estreia na elite — e
+                Campeão da Segunda Divisão em 2025, o Meldina perdeu a estreia na elite — e
                 respondeu com cinco vitórias seguidas e a liderança. No domingo, 4 de
                 outubro, tem clássico contra o vice-líder De Sola.
               </p>
@@ -143,7 +143,7 @@ export const Home: React.FC = () => {
               onClick={() => setActiveSlide(0)}
             >
               <small>Futebol</small>
-              <span>Campeão da Série B, líder na elite</span>
+              <span>Campeão da Segunda Divisão, líder na elite</span>
             </button>
             <button
               className={`hero__tab ${activeSlide === 1 ? "is-active" : ""}`}
@@ -170,7 +170,7 @@ export const Home: React.FC = () => {
             <div key={i} className="ticker__item">
               <img src="/assets/img/escudo-mono.png" alt="" />
               <span>
-                <b>Meldina FC</b> · Campeão Série B 2025 · Líder Série A 2026 · {MFC_INFO.lema}
+                <b>Meldina FC</b> · Campeão da Segunda Divisão 2025 · Líder Série A 2026 · {MFC_INFO.lema}
               </span>
             </div>
           ))}

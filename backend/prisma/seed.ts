@@ -66,7 +66,7 @@ async function main() {
     {
       id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026,
       matches: 8, goals: 0, assists: 0, extraKey: "Jogos sem sofrer gols", extraValue: "1",
-      bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Série B para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área.",
+      bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área.",
     },
     {
       id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024,
@@ -169,7 +169,7 @@ async function main() {
       id: "camisa-ii-lider",
       slug: "camisa-ii-lider",
       title: "A coroa pesa: Meldina FC lança nova camisa II oficial para a Série A",
-      summary: "Branca com detalhes em grená e dourado, a nova peça homenageia a conquista da Série B e a chegada à elite.",
+      summary: "Branca com detalhes em grená e dourado, a nova peça homenageia a conquista da Segunda Divisão e a chegada à elite.",
       content: "O departamento de marketing do Meldina FC apresentou oficialmente o novo uniforme II da temporada 2026...",
       category: "clube",
       imageUrl: "assets/news/camisas.jpg",

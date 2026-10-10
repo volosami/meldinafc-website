@@ -25,7 +25,7 @@ export const MFC_INFO = {
 };
 
 export const STATIC_PLAYERS: Player[] = [
-  { id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "/assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026, matches: 8, goals: 0, assists: 0, extraKey: "Jogos sem sofrer gols", extraValue: "1", bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Série B para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
+  { id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "/assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026, matches: 8, goals: 0, assists: 0, extraKey: "Jogos sem sofrer gols", extraValue: "1", bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
   { id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "/assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024, matches: 8, goals: 0, assists: 2, extraKey: "Desarmes", extraValue: "19", bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
   { id: "jonga", name: "Jonga", number: 6, position: "Lateral-esquerdo", group: "Defensores", photoUrl: "/assets/players/jonga-6.jpg", preferredFoot: "Esquerdo", joinedYear: 2024, matches: 7, goals: 0, assists: 1, extraKey: "Cruzamentos certos", extraValue: "15", bio: "O técnico da linha defensiva. Jonga resolve com a bola no pé: domínio limpo, passe preciso e leitura de jogo que faz a saída de bola do Meldina funcionar desde 2024." },
   { id: "gaab", name: "Gaab", number: 12, position: "Zagueiro", group: "Defensores", photoUrl: "/assets/players/gaab-12.jpg", preferredFoot: "Direito", joinedYear: 2024, matches: 8, goals: 0, assists: 0, extraKey: "Interceptações", extraValue: "22", bio: "O showman do Meldina. Carismático, energia lá em cima e coração do time: Gaab puxa o grupo nos momentos difíceis e transforma cada desarme em festa na arquibancada." },
@@ -100,7 +100,7 @@ export const STATIC_NEWS: NewsArticle[] = [
     id: "camisa-ii-lider",
     slug: "camisa-ii-lider",
     title: "A coroa pesa: Meldina FC lança nova camisa II oficial para a Série A",
-    summary: "Branca com detalhes em grená e dourado, a nova peça homenageia a conquista da Série B e a chegada à elite.",
+    summary: "Branca com detalhes em grená e dourado, a nova peça homenageia a conquista da Segunda Divisão e a chegada à elite.",
     content: "O departamento de marketing do Meldina FC apresentou oficialmente o novo uniforme II da temporada 2026. A peça já está disponível para compra na loja oficial e os sócios do plano Ouro possuem 20% de desconto.",
     category: "clube",
     imageUrl: "/assets/news/camisas.jpg",
@@ -141,14 +141,15 @@ export const STATIC_PRODUCTS: Product[] = [
   { id: "caneca-clube", name: "Caneca de Cerâmica Oficial", category: "Colecionáveis", price: 44.9, image: "/assets/img/produto-caneca.jpg", desc: "Caneca cerâmica 350ml com escudo e lema." },
   { id: "cachecol-estadio", name: "Cachecol de Arquibancada", category: "Acessórios", price: 69.9, image: "/assets/img/produto-cachecol.jpg", desc: "Tecido duplo com franjas e frase 'Muito além do jogo'." },
   { id: "chaveiro-metal", name: "Chaveiro Brasão de Metal", category: "Colecionáveis", price: 29.9, image: "/assets/img/produto-chaveiro.jpg", desc: "Em metal polido com banho de ouro envelhecido." },
+  { id: "necessaire-oficial", name: "Necessaire Oficial Meldina FC", category: "Acessórios", price: 134.9, image: "/assets/img/produto-necessaire.jpg", badge: "Novo", desc: "Couro sintético grená e marinho com monograma bordado em ouro." },
 ];
 
 /* Sala de troféus, da conquista mais recente para a mais antiga. count = títulos naquela edição do jogo */
 export const TROPHIES = [
-  { id: "serie-b-fc25", year: "2025", game: "FC 25", title: "Série B", competition: "Pro Clubs", count: 1, image: "/assets/img/trofeus/pro-clubs-eafc.webp" },
+  { id: "serie-b-fc25", year: "2025", game: "FC 25", title: "Segunda Divisão", competition: "Pro Clubs", count: 1, image: "/assets/img/trofeus/pro-clubs-eafc.webp" },
   { id: "primeira-divisao-fifa23", year: "2023", game: "FIFA 23", title: "Primeira Divisão", competition: "Pro Clubs", count: 7, image: "/assets/img/trofeus/pro-clubs-fifa.webp" },
   { id: "primeira-divisao-fifa21", year: "2021", game: "FIFA 21", title: "Primeira Divisão", competition: "Pro Clubs", count: 3, image: "/assets/img/trofeus/pro-clubs-fifa.webp" },
-  { id: "copa-ea-fifa19", year: "2019", game: "FIFA 19", title: "Copa EA", competition: "EA Sports", count: 1, image: "/assets/img/trofeus/copa-ea.webp" },
+  { id: "copa-ea-fifa19", year: "2019", game: "FIFA 19", title: "Copa EA", competition: "Pro Clubs", count: 1, image: "/assets/img/trofeus/copa-ea.webp" },
 ];
 
 /* Linha do tempo do clube, por edição do jogo */
@@ -157,7 +158,7 @@ export const HISTORY = [
   { year: "2019", game: "FIFA 19", title: "Campeão da Copa EA", text: "Na segunda temporada, a primeira taça: o Meldina conquista a Copa EA e passa a ser respeitado no cenário do Pro Clubs." },
   { year: "2021", game: "FIFA 21", title: "Tricampeão da primeira divisão", text: "Três títulos da primeira divisão em uma única edição. O Meldina se firma entre os grandes." },
   { year: "2023", game: "FIFA 23", title: "Sete vezes campeão", text: "A era de ouro: sete títulos da primeira divisão no FIFA 23, a maior sequência da história do clube. São 10 títulos da elite no total." },
-  { year: "2024", game: "FC 24", title: "Novo sistema, nova geração", text: "A EA troca as temporadas com troféus por um campeonato contínuo, sem início nem fim. O Meldina se reinventa: uma nova geração assume o elenco e o clube recomeça na Série B." },
-  { year: "2025", game: "FC 25", title: "Campeão da Série B", text: "Pelo acesso, o Meldina supera os playoffs e conquista a Série B — o título que marca o retorno do clube à elite." },
+  { year: "2024", game: "FC 24", title: "Novo sistema, nova geração", text: "A EA troca as temporadas com troféus por um campeonato contínuo, sem início nem fim. O Meldina se reinventa: uma nova geração assume o elenco e o clube recomeça na Segunda Divisão." },
+  { year: "2025", game: "FC 25", title: "Campeão da Segunda Divisão", text: "Pelo acesso, o Meldina supera os playoffs e conquista a Segunda Divisão — o título que marca o retorno do clube à elite." },
   { year: "2026", game: "FC 26", title: "De volta à primeira divisão", text: "O Meldina volta à Série A. Depois da derrota na estreia, cinco vitórias seguidas e a liderança. Em setembro, a presidência apresenta o lema oficial: Muito além do jogo." },
 ];

@@ -1,5 +1,5 @@
 export const FALLBACK_PLAYERS = [
-  { id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026, matches: 8, goals: 0, assists: 0, extraKey: "Jogos sem sofrer gols", extraValue: "1", bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Série B para dar ainda mais segurança ao gol.", isCaptain: false, roleTitle: null },
+  { id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026, matches: 8, goals: 0, assists: 0, extraKey: "Jogos sem sofrer gols", extraValue: "1", bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol.", isCaptain: false, roleTitle: null },
   { id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024, matches: 8, goals: 0, assists: 2, extraKey: "Desarmes", extraValue: "19", bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário.", isCaptain: false, roleTitle: null },
   { id: "jonga", name: "Jonga", number: 6, position: "Lateral-esquerdo", group: "Defensores", photoUrl: "assets/players/jonga-6.jpg", preferredFoot: "Esquerdo", joinedYear: 2024, matches: 7, goals: 0, assists: 1, extraKey: "Cruzamentos certos", extraValue: "15", bio: "O técnico da linha defensiva. Jonga resolve com a bola no pé.", isCaptain: false, roleTitle: null },
   { id: "gaab", name: "Gaab", number: 12, position: "Zagueiro", group: "Defensores", photoUrl: "assets/players/gaab-12.jpg", preferredFoot: "Direito", joinedYear: 2024, matches: 8, goals: 0, assists: 0, extraKey: "Interceptações", extraValue: "22", bio: "O showman do Meldina. Carismático, energia lá em cima e coração do time.", isCaptain: false, roleTitle: null },
@@ -59,7 +59,7 @@ export const FALLBACK_NEWS = [
     id: "camisa-ii-lider",
     slug: "camisa-ii-lider",
     title: "A coroa pesa: Meldina FC lança nova camisa II oficial para a Série A",
-    summary: "Branca com detalhes em grená e dourado, a nova peça homenageia a conquista da Série B e a chegada à elite.",
+    summary: "Branca com detalhes em grená e dourado, a nova peça homenageia a conquista da Segunda Divisão e a chegada à elite.",
     content: "O departamento de marketing do Meldina FC apresentou oficialmente o novo uniforme II da temporada 2026...",
     category: "clube",
     imageUrl: "assets/news/camisas.jpg",
