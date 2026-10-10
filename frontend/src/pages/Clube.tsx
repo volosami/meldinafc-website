@@ -13,7 +13,7 @@ export const Clube: React.FC = () => {
           <p className="eyebrow">Meldina Futebol Clube</p>
           <h1 className="display">O Clube</h1>
           <p>
-            Fundado em {MFC_INFO.fundacao}, no FIFA 18, o Meldina FC é dez vezes campeão da primeira divisão e campeão da Copa EA. Depois do título da Série B em 2025, o clube volta à elite do Pro Clubs em 2026.
+            Fundado em {MFC_INFO.fundacao}, no FIFA 18, o Meldina FC é dez vezes campeão da primeira divisão e campeão da Copa EA. Depois do título da Segunda Divisão em 2025, o clube volta à elite do Pro Clubs em 2026.
           </p>
         </div>
       </section>
@@ -29,7 +29,7 @@ export const Clube: React.FC = () => {
                 O Meldina Futebol Clube representa mais do que 11 jogadores em campo: é uma família forjada na superação.
               </p>
               <p>
-                Em 2017, um grupo de amigos fundou o Meldina para disputar o Pro Clubs. Vieram a Copa EA, o tricampeonato da primeira divisão no FIFA 21 e sete títulos no FIFA 23. Em 2024, com o novo sistema da EA, uma nova geração assumiu o elenco e, liderada pelo presidente André Almeida e pelo vice Carrijo, levantou a taça da Série B em 2025.
+                Em 2017, um grupo de amigos fundou o Meldina para disputar o Pro Clubs. Vieram a Copa EA, o tricampeonato da primeira divisão no FIFA 21 e sete títulos no FIFA 23. Em 2024, com o novo sistema da EA, uma nova geração assumiu o elenco e, liderada pelo presidente André Almeida e pelo vice Carrijo, levantou a taça da Segunda Divisão em 2025.
               </p>
               <p>
                 Hoje, sob o comando tático do professor Celso Roth, o Meldina é o líder da Série A e busca consolidar seu nome entre os maiores clubes virtuais do país.

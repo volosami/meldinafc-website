@@ -26,7 +26,7 @@ const MFC = {
 const PLAYERS = [
   { id: "muralha", nome: "Muralha", num: 1, pos: "Goleiro", grupo: "Goleiros", img: "muralha-1.jpg", pe: "Direito", desde: 2026,
     j: 8, g: 0, a: 0, extra: ["Jogos sem sofrer gols", 1],
-    bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Série B para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
+    bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
   { id: "kiki", nome: "Kiki", num: 2, pos: "Lateral-direito", grupo: "Defensores", img: "kiki-2.jpg", pe: "Direito", desde: 2024,
     j: 8, g: 0, a: 2, extra: ["Desarmes", 19],
     bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
@@ -119,12 +119,12 @@ const TROPHIES = [
   { titulo: "Primeira Divisão", comp: "Pro Clubs", sigla: "1ª", n: 10,
     temporadas: ["FIFA 21 · 2020/21 — 3×", "FIFA 23 · 2022/23 — 7×"],
     desc: "A maior marca da história do clube. Tricampeão da primeira divisão no FIFA 21 e, duas temporadas depois, uma sequência histórica de sete títulos no FIFA 23." },
-  { titulo: "Copa EA", comp: "EA Sports", sigla: "EA", n: 1,
+  { titulo: "Copa EA", comp: "Pro Clubs", sigla: "EA", n: 1,
     temporadas: ["FIFA 19 · 2018/19"],
     desc: "A primeira taça da história do Meldina, conquistada na segunda temporada do clube." },
-  { titulo: "Série B", comp: "Pro Clubs", sigla: "B", n: 1, link: "campeao-serie-b",
+  { titulo: "Segunda Divisão", comp: "Pro Clubs", sigla: "2ª", n: 1, link: "campeao-serie-b",
     temporadas: ["FC 25 · 2025"],
-    desc: "O título da reconstrução. Com a nova geração formada em 2024, o Meldina venceu a Série B e garantiu o retorno à elite em 2026." },
+    desc: "O título da reconstrução. Com a nova geração formada em 2024, o Meldina venceu a Segunda Divisão e garantiu o retorno à elite em 2026." },
 ];
 
 /* Linha do tempo do clube, por edição do jogo */
@@ -133,8 +133,8 @@ const HISTORY = [
   { ano: "2019", jogo: "FIFA 19", titulo: "Campeão da Copa EA", texto: "Na segunda temporada, a primeira taça: o Meldina conquista a Copa EA e passa a ser respeitado no cenário do Pro Clubs." },
   { ano: "2021", jogo: "FIFA 21", titulo: "Tricampeão da primeira divisão", texto: "Três títulos da primeira divisão em uma única edição. O Meldina se firma entre os grandes." },
   { ano: "2023", jogo: "FIFA 23", titulo: "Sete vezes campeão", texto: "A era de ouro: sete títulos da primeira divisão no FIFA 23, a maior sequência da história do clube. São 10 títulos da elite no total." },
-  { ano: "2024", jogo: "FC 24", titulo: "Novo sistema, nova geração", texto: "A EA troca as temporadas com troféus por um campeonato contínuo, sem início nem fim. O Meldina se reinventa: uma nova geração assume o elenco e o clube recomeça na Série B." },
-  { ano: "2025", jogo: "FC 25", titulo: "Campeão da Série B", texto: "Pelo acesso, o Meldina supera os playoffs e conquista a Série B — o título que marca o retorno do clube à elite." },
+  { ano: "2024", jogo: "FC 24", titulo: "Novo sistema, nova geração", texto: "A EA troca as temporadas com troféus por um campeonato contínuo, sem início nem fim. O Meldina se reinventa: uma nova geração assume o elenco e o clube recomeça na Segunda Divisão." },
+  { ano: "2025", jogo: "FC 25", titulo: "Campeão da Segunda Divisão", texto: "Pelo acesso, o Meldina supera os playoffs e conquista a Segunda Divisão — o título que marca o retorno do clube à elite." },
   { ano: "2026", jogo: "FC 26", titulo: "De volta à primeira divisão", texto: "O Meldina volta à Série A. Depois da derrota na estreia, cinco vitórias seguidas e a liderança. Em setembro, a presidência apresenta o lema oficial: Muito além do jogo." },
 ];
 
@@ -157,12 +157,12 @@ const NEWS = [
   {
     id: "celso-classico", tag: "Futebol", data: "2026-09-25", img: "news/quotes-celso-2.jpg", pos: "center top", poster: true,
     titulo: "Celso Roth sobre a liderança: “O time está unido, e a intenção é continuar assim”",
-    resumo: "Técnico falou sobre a sequência de cinco vitórias, o peso da liderança na Série A e a importância de manter o elenco que conquistou a Série B.",
+    resumo: "Técnico falou sobre a sequência de cinco vitórias, o peso da liderança na Série A e a importância de manter o elenco que conquistou a Segunda Divisão.",
     corpo: [
       "Com cinco vitórias seguidas e a liderança da Série A do Pro Clubs, o Meldina viveu uma semana de trabalho tranquilo na Lovebomb Arena. Em entrevista coletiva, o técnico Celso Roth falou sobre o momento da equipe.",
       "Depois da derrota na estreia, o time reagiu rápido e chegou à ponta da tabela. Para o treinador, a virada de chave foi coletiva. “Não precisamos reinventar nada. Precisamos ser quem somos”, disse.",
       "QUOTE:O time está unido, e a intenção é continuar assim.|Celso Roth, técnico do Meldina FC",
-      "Celso lembrou que o grupo atual é praticamente o mesmo que conquistou a Série B em 2025 e pediu pés no chão. “A tabela só vale no fim. Estamos felizes, mas a Série A não perdoa. Cada jogo é uma final.”",
+      "Celso lembrou que o grupo atual é praticamente o mesmo que conquistou a Segunda Divisão em 2025 e pediu pés no chão. “A tabela só vale no fim. Estamos felizes, mas a Série A não perdoa. Cada jogo é uma final.”",
       "Membros do Clube Meldina têm prioridade e desconto na compra de ingressos para os próximos jogos em casa. Vamo Meldina!",
     ],
   },
@@ -329,7 +329,7 @@ const NEWS = [
       "A estreia do Meldina FC na elite não saiu como a torcida sonhava. Na noite de terça-feira, 1º de setembro, o time foi superado pelo Ipê FC por 2 a 1, na Lovebomb Arena, pela 1ª rodada da Série A do Pro Clubs.",
       "Na entrevista coletiva, o técnico Celso Roth não fugiu da responsabilidade.",
       "QUOTE:Não foi a melhor estreia.|Celso Roth, técnico do Meldina FC",
-      "O treinador lembrou que o grupo é o mesmo que conquistou a Série B em 2025 e pediu paciência. “A Série A tem outro ritmo. Vamos corrigir, vamos trabalhar. Esse time já mostrou do que é capaz e vai mostrar de novo.”",
+      "O treinador lembrou que o grupo é o mesmo que conquistou a Segunda Divisão em 2025 e pediu paciência. “A Série A tem outro ritmo. Vamos corrigir, vamos trabalhar. Esse time já mostrou do que é capaz e vai mostrar de novo.”",
       "A resposta veio rápido: depois da derrota, o Meldina não perdeu mais na Série A e emendou cinco vitórias seguidas até a liderança.",
     ],
   },
@@ -341,7 +341,7 @@ const NEWS = [
       "Nem sempre o protagonista aparece nos melhores momentos da rodada. No Meldina, boa parte do controle das partidas passa pelos pés de Rafael, volante camisa 21.",
       "Depois da estreia na Série A, a nota de Rafael na partida virou assunto entre os torcedores. Quem saiu em defesa do volante foi o companheiro de setor, Guigs.",
       "QUOTE:As notas são apenas números. O que o Rafael faz pelo time é indispensável.|Guigs, volante do Meldina FC",
-      "Os números, aliás, também estão do lado de Rafael: na campanha do título da Série B, ele acertou 91% dos passes tentados — o maior índice do elenco — e foi o segundo jogador com mais recuperações de bola, atrás apenas do zagueiro Gaab.",
+      "Os números, aliás, também estão do lado de Rafael: na campanha do título da Segunda Divisão, ele acertou 91% dos passes tentados — o maior índice do elenco — e foi o segundo jogador com mais recuperações de bola, atrás apenas do zagueiro Gaab.",
       "A comissão técnica destaca a leitura de jogo do volante, capaz de antecipar as jogadas adversárias e iniciar os contra-ataques com um único toque. Ao lado de Guigs, forma a dupla que dá equilíbrio ao Meldina.",
     ],
   },
@@ -353,18 +353,18 @@ const NEWS = [
       "A coroa pesa — e agora ela também veste branco. O Meldina FC e a Lider, fornecedora oficial de material esportivo do clube, apresentaram a nova camisa II, que o time usará na temporada 2026 da Série A do Pro Clubs.",
       "A peça é branca, com gola transpassada em grená e dourado, faixas grená nos ombros e punhos com o mesmo acabamento. O escudo aparece em versão monocromática grená, bordado do lado do coração, reforçando a elegância que o clube quer levar para a elite.",
       "A nova camisa se junta à camisa I grená, que segue como o uniforme principal da equipe.",
-      "QUOTE:Queríamos uma camisa à altura do momento do clube. Somos campeões da Série B e chegamos à elite: a coroa pesa.|Departamento de Marketing do Meldina FC",
+      "QUOTE:Queríamos uma camisa à altura do momento do clube. Somos campeões da Segunda Divisão e chegamos à elite: a coroa pesa.|Departamento de Marketing do Meldina FC",
       "A camisa II já está à venda na Loja Oficial, em versões torcedor e jogador, com personalização de nome e número. Membros do Clube Meldina têm 15% de desconto.",
     ],
   },
   {
     id: "campeao-serie-b", tag: "Clube", data: "2025-12-14", img: "news/pelo-acesso.jpg", pos: "center 25%", poster: true,
-    titulo: "Campeão! Meldina conquista a Série B e garante a volta à elite do Pro Clubs",
+    titulo: "Campeão! Meldina conquista a Segunda Divisão e garante a volta à elite do Pro Clubs",
     resumo: "Título da reconstrução coroa a nova geração do clube. Em 2026, o Meldina volta a jogar a primeira divisão.",
     corpo: [
-      "Está escrito na história: o Meldina FC é campeão da Série B do Pro Clubs. Com a nova geração que assumiu o elenco em 2024, o clube conquistou o título e garantiu a volta à primeira divisão — onde já foi campeão dez vezes.",
+      "Está escrito na história: o Meldina FC é campeão da Segunda Divisão do Pro Clubs. Com a nova geração que assumiu o elenco em 2024, o clube conquistou o título e garantiu a volta à primeira divisão — onde já foi campeão dez vezes.",
       "A campanha foi construída com uma defesa sólida, um ataque decisivo e, principalmente, um grupo fechado. Pelo acesso, o time superou os playoffs e confirmou a taça diante da torcida.",
-      "A taça da Série B se junta à Copa EA e aos dez títulos da primeira divisão na sala de troféus. Em 2026, o desafio é reencontrar a glória na elite. Muito além do jogo. Meldina pra sempre.",
+      "A taça da Segunda Divisão se junta à Copa EA e aos dez títulos da primeira divisão na sala de troféus. Em 2026, o desafio é reencontrar a glória na elite. Muito além do jogo. Meldina pra sempre.",
     ],
   },
 ];
@@ -390,4 +390,5 @@ const PRODUCTS = [
   { id: "caneca", cat: "Casa", nome: "Caneca Escudo Oficial 350ml", preco: 59.9, img: "img/produto-caneca.jpg", badge: "Novo" },
   { id: "flamula", cat: "Casa", nome: "Flâmula Oficial Meldina FC 2024", preco: 69.9, img: "img/produto-flamula.png", badge: "Novo" },
   { id: "chaveiro", cat: "Acessórios", nome: "Chaveiro Metal Escudo", preco: 34.9, img: "img/produto-chaveiro.jpg", badge: "Novo" },
+  { id: "necessaire", cat: "Acessórios", nome: "Necessaire Oficial Meldina FC", preco: 134.9, img: "img/produto-necessaire.jpg", badge: "Novo" },
 ];

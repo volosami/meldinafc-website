@@ -26,7 +26,7 @@ const MFC = {
 const PLAYERS = [
   { id: "muralha", nome: "Muralha", num: 1, pos: "Goleiro", grupo: "Goleiros", img: "muralha-1.jpg", pe: "Direito", desde: 2026,
     j: 8, g: 0, a: 0, extra: ["Jogos sem sofrer gols", 1],
-    bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Série B para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
+    bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
   { id: "kiki", nome: "Kiki", num: 2, pos: "Lateral-direito", grupo: "Defensores", img: "kiki-2.jpg", pe: "Direito", desde: 2024,
     j: 8, g: 0, a: 2, extra: ["Desarmes", 19],
     bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki está no Meldina desde a fundação e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
@@ -116,8 +116,8 @@ const INSTAGRAM_POSTS = [];
 
 /* ---------------- Sala de troféus ---------------- */
 const TROPHIES = [
-  { titulo: "Série B", comp: "Pro Clubs", anos: [2025],
-    desc: "O primeiro título da história. Campeão da Série B do Pro Clubs em 2025, o Meldina garantiu o acesso à elite do futebol." },
+  { titulo: "Segunda Divisão", comp: "Pro Clubs", anos: [2025],
+    desc: "O primeiro título da história. Campeão da Segunda Divisão do Pro Clubs em 2025, o Meldina garantiu o acesso à elite do futebol." },
 ];
 
 /* ---------------- Notícias ----------------
@@ -137,7 +137,7 @@ const NEWS = [
   {
     id: "celso-classico", tag: "Futebol", data: "2026-09-25", img: "news/quotes-celso-2.jpg", pos: "center top", poster: true,
     titulo: "Às vésperas do clássico, Celso Roth reforça: “O time está unido, e a intenção é continuar assim”",
-    resumo: "Técnico falou sobre a rivalidade com o De Sola, a sequência de cinco vitórias e a importância de manter o elenco que conquistou a Série B.",
+    resumo: "Técnico falou sobre a rivalidade com o De Sola, a sequência de cinco vitórias e a importância de manter o elenco que conquistou a Segunda Divisão.",
     corpo: [
       "A semana na Lovebomb Arena foi de preparação especial. O clássico Meldina x De Sola FC, pela 7ª rodada da Série A do Pro Clubs, é o jogo mais aguardado do ano — e agora vale ainda mais: o De Sola é o vice-líder, dois pontos atrás. Durante a semana, o técnico Celso Roth falou à imprensa sobre o momento da equipe.",
       "Depois da derrota na estreia, o Meldina emendou cinco vitórias seguidas e chegou à liderança. Para o treinador, a virada de chave foi coletiva. “Não precisamos reinventar nada. Precisamos ser quem somos”, disse.",
@@ -317,7 +317,7 @@ const NEWS = [
       "A estreia do Meldina FC na elite não saiu como a torcida sonhava. Na noite de terça-feira, 1º de setembro, o time foi superado pelo Ipê FC por 2 a 1, na Lovebomb Arena, pela 1ª rodada da Série A do Pro Clubs.",
       "Na entrevista coletiva, o técnico Celso Roth não fugiu da responsabilidade.",
       "QUOTE:Não foi a melhor estreia.|Celso Roth, técnico do Meldina FC",
-      "O treinador lembrou que o grupo é o mesmo que conquistou a Série B em 2025 e pediu paciência. “A Série A tem outro ritmo. Vamos corrigir, vamos trabalhar. Esse time já mostrou do que é capaz e vai mostrar de novo.”",
+      "O treinador lembrou que o grupo é o mesmo que conquistou a Segunda Divisão em 2025 e pediu paciência. “A Série A tem outro ritmo. Vamos corrigir, vamos trabalhar. Esse time já mostrou do que é capaz e vai mostrar de novo.”",
       "A resposta veio rápido: depois da derrota, o Meldina não perdeu mais na Série A e emendou cinco vitórias seguidas até a liderança.",
     ],
   },
@@ -329,7 +329,7 @@ const NEWS = [
       "Nem sempre o protagonista aparece nos melhores momentos da rodada. No Meldina, boa parte do controle das partidas passa pelos pés de Rafael, volante camisa 21.",
       "Depois da estreia na Série A, a nota de Rafael na partida virou assunto entre os torcedores. Quem saiu em defesa do volante foi o companheiro de setor, Guigs.",
       "QUOTE:As notas são apenas números. O que o Rafael faz pelo time é indispensável.|Guigs, volante do Meldina FC",
-      "Os números, aliás, também estão do lado de Rafael: na campanha do título da Série B, ele acertou 91% dos passes tentados — o maior índice do elenco — e foi o segundo jogador com mais recuperações de bola, atrás apenas do zagueiro Gaab.",
+      "Os números, aliás, também estão do lado de Rafael: na campanha do título da Segunda Divisão, ele acertou 91% dos passes tentados — o maior índice do elenco — e foi o segundo jogador com mais recuperações de bola, atrás apenas do zagueiro Gaab.",
       "A comissão técnica destaca a leitura de jogo do volante, capaz de antecipar as jogadas adversárias e iniciar os contra-ataques com um único toque. Ao lado de Guigs, forma a dupla que dá equilíbrio ao Meldina.",
     ],
   },
@@ -341,18 +341,18 @@ const NEWS = [
       "A coroa pesa — e agora ela também veste branco. O Meldina FC e a Lider, fornecedora oficial de material esportivo do clube, apresentaram a nova camisa II, que o time usará na temporada 2026 da Série A do Pro Clubs.",
       "A peça é branca, com gola transpassada em grená e dourado, faixas grená nos ombros e punhos com o mesmo acabamento. O escudo aparece em versão monocromática grená, bordado do lado do coração, reforçando a elegância que o clube quer levar para a elite.",
       "A nova camisa se junta à camisa I grená, que segue como o uniforme principal da equipe.",
-      "QUOTE:Queríamos uma camisa à altura do momento do clube. Somos campeões da Série B e chegamos à elite: a coroa pesa.|Departamento de Marketing do Meldina FC",
+      "QUOTE:Queríamos uma camisa à altura do momento do clube. Somos campeões da Segunda Divisão e chegamos à elite: a coroa pesa.|Departamento de Marketing do Meldina FC",
       "A camisa II já está à venda na Loja Oficial, em versões torcedor e jogador, com personalização de nome e número. Membros do Clube Meldina têm 15% de desconto.",
     ],
   },
   {
     id: "campeao-serie-b", tag: "Clube", data: "2025-12-14", img: "news/pelo-acesso.jpg", pos: "center 25%", poster: true,
-    titulo: "Campeão! Meldina conquista a Série B e garante vaga na elite do Pro Clubs",
+    titulo: "Campeão! Meldina conquista a Segunda Divisão e garante vaga na elite do Pro Clubs",
     resumo: "Primeiro título da história do clube coroa uma campanha de entrega total. Em 2026, o Meldina joga a Série A.",
     corpo: [
-      "Está escrito na história: o Meldina FC é campeão da Série B do Pro Clubs. Um ano depois da fundação, o clube conquistou seu primeiro título e garantiu o acesso à primeira divisão.",
+      "Está escrito na história: o Meldina FC é campeão da Segunda Divisão do Pro Clubs. Um ano depois da fundação, o clube conquistou seu primeiro título e garantiu o acesso à primeira divisão.",
       "A campanha foi construída com uma defesa sólida, um ataque decisivo e, principalmente, um grupo fechado. Pelo acesso, o time superou os playoffs e confirmou a taça diante da torcida.",
-      "A taça da Série B passa a ocupar lugar de honra na sala de troféus do clube. Em 2026, o desafio é outro: a elite. Muito além do jogo. Meldina pra sempre.",
+      "A taça da Segunda Divisão passa a ocupar lugar de honra na sala de troféus do clube. Em 2026, o desafio é outro: a elite. Muito além do jogo. Meldina pra sempre.",
     ],
   },
 ];

@@ -98,7 +98,7 @@
         <div class="wrap">
           <div class="topbar__left">
             <span>Próximo jogo: <strong>${TEAMS[home(nx)].curto} x ${TEAMS[away(nx)].curto}</strong> · ${fmtShort(nx.d)} · ${fmtTime(nx.d)}</span>
-            <span>Pro Clubs · Série A ${MFC.temporada} · Campeão da Série B 2025</span>
+            <span>Pro Clubs · Série A ${MFC.temporada} · Campeão da Segunda Divisão 2025</span>
           </div>
           <div class="topbar__right">
             <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram @meldinafc">${I.ig}<span class="hide-sm">@meldinafc</span></a>
