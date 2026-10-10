@@ -19,6 +19,7 @@
   --tinta: #0b0d1c;
   --cinza: #6b6f86;
   --vitoria: #1a7a43;
+  --ouro-clube: #fecc00; /* ouro da marca Clube Meldina (material oficial) */
   --linha-escura: rgba(255, 255, 255, 0.1);
   --linha-clara: rgba(11, 13, 28, 0.12);
 
@@ -307,10 +308,11 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 @keyframes tabfill { to { width: 100%; } }
 
 @media (max-width: 900px) {
-  .hero { min-height: auto; }
+  .hero { min-height: auto; flex-direction: column; }
+  .hero__nav { position: relative; }
   .hero__slide { grid-template-columns: 1fr; }
   .hero__media { order: -1; height: 56vh; min-height: 360px; }
-  .hero__copy { padding: 0 0 140px; margin-top: -60px; }
+  .hero__copy { padding: 0 0 40px; margin-top: -60px; }
   .hero__number { top: 2%; }
   .hero__tab span { font-size: 0.78rem; }
   .hero__tab small { font-size: 0.56rem; }
@@ -318,7 +320,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 @media (max-width: 560px) {
   .hero__tabs { grid-template-columns: 1fr 1fr 1fr; }
   .hero__tab span { display: none; }
-  .hero__copy { padding-bottom: 96px; }
+  .hero__copy { padding-bottom: 32px; }
 }
 
 /* ---------- Page hero (páginas internas) ---------- */
@@ -976,3 +978,91 @@ main:focus { outline: none; }
 .fixtures { list-style: none; margin: 0; padding: 0; }
 .news-empty { grid-column: 1 / -1; margin: 0; color: rgba(11,13,28,0.75); }
 .product__name { margin: 0; }
+
+/* ---------- Celular: próximo jogo, hero curto, alvos de toque ---------- */
+.nextbar { display: none; }
+@media (max-width: 640px) {
+  .nextbar {
+    display: flex; flex-direction: column; gap: 4px; padding: 10px var(--gutter);
+    background: var(--noite-2); border-bottom: 1px solid var(--linha-escura);
+  }
+  .nextbar__row { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-width: 0; }
+  .nextbar__label { font-family: var(--f-regal); font-weight: 700; font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ouro); }
+  .nextbar__teams { display: flex; align-items: center; gap: 8px; min-width: 0; font-family: var(--f-display); font-size: 1.15rem; text-transform: uppercase; line-height: 1.1; }
+  .nextbar__teams b { font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .nextbar__teams i { font-style: normal; color: rgba(255,255,255,0.55); font-size: 0.9rem; }
+  .nextbar__teams img, .nextbar__teams .team-badge { width: 22px; height: 22px; flex: none; object-fit: contain; }
+  .nextbar__when { text-align: right; font-weight: 700; font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+  .nextbar__until { flex: none; text-align: right; font-weight: 600; font-size: 0.74rem; color: var(--ouro); white-space: nowrap; }
+
+  /* Hero mais curto: botões acima da dobra */
+  .hero__media { height: 34vh; min-height: 240px; }
+  .hero__slide > *, .hero__copy { min-width: 0; }
+  .hero__number { font-size: 9rem; }
+  .hero__copy { margin-top: -40px; padding-bottom: 32px; }
+  .hero__copy p { font-size: 1rem; margin: 16px 0 22px; }
+  .hero__actions { flex-wrap: nowrap; gap: 10px; }
+  .hero__actions .btn { flex: 1 1 0; min-width: 0; padding: 13px 12px; font-size: 0.74rem; letter-spacing: 0.1em; }
+  .hero__tab { min-height: 52px; }
+  .hero__tab small { font-size: 0.7rem; letter-spacing: 0.16em; }
+
+  /* Piso de leitura para rótulos funcionais */
+  .brand__tag { font-size: 0.62rem; letter-spacing: 0.24em; }
+  .result-tag, .news-card__tag, .fx__comp { font-size: 0.72rem; }
+  .partner small { font-size: 0.7rem; }
+  .eyebrow { font-size: 0.72rem; letter-spacing: 0.2em; }
+  .product__badge, .product__cat, .plan__ribbon { font-size: 0.7rem; }
+  .video--row .video__show small, .video__show small { font-size: 0.68rem; }
+
+  /* Perfil do jogador: foto menor para o texto aparecer logo */
+  .profile__media { min-height: 0; height: 40vh; }
+  .profile__media .num { font-size: 10rem; }
+
+  .topbar .wrap { height: 44px; }
+}
+
+/* Alvos de toque de pelo menos 44px em telas de toque, sem mudar o layout */
+@media (pointer: coarse) {
+  .topbar__right a { min-width: 44px; min-height: 44px; justify-content: center; }
+  .link-arrow, .breadcrumb a, .line__rm { padding-block: 12px; margin-block: -12px; }
+  .footer ul a { display: inline-block; padding-block: 10px; }
+  .footer ul { gap: 0; }
+  .sizes button { min-width: 44px; height: 44px; }
+  .qty button { width: 40px; height: 40px; }
+  .prose a, .text-grena { display: inline-block; padding-block: 10px; }
+}
+@media (max-width: 360px) {
+  .header .wrap { gap: 12px; }
+  .brand { gap: 10px; }
+  .brand img { height: 42px; }
+  .brand__name { font-size: 1.2rem; }
+  .header__cta { gap: 6px; }
+  .hero__copy .eyebrow { letter-spacing: 0.12em; }
+  .nextbar__teams { gap: 5px; font-size: 0.95rem; }
+  .nextbar__teams img, .nextbar__teams .team-badge { width: 18px; height: 18px; }
+  .nextbar__when, .nextbar__until { font-size: 0.68rem; letter-spacing: 0.02em; }
+}
+.nextbar__teams svg { width: 22px; height: 22px; flex: none; }
+@media (max-width: 360px) { .nextbar__teams svg { width: 18px; height: 18px; } }
+@media (pointer: coarse) {
+  .footer__bottom nav a { display: inline-block; padding-block: 12px; }
+}
+
+/* ---------- Clube Meldina: marca oficial do programa de sócios ---------- */
+/* Versão branca sobre fundos escuros; colorida sobre creme/branco; preta só em impressão. */
+.cm-logo { margin: 0; line-height: 0; }
+:where(.cm-logo img, img.cm-logo) { display: block; width: auto; max-width: 100%; height: auto; object-fit: contain; }
+.cm-logo--hero img { height: clamp(120px, 16vw, 210px); }
+.cm-logo--page img { height: clamp(110px, 15vw, 190px); }
+.cm-logo--band { height: clamp(64px, 8vw, 96px); margin: 0 0 22px; }
+.cm-logo--partner { height: 52px; }
+.cm-logo--dialog { height: 96px; margin: 8px auto 22px; }
+/* Faixa tricolor do Clube Meldina (grená, marinho, ouro), como no material oficial */
+.page-hero--cm { position: relative; }
+.page-hero--cm::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 12px;
+  background: linear-gradient(to bottom, var(--grena) 0 44%, var(--marinho) 44% 54%, var(--ouro-clube) 54% 100%);
+}
+@media (max-width: 640px) {
+  .cm-logo--hero img { height: 112px; }
+}

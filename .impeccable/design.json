@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-10T17:43:31.582657+00:00",
+  "generatedAt": "2026-10-10T22:15:47.121561+00:00",
   "title": "Design System: Meldina FC",
   "extensions": {
     "colorMeta": {
@@ -227,6 +227,21 @@
           "#78e2a6",
           "#abedc7",
           "#ddf8e9"
+        ]
+      },
+      "ouro-clube": {
+        "role": "secondary",
+        "displayName": "Ouro Clube",
+        "canonical": "#fecc00",
+        "tonalRamp": [
+          "#3d3100",
+          "#705a00",
+          "#a38300",
+          "#e0b400",
+          "#ffd31f",
+          "#ffdf5c",
+          "#ffeb99",
+          "#fff7d6"
         ]
       },
       "white": {
@@ -493,7 +508,8 @@
       "**Don't** round buttons or cards beyond 6px; pills are only for filter tabs and circular controls.",
       "**Don't** introduce colours outside the club palette except the win/draw/loss status markers.",
       "**Don't** design any payment UI: no card, Pix, boleto or bank fields, no payment-method logos or badges, no \"Pagar\" buttons. Store and sócio flows end in an in-character confirmation (The No-Money Rule, PRODUCT.md).",
-      "**Don't** add copy promising emails, newsletters or messages to people who sign up."
+      "**Don't** add copy promising emails, newsletters or messages to people who sign up.",
+      "**Don't** spell \"Clube Meldina\" as a styled headline where the official mark belongs; use `cm-white.svg` on dark and `cm-color.svg` on light."
     ]
   }
 }

@@ -50,6 +50,7 @@ The site must never lead anyone to spend money. This overrides every other produ
 - Name: Meldina Futebol Clube / Meldina FC. Membership program: Clube Meldina. Video channel: Meldina TV.
 - Motto: "Muito além do jogo". Slogans: "Vamo Meldina", "Meldina pra sempre".
 - Voice: play it straight. The site always speaks as a real professional club and never winks that it is a video-game team.
+- Clube Meldina has an official logo (white, color and black SVGs in `assets/img/clube-meldina/`; source files in `Meldina reference/Clube Meldina/`).
 - Existing assets: crest (`escudo.png`, `escudo-mono.png`), monogram (`monograma.png`, `monograma-outline.png`), Meldina TV marks (`mtv*.png`), nuFUT partner logo, uniform shirt photos, in `Meldina site/assets/img/`.
 
 ## Evidence on Hand

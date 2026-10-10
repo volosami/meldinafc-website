@@ -185,6 +185,42 @@ export const Home: React.FC = () => {
 
   return (
     <div>
+      {/* 0. PRÓXIMO JOGO (só no celular): responde "quando a gente joga?" antes do hero */}
+      {loaded && nextMatch && (() => {
+        const date = new Date(kickoff(nextMatch));
+        const opp = opponentOf(nextMatch);
+        const oppShort = opp?.shortName || nextMatch.opponentId;
+        const [homeTeam, awayTeam] = nextMatch.isHome ? [STATIC_TEAMS.mfc, opp] : [opp, STATIC_TEAMS.mfc];
+        const [homeName, awayName] = nextMatch.isHome ? ["Meldina", oppShort] : [oppShort, "Meldina"];
+        const mins = Math.max(0, Math.floor((kickoff(nextMatch) - now) / 60000));
+        const until =
+          mins <= 0 ? "Hoje" : mins < 1440 ? `em ${Math.floor(mins / 60)}h ${String(mins % 60).padStart(2, "0")}min` : `em ${Math.floor(mins / 1440)}d ${Math.floor((mins % 1440) / 60)}h`;
+        return (
+          <Link
+            to="/jogos"
+            className="nextbar"
+            aria-label={`Próximo jogo: ${homeName} contra ${awayName}, ${formatFull(date)}. Ver calendário`}
+          >
+            <span className="nextbar__row" aria-hidden="true">
+              <span className="nextbar__label">Próximo jogo</span>
+              <span className="nextbar__when">
+                {formatMatchDay(date)} · {formatTime(date)}
+              </span>
+            </span>
+            <span className="nextbar__row" aria-hidden="true">
+              <span className="nextbar__teams">
+                <TeamBadge team={homeTeam} small />
+                <b>{homeName}</b>
+                <i>×</i>
+                <b>{awayName}</b>
+                <TeamBadge team={awayTeam} small />
+              </span>
+              <span className="nextbar__until">{until}</span>
+            </span>
+          </Link>
+        );
+      })()}
+
       {/* 1. HERO CAROUSEL */}
       <section
         className={`hero${autoplay ? "" : " is-paused"}`}
@@ -257,9 +293,8 @@ export const Home: React.FC = () => {
           <article {...slideProps(2)}>
             <div className="hero__copy">
               <p className="eyebrow">Programa oficial de sócios</p>
-              <h2 className="display">
-                Clube<br />
-                <em>Meldina</em>
+              <h2 className="cm-logo cm-logo--hero">
+                <img src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} decoding="async" />
               </h2>
               <p>
                 Prioridade na compra de ingressos, até 50% de desconto nos jogos, 15%
@@ -334,7 +369,7 @@ export const Home: React.FC = () => {
       </div>
 
       {/* 3. MATCHBAR / MATCH CENTER */}
-      <section className="matchbar" aria-label="Central de jogos" aria-busy={!loaded}>
+      <section className="matchbar" id="central" aria-label="Central de jogos" aria-busy={!loaded}>
         <div className="wrap">
           {/* Próximo Jogo */}
           <div className="matchbar__cell">
@@ -586,7 +621,7 @@ export const Home: React.FC = () => {
         </div>
         <img className="cta-band__crown" src="/assets/img/monograma-outline.png" alt="" loading="lazy" decoding="async" />
         <div className="wrap">
-          <p className="eyebrow">Clube Meldina</p>
+          <img className="cm-logo cm-logo--band" src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} loading="lazy" decoding="async" />
           <h2 className="display">
             Jogue junto com o <em>Meldina</em>
           </h2>

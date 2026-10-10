@@ -142,7 +142,7 @@
           <div class="partner"><small>Patrocinador oficial</small><img class="nufut" src="${asset("img/nufut.png")}" alt="nuFUT"></div>
           <div class="partner"><small>Fornecedor oficial</small>${LIDER}</div>
           <div class="partner"><small>Mídia oficial</small><img class="mtv" src="${asset("img/mtv-white.png")}" alt="Meldina TV"></div>
-          <div class="partner"><small>Programa oficial</small><span class="lider" style="font-family:var(--f-regal);font-size:1.3rem;letter-spacing:.18em">${I.crown.replace("<svg", '<svg style="width:26px;height:26px;color:var(--ouro)"')}CLUBE MELDINA</span></div>
+          <div class="partner"><small>Programa oficial</small><img class="cm-logo cm-logo--partner" src="${asset("img/clube-meldina/cm-white.svg")}" alt="Clube Meldina" width="1500" height="915" loading="lazy" decoding="async"></div>
         </div>
       </section>
       <footer class="footer">
@@ -422,7 +422,7 @@
     if (open) { cartFocus = opener(); } else if (orderDone) { orderDone = false; renderCart(); }
     d.classList.toggle("is-open", open);
     d.setAttribute("aria-hidden", String(!open));
-    document.body.style.overflow = open ? "hidden" : "";
+    document.documentElement.style.overflow = open ? "hidden" : "";
     if (open) setTimeout(() => $(".drawer__head button", d).focus(), 50);
     else if (cartFocus && document.contains(cartFocus)) cartFocus.focus();
   }
@@ -521,6 +521,17 @@
         <div class="mc-label"><span>Série A · Pro Clubs</span><a href="jogos.html#classificacao" class="link-arrow" style="font-size:.66rem">Tabela ${I.arrow}</a></div>
         <table class="mini-table"><caption class="sr-only">Cinco primeiros colocados da Série A</caption>${STANDINGS.slice(0, 5).map((r, i) => `<tr class="${TEAMS[r.t].us ? "is-us" : ""}"><td>${i + 1}</td><td><span class="t">${crest(r.t)}${TEAMS[r.t].curto}</span></td><td>${r.v * 3 + r.e}</td></tr>`).join("")}</table>
       </div>`;
+
+    // Próximo jogo no topo (só no celular; o CSS esconde a partir de 641px).
+    const hero = $("#hero");
+    if (hero && nx && !$(".nextbar")) {
+      const d = parseD(nx.d), mins = Math.max(0, Math.floor((d.getTime() - Date.now()) / 60000));
+      const until = mins <= 0 ? "Hoje" : mins < 1440 ? `em ${Math.floor(mins / 60)}h ${d2(mins % 60)}min` : `em ${Math.floor(mins / 1440)}d ${Math.floor((mins % 1440) / 60)}h`;
+      const hn = TEAMS[home(nx)].curto, an = TEAMS[away(nx)].curto;
+      hero.insertAdjacentHTML("beforebegin", `<a class="nextbar" href="jogos.html" aria-label="Próximo jogo: ${esc(hn)} contra ${esc(an)}, ${fmtShort(nx.d)}, ${fmtTime(nx.d)}. Ver calendário">
+        <span class="nextbar__row" aria-hidden="true"><span class="nextbar__label">Próximo jogo</span><span class="nextbar__when">${fmtShort(nx.d)} · ${fmtTime(nx.d)}</span></span>
+        <span class="nextbar__row" aria-hidden="true"><span class="nextbar__teams">${crest(home(nx))}<b>${hn}</b><i>×</i><b>${an}</b>${crest(away(nx))}</span><span class="nextbar__until">${until}</span></span></a>`);
+    }
 
     const ns = newsSorted();
     const ng = $("#homeNews");
@@ -803,9 +814,14 @@
       document.body.classList.toggle("nav-open", open);
       burger.setAttribute("aria-expanded", String(open));
       burger.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
-      document.body.style.overflow = open ? "hidden" : "";
+      document.documentElement.style.overflow = open ? "hidden" : "";
     };
     burger.addEventListener("click", () => setNav(!document.body.classList.contains("nav-open")));
+    // O topo do menu acompanha a base do cabeçalho (a faixa de patrocinadores some ao rolar).
+    const syncNavTop = () => document.body.classList.contains("nav-open") &&
+      document.documentElement.style.setProperty("--nav-top", $("#header").getBoundingClientRect().bottom + "px");
+    window.addEventListener("scroll", syncNavTop, { passive: true });
+    window.addEventListener("resize", syncNavTop);
 
     document.addEventListener("click", (e) => {
       const t = e.target.closest("button, a, [data-close]");

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 
@@ -9,6 +9,25 @@ export const Header: React.FC = () => {
 
   // Fecha o menu ao trocar de página e com Esc.
   useEffect(() => setNavOpen(false), [location.pathname]);
+  // O topo do menu acompanha a base do cabeçalho (a faixa de patrocinadores some ao rolar)
+  // e a página por trás não rola enquanto ele está aberto.
+  const headerRef = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!navOpen) return;
+    const sync = () => {
+      const bottom = headerRef.current?.getBoundingClientRect().bottom ?? 0;
+      document.documentElement.style.setProperty("--nav-top", `${bottom}px`);
+    };
+    sync();
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    document.documentElement.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+      document.documentElement.style.overflow = "";
+    };
+  }, [navOpen]);
   useEffect(() => {
     if (!navOpen) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setNavOpen(false);
@@ -27,7 +46,7 @@ export const Header: React.FC = () => {
   ];
 
   return (
-    <header className={`header ${navOpen ? "nav-open" : ""}`}>
+    <header ref={headerRef} className={`header ${navOpen ? "nav-open" : ""}`}>
       <div className="wrap">
         <Link to="/" className="brand" onClick={() => setNavOpen(false)}>
           <img src="/assets/img/escudo-sm.png" alt="Escudo do Meldina FC" />

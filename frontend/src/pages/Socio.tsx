@@ -91,9 +91,7 @@ const SuccessDialog: React.FC<{ planName: string; onClose: () => void }> = ({ pl
         <button className="modal__close" onClick={onClose} aria-label="Fechar">
           <X aria-hidden="true" />
         </button>
-        <div className="form-success__icon" aria-hidden="true">
-          <Check />
-        </div>
+        <img className="cm-logo cm-logo--dialog" src="/assets/img/clube-meldina/cm-white.svg" alt="" width={1500} height={915} />
         <h2 className="display text-3xl text-ouro mb-2" id="socio-ok-title">Bem-vindo ao Meldina!</h2>
         <p className="text-white/75 text-sm mb-6">
           Seu cadastro no plano <strong className="text-white">{planName}</strong> foi registrado.
@@ -185,14 +183,16 @@ export const Socio: React.FC = () => {
 
   return (
     <div>
-      <section className="page-hero">
+      <section className="page-hero page-hero--cm">
         <img className="page-hero__mark" src="/assets/img/monograma-outline.png" alt="" />
         <div className="wrap">
           <nav className="breadcrumb" aria-label="Trilha">
             <Link to="/">Início</Link> <span aria-hidden="true">/</span> <span aria-current="page">Clube Meldina</span>
           </nav>
           <p className="eyebrow">Programa Oficial de Sócios</p>
-          <h1 className="display">Clube Meldina</h1>
+          <h1 className="cm-logo cm-logo--page">
+            <img src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} decoding="async" />
+          </h1>
           <p>
             Seja sócio-torcedor do Meldina FC. Garanta descontos exclusivos em camisas, acesso prioritário aos jogos e ajude a fortalecer o nosso clube na Série A.
           </p>
