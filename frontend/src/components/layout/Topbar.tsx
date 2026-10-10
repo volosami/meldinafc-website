@@ -5,16 +5,9 @@ export const Topbar: React.FC = () => {
   return (
     <div className="topbar">
       <div className="wrap">
-        <div className="topbar__left">
-          <span>
-            Patrocinador Master: <strong>NuFut</strong>
-          </span>
-          <span className="hidden sm:inline">
-            Temporada <strong>{MFC_INFO.temporada}</strong>
-          </span>
-          <span className="hidden md:inline">
-            Estádio: <strong>{MFC_INFO.estadio}</strong>
-          </span>
+        <div className="topbar__left topbar__sponsors">
+          <img src="/assets/img/lider-mark.png" alt="Lider Sport" className="topbar__logo topbar__logo--lider" />
+          <img src="/assets/img/nufut.png" alt="nuFUT" className="topbar__logo topbar__logo--nufut" />
         </div>
         <div className="topbar__right">
           <a

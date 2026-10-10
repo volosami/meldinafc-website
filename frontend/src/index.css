@@ -614,6 +614,8 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .plan li svg { width: 18px; height: 18px; color: var(--ouro); margin-top: 3px; }
 .plan li.off { color: rgba(255,255,255,0.35); }
 .plan li.off svg { color: rgba(255,255,255,0.25); }
+.plan__ico { color: var(--ouro); font-weight: 700; text-align: center; }
+.plan li.off .plan__ico { color: rgba(255,255,255,0.25); }
 .plan .btn { margin-top: auto; }
 @media (max-width: 960px) { .plans { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; } }
 
@@ -788,7 +790,7 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .partner:hover { transform: translateY(-3px); }
 .partner small { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.45); font-weight: 600; }
 .partner img { height: 56px; width: auto; }
-.partner img.nufut { height: 40px; }
+.partner img.nufut { height: 50px; }
 .partner img.mtv { height: 64px; }
 .partner img.lider-logo, .lider-logo { height: 38px; width: auto; }
 .captain { display: inline-grid; place-items: center; margin-top: 10px; padding: 4px 10px; border-radius: 3px; background: var(--ouro); color: var(--noite); font-weight: 800; font-size: .7rem; letter-spacing: .14em; text-transform: uppercase; }
@@ -857,16 +859,6 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .champ-band .link-arrow { margin-left: auto; }
 @media (max-width: 700px) { .champ-band__txt { display: none; } .champ-band .link-arrow { margin-left: 0; } }
 
-.trophy-room { background: radial-gradient(ellipse 60% 70% at 25% 50%, rgba(239,170,25,.14), transparent 70%), var(--noite); }
-.trophy { display: grid; grid-template-columns: minmax(200px, 340px) 1fr; gap: clamp(28px, 5vw, 70px); align-items: center; border: 1px solid rgba(239,170,25,.3); border-radius: 8px; padding: clamp(24px, 4vw, 48px); background: linear-gradient(135deg, rgba(239,170,25,.07), rgba(255,255,255,.02)); }
-.trophy__art { position: relative; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; background: radial-gradient(circle, rgba(239,170,25,.3), transparent 65%); }
-.trophy__art svg { width: 62%; filter: drop-shadow(0 24px 40px rgba(0,0,0,.55)); animation: float 6s ease-in-out infinite; }
-.trophy__count { position: absolute; right: 8%; bottom: 8%; font-family: var(--f-display); font-size: 2.6rem; color: var(--ouro); line-height: 1; }
-.trophy h3 { font-size: clamp(2.6rem, 6vw, 4.6rem); }
-.trophy__years { display: flex; gap: 8px; margin: 16px 0; }
-.trophy__years span { border: 1px solid var(--ouro); color: var(--ouro); padding: 4px 12px; border-radius: 999px; font-weight: 700; font-size: .82rem; }
-.trophy p:not(.eyebrow) { color: rgba(255,255,255,.75); max-width: 560px; margin: 0 0 20px; }
-@media (max-width: 760px) { .trophy { grid-template-columns: 1fr; } .trophy__art { max-width: 260px; margin: 0 auto; } }
 
 .rivals { display: flex; align-items: center; justify-content: center; gap: clamp(16px, 4vw, 40px); padding: 40px 0; }
 .rivals img { width: clamp(110px, 18vw, 200px); height: auto; filter: drop-shadow(0 20px 30px rgba(0,0,0,.25)); }
@@ -952,3 +944,39 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .trophy-total { font-family: var(--f-regal); letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); margin: 0; }
 .trophy-total b { font-family: var(--f-display); font-size: 2.6rem; color: var(--ouro); letter-spacing: 0; margin-right: 8px; }
 .tl__y small { display: block; font-family: var(--f-body); font-size: .7rem; letter-spacing: .14em; color: rgba(255,255,255,.55); margin-top: 6px; }
+
+/* ---------- Sala de troféus: linha do tempo ---------- */
+.trophy-room { background: radial-gradient(ellipse 60% 70% at 25% 50%, rgba(239,170,25,.14), transparent 70%), var(--noite); }
+.trophy-tl { position: relative; list-style: none; padding: 0; margin: 48px 0 0; }
+.trophy-tl::before { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; transform: translateX(-50%); background: var(--ouro); border-radius: 2px; }
+.trophy-tl__item { position: relative; width: 50%; }
+.trophy-tl__item.is-right { margin-left: 50%; padding-left: 64px; }
+.trophy-tl__item.is-left { padding-right: 64px; }
+.trophy-tl__item + .trophy-tl__item { margin-top: -150px; }
+.trophy-tl__star { position: absolute; top: 42%; width: 52px; height: 52px; fill: var(--ouro); filter: drop-shadow(0 0 0 var(--noite)) drop-shadow(0 4px 14px rgba(239,170,25,.35)); z-index: 2; }
+.is-right .trophy-tl__star { left: -26px; }
+.is-left .trophy-tl__star { right: -26px; }
+.trophy-card { max-width: 440px; overflow: hidden; border-radius: 4px; box-shadow: 0 24px 50px rgba(0,0,0,.45); transition: transform .35s var(--ease); }
+.is-left .trophy-card { margin-left: auto; }
+.trophy-card:hover { transform: translateY(-6px); }
+.trophy-card__media { position: relative; height: clamp(220px, 24vw, 280px); display: flex; align-items: center; justify-content: center; padding: 18px; background: radial-gradient(circle at 50% 55%, rgba(239,170,25,.28), transparent 62%), linear-gradient(160deg, var(--grena-deep), #12020a 75%); }
+.trophy-card__media img { max-width: 80%; width: auto; height: 100%; object-fit: contain; filter: drop-shadow(0 18px 26px rgba(0,0,0,.6)); transition: transform .5s var(--ease); }
+.trophy-card:hover .trophy-card__media img { transform: scale(1.05) rotate(-1deg); }
+.trophy-card__count { position: absolute; right: 16px; bottom: 10px; font-family: var(--f-display); font-size: 2.6rem; line-height: 1; color: var(--ouro); text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+.trophy-card__year { display: flex; align-items: baseline; gap: 12px; background: var(--ouro); color: var(--noite); font-family: var(--f-display); font-size: 1.7rem; line-height: 1; padding: 12px 24px; }
+.trophy-card__year small, .trophy-card__title small { font-family: var(--f-body); font-size: .7rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; opacity: .7; }
+.trophy-card__title { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; background: var(--creme); color: var(--tinta); font-weight: 600; font-size: 1.05rem; padding: 16px 24px; }
+@media (max-width: 760px) {
+  .trophy-tl::before { left: 22px; }
+  .trophy-tl__item, .trophy-tl__item.is-right, .trophy-tl__item.is-left { width: 100%; margin-left: 0; padding: 0 0 0 64px; }
+  .trophy-tl__item + .trophy-tl__item { margin-top: 36px; }
+  .is-right .trophy-tl__star, .is-left .trophy-tl__star { left: 0; right: auto; width: 44px; height: 44px; }
+  .is-left .trophy-card { margin-left: 0; }
+}
+
+/* ---------- Topbar: logos dos patrocinadores ---------- */
+.topbar__sponsors { gap: 36px; }
+.topbar__logo { display: block; width: auto; opacity: .92; transition: opacity .2s; }
+.topbar__logo:hover { opacity: 1; }
+.topbar__logo--lider { height: 16px; }
+.topbar__logo--nufut { height: 19px; }
