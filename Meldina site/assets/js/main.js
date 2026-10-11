@@ -109,7 +109,7 @@
         <div class="wrap">
           <div class="topbar__left topbar__sponsors">
             <img src="${asset("img/lider-mark.png")}" alt="Lider Sport" class="topbar__logo topbar__logo--lider">
-            <img src="${asset("img/nufut.png")}" alt="nuFUT" class="topbar__logo topbar__logo--nufut">
+            <img src="${asset("img/nufut.svg")}" alt="nuFUT" class="topbar__logo topbar__logo--nufut">
           </div>
           <div class="topbar__right">
             <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram @meldinafc">${I.ig}<span class="hide-sm">Instagram</span></a>
@@ -139,10 +139,10 @@
     const footer = `
       <section class="partners" aria-label="Parceiros">
         <div class="wrap">
-          <div class="partner"><small>Patrocinador oficial</small><img class="nufut" src="${asset("img/nufut.png")}" alt="nuFUT"></div>
+          <div class="partner"><small>Patrocinador oficial</small><img class="nufut" src="${asset("img/nufut.svg")}" alt="nuFUT"></div>
           <div class="partner"><small>Fornecedor oficial</small>${LIDER}</div>
           <div class="partner"><small>Mídia oficial</small><img class="mtv" src="${asset("img/mtv-white.png")}" alt="Meldina TV"></div>
-          <div class="partner"><small>Programa oficial</small><img class="cm-logo cm-logo--partner" src="${asset("img/clube-meldina/cm-white.svg")}" alt="Clube Meldina" width="1500" height="915" loading="lazy" decoding="async"></div>
+          <div class="partner"><small>Sócio-Torcedor</small><img class="cm-logo cm-logo--partner" src="${asset("img/clube-meldina/cm-logo.png")}" alt="Clube Meldina" width="720" height="669" loading="lazy" decoding="async"></div>
         </div>
       </section>
       <footer class="footer">
@@ -150,7 +150,7 @@
           <div class="footer__top">
             <div class="footer__brand">
               <img src="${asset("img/escudo-sm.png")}" alt="Meldina FC">
-              <p>Meldina Futebol Clube: Muito Além do Jogo</p>
+              <p>Meldina Futebol Clube: muito além do jogo</p>
               <div class="socials">
                 <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram">${I.ig}</a>
                 <a href="${MFC.youtube}" target="_blank" rel="noopener" aria-label="YouTube">${I.yt}</a>
@@ -292,8 +292,20 @@
 
   /* ---------------- Notícias ---------------- */
   const tagClass = (t) => (t === "Meldina TV" ? "t-tv" : t === "Clube" ? "t-clube" : t === "Nota oficial" ? "t-nota" : "");
-  function newsCard(n, feature = false, i = 0) {
-    return `<a class="news-card ${feature ? "news-card--feature" : ""} reveal reveal-d${i % 3}" href="noticia.html?id=${n.id}">
+  /* Grade de notícias: a 1ª é destaque com duas ao lado; as demais vêm de três em três.
+     A última linha nunca fica com card sobrando (um card ocupa a linha, dois dividem ao meio). */
+  function newsLayout(idx, total) {
+    if (idx === 0) return "feature";
+    if (idx < 3) return "";
+    const leftover = (total - 3) % 3;
+    if (leftover === 1 && idx === total - 1) return "wide";
+    if (leftover === 2 && idx >= total - 2) return "half";
+    return "";
+  }
+  function newsCard(n, layout = "", i = 0) {
+    const lay = layout === true ? "feature" : layout || "";
+    const feature = lay === "feature";
+    return `<a class="news-card ${lay ? "news-card--" + lay : ""} reveal reveal-d${i % 3}" href="noticia.html?id=${n.id}">
       <div class="news-card__img"><img src="${asset(n.img)}" alt="" loading="lazy" style="${n.pos ? `object-position:${n.pos}` : ""}">${feature ? "" : `<span class="news-card__tag ${tagClass(n.tag)}">${n.tag}</span>`}</div>
       <div class="news-card__body">
         ${feature ? `<span class="news-card__tag ${tagClass(n.tag)}">${n.tag}</span>` : ""}
@@ -535,7 +547,7 @@
 
     const ns = newsSorted();
     const ng = $("#homeNews");
-    if (ng) ng.innerHTML = newsCard(ns[0], true) + ns.slice(1, 6).map((n, i) => newsCard(n, false, i)).join("");
+    if (ng) { const home = ns.slice(0, 6); ng.innerHTML = home.map((n, i) => newsCard(n, newsLayout(i, home.length), i)).join(""); }
 
     const rail = $("#homeSquad");
     if (rail) rail.innerHTML = PLAYERS.map(playerCard).join("");
@@ -678,7 +690,7 @@
     const draw = (tag) => {
       const list = tag === "Todas" ? all : all.filter((n) => n.tag === tag);
       el.innerHTML = list.length
-        ? list.map((n, i) => newsCard(n, i === 0 && tag === "Todas", i)).join("")
+        ? list.map((n, i) => newsCard(n, tag === "Todas" ? newsLayout(i, list.length) : i === list.length - 1 && list.length % 3 === 1 ? "wide" : "", i)).join("")
         : `<p class="news-empty">Nenhuma notícia nesta categoria por enquanto.</p>`;
       observeReveal();
     };

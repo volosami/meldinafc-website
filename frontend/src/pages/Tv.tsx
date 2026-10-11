@@ -87,9 +87,7 @@ export const Tv: React.FC = () => {
         <div className="wrap">
           <div className="section-head">
             <div>
-              <h2>
-                <img className="tv__logo" src="/assets/img/mtv-white.png" alt="Vídeos da Meldina TV" loading="lazy" />
-              </h2>
+              <h2 className="display">Meldina TV</h2>
               <p className="text-white/75 text-sm mt-3 max-w-md">
                 Vídeos semanais com o elenco e comissão técnica.
               </p>

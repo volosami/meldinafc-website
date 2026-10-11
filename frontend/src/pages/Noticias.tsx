@@ -4,7 +4,7 @@ import { api } from "../services/api";
 import { NewsArticle } from "../types";
 import { STATIC_NEWS } from "../data/staticData";
 import { asList } from "../lib/format";
-import { NewsCard } from "../components/NewsCard";
+import { NewsCard, newsLayout } from "../components/NewsCard";
 
 export const Noticias: React.FC = () => {
   const [news, setNews] = useState<NewsArticle[]>([]);
@@ -74,16 +74,25 @@ export const Noticias: React.FC = () => {
               )}
             </div>
           ) : (
+            <>
+            <h2 className="sr-only">{filter === "todas" ? "Todas as notícias" : `Notícias: ${filter}`}</h2>
             <div className="news-grid">
               {filteredNews.map((item, idx) => (
                 <NewsCard
                   key={item.id}
                   item={item}
-                  feature={idx === 0 && filter === "todas"}
+                  layout={
+                    filter === "todas"
+                      ? newsLayout(idx, filteredNews.length)
+                      : idx === filteredNews.length - 1 && filteredNews.length % 3 === 1
+                        ? "wide"
+                        : "default"
+                  }
                   eager={idx === 0}
                 />
               ))}
             </div>
+            </>
           )}
         </div>
       </section>

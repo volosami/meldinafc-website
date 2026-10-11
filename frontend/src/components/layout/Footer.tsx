@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
         <div className="wrap">
           <div className="partner">
             <small>Patrocinador oficial</small>
-            <img className="nufut" src="/assets/img/nufut.png" alt="nuFUT" />
+            <img className="nufut" src="/assets/img/nufut.svg" alt="nuFUT" />
           </div>
           <div className="partner">
             <small>Fornecedor oficial</small>
@@ -21,8 +21,8 @@ export const Footer: React.FC = () => {
             <img className="mtv" src="/assets/img/mtv-white.png" alt="Meldina TV" />
           </div>
           <div className="partner">
-            <small>Programa oficial</small>
-            <img className="cm-logo cm-logo--partner" src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} loading="lazy" decoding="async" />
+            <small>Sócio-Torcedor</small>
+            <img className="cm-logo cm-logo--partner" src="/assets/img/clube-meldina/cm-logo.png" alt="Clube Meldina" width={720} height={669} loading="lazy" decoding="async" />
           </div>
         </div>
       </section>
@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
           <div className="footer__top">
             <div className="footer__brand">
               <img src="/assets/img/escudo-sm.png" alt="Meldina FC" />
-              <p>Meldina Futebol Clube: Muito Além do Jogo</p>
+              <p>Meldina Futebol Clube: muito além do jogo</p>
               <div className="socials">
                 <a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">

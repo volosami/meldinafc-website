@@ -14,7 +14,7 @@ import {
 import { asList, formatFull, formatMatchDay, formatTime } from "../lib/format";
 import { kickoff, opponentOf, outcomeOf, pickLastResult, pickNextMatch } from "../lib/fixtures";
 import { TeamBadge } from "../components/ui/TeamBadge";
-import { NewsCard } from "../components/NewsCard";
+import { NewsCard, newsLayout } from "../components/NewsCard";
 import { PlayerCard, PlayerDialog } from "../components/PlayerDialog";
 
 const SLIDE_COUNT = 3;
@@ -294,7 +294,7 @@ export const Home: React.FC = () => {
             <div className="hero__copy">
               <p className="eyebrow">Programa oficial de sócios</p>
               <h2 className="cm-logo cm-logo--hero">
-                <img src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} decoding="async" />
+                <img src="/assets/img/clube-meldina/cm-logo.png" alt="Clube Meldina" width={720} height={669} decoding="async" />
               </h2>
               <p>
                 Prioridade na compra de ingressos, até 50% de desconto nos jogos, 15%
@@ -522,7 +522,7 @@ export const Home: React.FC = () => {
           ) : (
             <div className="news-grid">
               {news.map((item, idx) => (
-                <NewsCard key={item.id} item={item} feature={idx === 0} eager={idx === 0} />
+                <NewsCard key={item.id} item={item} layout={newsLayout(idx, news.length)} eager={idx === 0} />
               ))}
             </div>
           )}
@@ -619,14 +619,14 @@ export const Home: React.FC = () => {
         <div className="cta-band__img">
           <img src="/assets/players/gaab-12.jpg" alt="" loading="lazy" decoding="async" />
         </div>
-        <img className="cta-band__crown" src="/assets/img/monograma-outline.png" alt="" loading="lazy" decoding="async" />
+        <img className="cta-band__crown" src="/assets/img/clube-meldina/cm-crown.png" alt="" loading="lazy" decoding="async" />
         <div className="wrap">
-          <img className="cm-logo cm-logo--band" src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} loading="lazy" decoding="async" />
+          <img className="cm-logo cm-logo--band" src="/assets/img/clube-meldina/cm-logo.png" alt="Clube Meldina" width={720} height={669} loading="lazy" decoding="async" />
           <h2 className="display">
             Jogue junto com o <em>Meldina</em>
           </h2>
           <p>
-            Faça parte da nossa história. Descontos em camisas oficiais, prioridade em ingressos e conteúdos exclusivos direto no WhatsApp.
+            Faça parte da nossa história. Descontos em camisas oficiais, prioridade em ingressos e outros conteúdos exclusivos.
           </p>
           <div className="stat-row">
             <div><b>20%</b><small>off em ingressos</small></div>

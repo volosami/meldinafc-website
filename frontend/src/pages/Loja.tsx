@@ -38,7 +38,6 @@ export const Loja: React.FC = () => {
         <div className="product__body">
           <span className="product__cat">{prod.category}</span>
           <h3 className="product__name">{prod.name}</h3>
-          {prod.desc && <p className="text-xs text-tinta/70">{prod.desc}</p>}
 
           {prod.sizes && (
             <div className="sizes" role="group" aria-label={`Tamanho de ${prod.name}`}>
@@ -97,7 +96,7 @@ export const Loja: React.FC = () => {
             </div>
           </div>
 
-          <div className="products mb-16">
+          <div className="products products--kits mb-16">
             {STATIC_PRODUCTS.slice(0, 2).map((prod) => renderProduct(prod, ""))}
           </div>
 

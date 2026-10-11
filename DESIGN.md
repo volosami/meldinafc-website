@@ -18,6 +18,10 @@ colors:
   cinza: "#6b6f86"
   vitoria: "#1a7a43"
   ouro-clube: "#fecc00"
+  tinta-2: "#4a4d63"
+  noite-0: "#02041a"
+  erro: "#ff5a6a"
+  erro-claro: "#ff8c97"
   white: "#ffffff"
 typography:
   display:
@@ -163,6 +167,9 @@ A three-colour club identity (grená, ouro, marinho) set on a night-navy field, 
 - **Creme** (`creme`, `creme-2`): the paper band for reading sections, cart drawer, product image wells.
 - **Tinta** (`tinta`): text on cream and white, and the dark button.
 - **Cinza** (`cinza`): metadata on light surfaces and the draw marker.
+- **Tinta 2** (`tinta-2`): secondary body text on white and cream cards (news and benefit summaries).
+- **Noite 0** (`noite-0`): the footer, one step darker than Noite.
+- **Erro** (`erro`, `erro-claro`): form error borders and messages on dark surfaces. Status only.
 - **White** at reduced opacity is the text ramp on dark: 0.85 for links, 0.78 for lede copy, 0.6 for metadata, 0.55 for labels. Hairlines are `rgba(255,255,255,0.1)` on dark and `rgba(11,13,28,0.12)` on light.
 - **Vitória** (`vitoria`): the win marker only (result tags and form dots). It is a status colour, not a brand colour.
 - **Ouro Clube** (`ouro-clube`): the gold of the Clube Meldina mark and its tricolour stripe. Used only inside Clube Meldina branding, never as a site accent (that stays Ouro da Coroa).
@@ -176,7 +183,7 @@ A three-colour club identity (grená, ouro, marinho) set on a night-navy field, 
 
 ## Typography
 
-**Display Font:** Anton (with Oswald, Impact). The stack is led by "Extenda 20 Max", which is not loaded, so Anton is what renders.
+**Display Font:** Anton (with Oswald, Impact).
 **Label Font:** Cinzel (with Trajan Pro)
 **Editorial Font:** DM Serif Display (with Georgia)
 **Body Font:** Poppins (with system-ui)
@@ -266,12 +273,18 @@ These follow The No-Money Rule in PRODUCT.md: they must look like a real club st
 - **Button labels:** "Adicionar ao carrinho" and "Finalizar pedido" are fine. Never use "Pagar", "Pagar com Pix", "Pagar com cartão" or show payment-method logos.
 
 ### Clube Meldina Mark
-The membership program has its own official logo (`/assets/img/clube-meldina/`, cropped SVGs): "clube" over "MELDINA", with the crowned M and a grená, marinho and gold stripe running through the L.
-- **Versions:** `cm-white.svg` on dark backgrounds (the default on this site), `cm-color.svg` on cream or white, `cm-black.svg` for print only.
+The membership program has its own official logo (`/assets/img/clube-meldina/`, cropped transparent PNGs): a sticker-style "clube" in heavy white letters with a black drop shadow, under a white crown that carries a grená, marinho and gold band.
+- **Versions:** `cm-logo.png` is the full logo, in the outlined version (thin white rim) so it holds on the site's dark backgrounds. `cm-crown.png` is the outlined crown alone, used only as a faint watermark (the Sócio page hero and the sócio band on Home). Sources, including the non-outlined versions and SVGs, are in `Meldina reference/Clube Meldina/`.
 - **Where it appears:** the Sócio page heading, the Clube Meldina hero slide, the sócio band on Home, the footer partners row and the sign-up confirmation. Running text still says "Clube Meldina" in words.
 - **Accessibility:** when the mark replaces a heading, it sits inside the heading element with `alt="Clube Meldina"`. When it is decorative next to text that already names the program, `alt=""`.
 - **Never** recolour, stretch, outline or add effects to the mark, and never rebuild it with live type.
 - **Tricolour stripe:** the program's stripe runs grená, marinho, gold (44 / 10 / 46), used as the 12px band under the Sócio page hero. It belongs to Clube Meldina only; the club-wide tricolour order (grená, ouro, marinho) is unchanged.
+
+### News Grid
+Twelve columns: the first story is the 8×2 feature with two cards beside it; the rest run three per row. The last row never leaves a card alone: one leftover card becomes a full-width horizontal card (image left, text right), two leftovers split the row in half.
+
+### Pull Quotes
+Article quotes sit under a 2px gold rule on top, in DM Serif. No coloured side borders.
 
 ### Standings Table
 Hairline-ruled rows on night, uppercase micro headers, Anton points. Meldina's row is highlighted with an ouro gradient wash and a 3px ouro inset bar on the left.
@@ -295,4 +308,4 @@ Hairline-ruled rows on night, uppercase micro headers, Anton points. Meldina's r
 - **Don't** introduce colours outside the club palette except the win/draw/loss status markers.
 - **Don't** design any payment UI: no card, Pix, boleto or bank fields, no payment-method logos or badges, no "Pagar" buttons. Store and sócio flows end in an in-character confirmation (The No-Money Rule, PRODUCT.md).
 - **Don't** add copy promising emails, newsletters or messages to people who sign up.
-- **Don't** spell "Clube Meldina" as a styled headline where the official mark belongs; use `cm-white.svg` on dark and `cm-color.svg` on light.
+- **Don't** spell "Clube Meldina" as a styled headline where the official mark belongs; use `cm-logo.png`.

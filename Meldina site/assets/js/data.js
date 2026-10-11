@@ -27,7 +27,7 @@ const MFC = {
 const PLAYERS = [
   { id: "muralha", nome: "Muralha", num: 1, pos: "Goleiro", grupo: "Goleiros", img: "muralha-1.jpg", pe: "Direito", desde: 2026,
     j: 8, g: 0, a: 0, extra: ["Jogos sem sofrer gols", 1],
-    bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
+    bio: "Nova contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso." },
   { id: "kiki", nome: "Kiki", num: 2, pos: "Lateral-direito", grupo: "Defensores", img: "kiki-2.jpg", pe: "Direito", desde: 2024,
     j: 8, g: 0, a: 2, extra: ["Desarmes", 19],
     bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado." },
@@ -391,5 +391,5 @@ const PRODUCTS = [
   { id: "caneca", cat: "Casa", nome: "Caneca Escudo Oficial 350ml", preco: 59.9, img: "img/produto-caneca.jpg", badge: "Novo" },
   { id: "flamula", cat: "Casa", nome: "Flâmula Oficial Meldina FC 2024", preco: 69.9, img: "img/produto-flamula.png", badge: "Novo" },
   { id: "chaveiro", cat: "Acessórios", nome: "Chaveiro Metal Escudo", preco: 34.9, img: "img/produto-chaveiro.jpg", badge: "Novo" },
-  { id: "necessaire", cat: "Acessórios", nome: "Necessaire Oficial Meldina FC", preco: 134.9, img: "img/produto-necessaire.jpg", badge: "Novo" },
+  { id: "necessaire", cat: "Acessórios", nome: "Necessaire Meldina", preco: 134.9, img: "img/produto-necessaire.jpg", badge: "Novo" },
 ];

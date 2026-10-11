@@ -121,7 +121,7 @@ export const CartDrawer: React.FC = () => {
             </div>
             <div className="drawer__row">
               <span>Frete</span>
-              <span className="text-green-800 font-semibold">Grátis para Sócios</span>
+              <span className="drawer__free">Grátis para Sócios</span>
             </div>
             <div className="drawer__row total">
               <span>Total</span>
