@@ -633,6 +633,20 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 
 .plan .btn { margin-top: auto; }
 @media (max-width: 960px) { .plans { grid-template-columns: 1fr; max-width: 520px; margin: 0 auto; } }
+/* Carteirinha de cada plano, saindo pelo topo do cartão */
+.plans { margin-top: 130px; row-gap: 130px; }
+.plan__card {
+  display: block; width: min(80%, 300px); height: auto; margin: -128px auto 24px;
+  border-radius: 14px; box-shadow: 0 22px 40px -14px rgba(0,0,0,0.75);
+  transform: rotate(-3deg); transition: transform 0.45s var(--ease);
+}
+.plan:hover .plan__card { transform: rotate(0deg) translateY(-4px); }
+/* Nome e etiqueta na mesma linha: a etiqueta não empurra o texto */
+.plan__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.plan__head .plan__ribbon { position: static; flex: none; }
+/* Plano em destaque em preto, como a carteirinha Ouro física */
+.plan--hl { background: linear-gradient(170deg, #141414 0%, #000 100%); }
+@media (prefers-reduced-motion: reduce) { .plan__card, .plan:hover .plan__card { transform: none; transition: none; } }
 
 /* ---------- FormulÃ¡rios ---------- */
 .form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }

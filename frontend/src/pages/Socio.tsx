@@ -15,7 +15,6 @@ type PlanKey = "BRONZE" | "PRATA" | "OURO";
 const PLANS: {
   key: PlanKey;
   name: string;
-  tier: string;
   price: string;
   ribbon?: string;
   perks: { text: string; on: boolean }[];
@@ -23,40 +22,44 @@ const PLANS: {
   {
     key: "BRONZE",
     name: "Bronze",
-    tier: "Plano Inicial",
     price: "R$ 14,90",
     perks: [
       { text: "Carteirinha digital de sócio", on: true },
-      { text: "5% de desconto na Loja Oficial", on: true },
       { text: "Acesso ao grupo oficial no WhatsApp", on: true },
-      { text: "Desconto em ingressos de jogos", on: false },
-      { text: "Camisa oficial autografada", on: false },
+      { text: "5% de desconto na Loja Oficial", on: true },
+      { text: "Desconto em ingressos", on: false },
+      { text: "Participação em sorteios mensais", on: false },
+      { text: "Sorteio anual de camisa oficial autografada", on: false },
+      { text: "Acesso VIP nos eventos do clube", on: false },
     ],
   },
   {
     key: "PRATA",
     name: "Prata",
-    tier: "Mais Popular",
     price: "R$ 29,90",
     perks: [
       { text: "Carteirinha digital de sócio", on: true },
+      { text: "Acesso ao grupo oficial no WhatsApp", on: true },
       { text: "10% de desconto na Loja Oficial", on: true },
       { text: "20% de desconto em ingressos", on: true },
       { text: "Participação em sorteios mensais", on: true },
-      { text: "Camisa oficial autografada", on: false },
+      { text: "Sorteio anual de camisa oficial autografada", on: false },
+      { text: "Acesso VIP nos eventos do clube", on: false },
     ],
   },
   {
     key: "OURO",
     name: "Ouro",
-    tier: "Elite Grená",
     price: "R$ 49,90",
     ribbon: "Recomendado",
     perks: [
-      { text: "Todos os benefícios do Prata", on: true },
+      { text: "Carteirinha digital de sócio", on: true },
+      { text: "Acesso ao grupo oficial no WhatsApp", on: true },
       { text: "20% de desconto na Loja Oficial", on: true },
+      { text: "50% de desconto em ingressos", on: true },
+      { text: "Participação em sorteios mensais", on: true },
+      { text: "Sorteio anual de camisa oficial autografada", on: true },
       { text: "Acesso VIP nos eventos do clube", on: true },
-      { text: "Sorteio de 1 Camisa Oficial por ano", on: true },
       { text: "Nome gravado no Mural do Clube", on: true },
     ],
   },
@@ -184,7 +187,7 @@ export const Socio: React.FC = () => {
   return (
     <div>
       <section className="page-hero page-hero--cm">
-        <img className="page-hero__mark" src="/assets/img/clube-meldina/cm-crown.png" alt="" />
+        <img className="page-hero__mark" src="/assets/img/monograma-outline.png" alt="" />
         <div className="wrap">
           <nav className="breadcrumb" aria-label="Trilha">
             <Link to="/">Início</Link> <span aria-hidden="true">/</span> <span aria-current="page">Clube Meldina</span>
@@ -218,9 +221,19 @@ export const Socio: React.FC = () => {
                   className={`plan ${p.ribbon ? "plan--hl" : ""} ${isSelected ? "border-ouro" : ""}`}
                   aria-labelledby={`plan-${p.key}`}
                 >
-                  {p.ribbon && <span className="plan__ribbon">{p.ribbon}</span>}
-                  <span className={`plan__tier ${p.ribbon ? "text-ouro" : ""}`}>{p.tier}</span>
-                  <h3 className="display plan__name" id={`plan-${p.key}`}>{p.name}</h3>
+                  <img
+                    className="plan__card"
+                    src={`/assets/img/clube-meldina/card-${p.key.toLowerCase()}.png`}
+                    alt={`Carteirinha Clube Meldina ${p.name}`}
+                    width={640}
+                    height={349}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="plan__head">
+                    <h3 className="display plan__name" id={`plan-${p.key}`}>{p.name}</h3>
+                    {p.ribbon && <span className="plan__ribbon">{p.ribbon}</span>}
+                  </div>
                   <div className="plan__price">
                     <b>{p.price}</b>
                     <small>/mês</small>

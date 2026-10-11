@@ -257,7 +257,6 @@ export const Home: React.FC = () => {
               </div>
             </div>
             <div className="hero__media">
-              <span className="hero__number" aria-hidden="true">9</span>
               <img src="/assets/players/almeida-9.jpg" alt="Almeida, camisa 9" {...{ fetchpriority: "high" }} />
             </div>
           </article>
@@ -284,7 +283,6 @@ export const Home: React.FC = () => {
               </div>
             </div>
             <div className="hero__media hero__media--photo">
-              <span className="hero__number" aria-hidden="true">II</span>
               <img src="/assets/img/camisa-2-modelo.jpg" alt="Modelo vestindo a camisa II do Meldina" decoding="async" {...{ fetchpriority: "low" }} />
             </div>
           </article>
@@ -310,7 +308,6 @@ export const Home: React.FC = () => {
               </div>
             </div>
             <div className="hero__media">
-              <span className="hero__number" aria-hidden="true">10</span>
               <img src="/assets/players/carrijo-10.jpg" alt="Carrijo, camisa 10" decoding="async" {...{ fetchpriority: "low" }} />
             </div>
           </article>
