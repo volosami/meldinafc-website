@@ -266,8 +266,8 @@ These follow The No-Money Rule in PRODUCT.md: they must look like a real club st
 - **Button labels:** "Adicionar ao carrinho" and "Finalizar pedido" are fine. Never use "Pagar", "Pagar com Pix", "Pagar com cartão" or show payment-method logos.
 
 ### Clube Meldina Mark
-The membership program has its own official logo (`/assets/img/clube-meldina/`, cropped SVGs): "clube" over "MELDINA", with the crowned M and a grená, marinho and gold stripe running through the L.
-- **Versions:** `cm-white.svg` on dark backgrounds (the default on this site), `cm-color.svg` on cream or white, `cm-black.svg` for print only.
+The membership program has its own official logo (`/assets/img/clube-meldina/`, cropped transparent PNGs): a sticker-style "clube" in heavy white letters with a black drop shadow, under a white crown that carries a grená, marinho and gold band.
+- **Versions:** `cm-logo.png` is the full logo, in the outlined version (thin white rim) so it holds on the site's dark backgrounds. `cm-crown.png` is the outlined crown alone, used only as a faint watermark (the Sócio page hero and the sócio band on Home). Sources, including the non-outlined versions and SVGs, are in `Meldina reference/Clube Meldina/`.
 - **Where it appears:** the Sócio page heading, the Clube Meldina hero slide, the sócio band on Home, the footer partners row and the sign-up confirmation. Running text still says "Clube Meldina" in words.
 - **Accessibility:** when the mark replaces a heading, it sits inside the heading element with `alt="Clube Meldina"`. When it is decorative next to text that already names the program, `alt=""`.
 - **Never** recolour, stretch, outline or add effects to the mark, and never rebuild it with live type.
@@ -295,4 +295,4 @@ Hairline-ruled rows on night, uppercase micro headers, Anton points. Meldina's r
 - **Don't** introduce colours outside the club palette except the win/draw/loss status markers.
 - **Don't** design any payment UI: no card, Pix, boleto or bank fields, no payment-method logos or badges, no "Pagar" buttons. Store and sócio flows end in an in-character confirmation (The No-Money Rule, PRODUCT.md).
 - **Don't** add copy promising emails, newsletters or messages to people who sign up.
-- **Don't** spell "Clube Meldina" as a styled headline where the official mark belongs; use `cm-white.svg` on dark and `cm-color.svg` on light.
+- **Don't** spell "Clube Meldina" as a styled headline where the official mark belongs; use `cm-logo.png`.

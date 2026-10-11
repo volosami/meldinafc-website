@@ -109,7 +109,7 @@
         <div class="wrap">
           <div class="topbar__left topbar__sponsors">
             <img src="${asset("img/lider-mark.png")}" alt="Lider Sport" class="topbar__logo topbar__logo--lider">
-            <img src="${asset("img/nufut.png")}" alt="nuFUT" class="topbar__logo topbar__logo--nufut">
+            <img src="${asset("img/nufut.svg")}" alt="nuFUT" class="topbar__logo topbar__logo--nufut">
           </div>
           <div class="topbar__right">
             <a href="${MFC.instagram}" target="_blank" rel="noopener" aria-label="Instagram @meldinafc">${I.ig}<span class="hide-sm">Instagram</span></a>
@@ -139,10 +139,10 @@
     const footer = `
       <section class="partners" aria-label="Parceiros">
         <div class="wrap">
-          <div class="partner"><small>Patrocinador oficial</small><img class="nufut" src="${asset("img/nufut.png")}" alt="nuFUT"></div>
+          <div class="partner"><small>Patrocinador oficial</small><img class="nufut" src="${asset("img/nufut.svg")}" alt="nuFUT"></div>
           <div class="partner"><small>Fornecedor oficial</small>${LIDER}</div>
           <div class="partner"><small>Mídia oficial</small><img class="mtv" src="${asset("img/mtv-white.png")}" alt="Meldina TV"></div>
-          <div class="partner"><small>Programa oficial</small><img class="cm-logo cm-logo--partner" src="${asset("img/clube-meldina/cm-white.svg")}" alt="Clube Meldina" width="1500" height="915" loading="lazy" decoding="async"></div>
+          <div class="partner"><small>Sócio-Torcedor</small><img class="cm-logo cm-logo--partner" src="${asset("img/clube-meldina/cm-logo.png")}" alt="Clube Meldina" width="720" height="669" loading="lazy" decoding="async"></div>
         </div>
       </section>
       <footer class="footer">

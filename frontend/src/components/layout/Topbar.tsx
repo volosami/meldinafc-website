@@ -7,7 +7,7 @@ export const Topbar: React.FC = () => {
       <div className="wrap">
         <div className="topbar__left topbar__sponsors">
           <img src="/assets/img/lider-mark.png" alt="Lider Sport" className="topbar__logo topbar__logo--lider" />
-          <img src="/assets/img/nufut.png" alt="nuFUT" className="topbar__logo topbar__logo--nufut" />
+          <img src="/assets/img/nufut.svg" alt="nuFUT" className="topbar__logo topbar__logo--nufut" />
         </div>
         <div className="topbar__right">
           <a

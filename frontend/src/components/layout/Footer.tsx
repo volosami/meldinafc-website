@@ -10,7 +10,7 @@ export const Footer: React.FC = () => {
         <div className="wrap">
           <div className="partner">
             <small>Patrocinador oficial</small>
-            <img className="nufut" src="/assets/img/nufut.png" alt="nuFUT" />
+            <img className="nufut" src="/assets/img/nufut.svg" alt="nuFUT" />
           </div>
           <div className="partner">
             <small>Fornecedor oficial</small>
@@ -21,8 +21,8 @@ export const Footer: React.FC = () => {
             <img className="mtv" src="/assets/img/mtv-white.png" alt="Meldina TV" />
           </div>
           <div className="partner">
-            <small>Programa oficial</small>
-            <img className="cm-logo cm-logo--partner" src="/assets/img/clube-meldina/cm-white.svg" alt="Clube Meldina" width={1500} height={915} loading="lazy" decoding="async" />
+            <small>Sócio-Torcedor</small>
+            <img className="cm-logo cm-logo--partner" src="/assets/img/clube-meldina/cm-logo.png" alt="Clube Meldina" width={720} height={669} loading="lazy" decoding="async" />
           </div>
         </div>
       </section>

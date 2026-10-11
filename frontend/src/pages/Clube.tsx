@@ -11,7 +11,7 @@ export const Clube: React.FC = () => {
           <nav className="breadcrumb" aria-label="Trilha">
             <Link to="/">Início</Link> <span aria-hidden="true">/</span> <span aria-current="page">O Clube</span>
           </nav>
-          <p className="eyebrow">Meldina Futebol Clube</p>
+          <p className="eyebrow">Institucional</p>
           <h1 className="display">O Clube</h1>
           <p>
             Fundado em {MFC_INFO.fundacao}, no FIFA 18, o Meldina FC é dez vezes campeão da primeira divisão e campeão da Copa EA. Depois do título da Segunda Divisão em 2025, o clube volta à elite do Pro Clubs em 2026.
