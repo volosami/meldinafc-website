@@ -96,7 +96,7 @@ export const Loja: React.FC = () => {
             </div>
           </div>
 
-          <div className="products mb-16">
+          <div className="products products--kits mb-16">
             {STATIC_PRODUCTS.slice(0, 2).map((prod) => renderProduct(prod, ""))}
           </div>
 

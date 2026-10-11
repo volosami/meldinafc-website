@@ -30,7 +30,7 @@ export default {
         cinza: "#6b6f86",
       },
       fontFamily: {
-        display: ["Extenda 20 Max", "Anton", "Oswald", "Impact", "sans-serif"],
+        display: ["Anton", "Oswald", "Impact", "sans-serif"],
         regal: ["Cinzel", "Trajan Pro", "serif"],
         serif: ["DM Serif Display", "Georgia", "serif"],
         body: ["Poppins", "system-ui", "-apple-system", "sans-serif"],

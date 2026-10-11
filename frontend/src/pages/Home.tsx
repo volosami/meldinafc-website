@@ -14,7 +14,7 @@ import {
 import { asList, formatFull, formatMatchDay, formatTime } from "../lib/format";
 import { kickoff, opponentOf, outcomeOf, pickLastResult, pickNextMatch } from "../lib/fixtures";
 import { TeamBadge } from "../components/ui/TeamBadge";
-import { NewsCard } from "../components/NewsCard";
+import { NewsCard, newsLayout } from "../components/NewsCard";
 import { PlayerCard, PlayerDialog } from "../components/PlayerDialog";
 
 const SLIDE_COUNT = 3;
@@ -522,7 +522,7 @@ export const Home: React.FC = () => {
           ) : (
             <div className="news-grid">
               {news.map((item, idx) => (
-                <NewsCard key={item.id} item={item} feature={idx === 0} eager={idx === 0} />
+                <NewsCard key={item.id} item={item} layout={newsLayout(idx, news.length)} eager={idx === 0} />
               ))}
             </div>
           )}

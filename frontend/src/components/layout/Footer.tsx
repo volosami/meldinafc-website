@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
           <div className="footer__top">
             <div className="footer__brand">
               <img src="/assets/img/escudo-sm.png" alt="Meldina FC" />
-              <p>Meldina Futebol Clube: Muito Além do Jogo</p>
+              <p>Meldina Futebol Clube: muito além do jogo</p>
               <div className="socials">
                 <a href={MFC_INFO.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">

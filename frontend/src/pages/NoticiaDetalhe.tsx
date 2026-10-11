@@ -63,14 +63,14 @@ export const NoticiaDetalhe: React.FC = () => {
 
   return (
     <article>
-      <section className="page-hero">
+      <section className="page-hero page-hero--article">
         <div className="wrap max-w-4xl">
           <nav className="breadcrumb" aria-label="Trilha">
             <Link to="/">Início</Link> <span aria-hidden="true">/</span> <Link to="/noticias">Notícias</Link>{" "}
             <span aria-hidden="true">/</span> <span aria-current="page">{article.category}</span>
           </nav>
           <p className="eyebrow">{article.category}</p>
-          <h1 className="display text-3xl md:text-5xl">{article.title}</h1>
+          <h1 className="display">{article.title}</h1>
           <p className="text-sm text-white/75 mt-4">
             {date ? (
               <>
@@ -87,11 +87,10 @@ export const NoticiaDetalhe: React.FC = () => {
       <section className="section section--creme">
         <div className="wrap max-w-3xl">
           {article.imageUrl && (
-            <figure className="article-figure mb-10 rounded overflow-hidden shadow-lg">
+            <figure className="article-figure">
               <FallbackImage
                 src={article.imageUrl}
                 alt=""
-                className="w-full h-auto object-cover max-h-[460px]"
                 fallbackClassName="article-figure__fallback"
               />
             </figure>

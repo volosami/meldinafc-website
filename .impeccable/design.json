@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-10T22:15:47.121561+00:00",
+  "generatedAt": "2026-10-11T13:48:05.236024+00:00",
   "title": "Design System: Meldina FC",
   "extensions": {
     "colorMeta": {
@@ -257,6 +257,66 @@
           "#adadad",
           "#cccccc",
           "#ebebeb"
+        ]
+      },
+      "tinta-2": {
+        "role": "neutral",
+        "displayName": "Tinta 2",
+        "canonical": "#4a4d63",
+        "tonalRamp": [
+          "#1a1b23",
+          "#303240",
+          "#46495d",
+          "#606480",
+          "#7f829f",
+          "#a2a4b9",
+          "#c5c6d3",
+          "#e8e8ee"
+        ]
+      },
+      "noite-0": {
+        "role": "neutral",
+        "displayName": "Noite 0",
+        "canonical": "#02041a",
+        "tonalRamp": [
+          "#040939",
+          "#081068",
+          "#0c1798",
+          "#1020d0",
+          "#2f3fef",
+          "#6773f3",
+          "#a0a8f8",
+          "#d9dcfc"
+        ]
+      },
+      "erro": {
+        "role": "status",
+        "displayName": "Erro",
+        "canonical": "#ff5a6a",
+        "tonalRamp": [
+          "#3d0006",
+          "#70000b",
+          "#a30010",
+          "#e00016",
+          "#ff1f34",
+          "#ff5c6c",
+          "#ff99a3",
+          "#ffd6da"
+        ]
+      },
+      "erro-claro": {
+        "role": "status",
+        "displayName": "Erro claro",
+        "canonical": "#ff8c97",
+        "tonalRamp": [
+          "#3d0006",
+          "#70000b",
+          "#a30010",
+          "#e00015",
+          "#ff1f34",
+          "#ff5c6b",
+          "#ff99a3",
+          "#ffd6da"
         ]
       }
     },
