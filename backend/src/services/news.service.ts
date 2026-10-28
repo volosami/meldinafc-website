@@ -1,5 +1,6 @@
 import { newsRepository } from "../repositories/news.repository.js";
 import { CreateNewsInput, UpdateNewsInput } from "../models/news.schema.js";
+import { AppError } from "../utils/AppError.js";
 
 export class NewsService {
   async getAllNews() {
@@ -9,7 +10,7 @@ export class NewsService {
   async getNewsBySlug(slug: string) {
     const news = await newsRepository.findBySlug(slug);
     if (!news) {
-      throw new Error("Notícia não encontrada");
+      throw new AppError("Notícia não encontrada", 404);
     }
     return news;
   }
@@ -28,7 +29,7 @@ export class NewsService {
   async updateNews(slug: string, data: UpdateNewsInput) {
     const updated = await newsRepository.update(slug, data);
     if (!updated) {
-      throw new Error("Notícia não encontrada para atualização");
+      throw new AppError("Notícia não encontrada para atualização", 404);
     }
     return updated;
   }

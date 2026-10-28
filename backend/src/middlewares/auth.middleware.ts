@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { authService } from "../services/auth.service.js";
+import { authService, AuthTokenPayload } from "../services/auth.service.js";
 
 export interface AuthenticatedRequest extends Request {
-  user?: any;
+  user?: AuthTokenPayload;
 }
 
 export function authMiddleware(
@@ -24,6 +24,13 @@ export function authMiddleware(
 
   try {
     const payload = authService.verifyToken(token);
+    if (!payload || !payload.id || payload.role !== "ADMIN") {
+      res.status(403).json({
+        success: false,
+        error: "Acesso negado: privilégios de administrador exigidos.",
+      });
+      return;
+    }
     req.user = payload;
     next();
   } catch {

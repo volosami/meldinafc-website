@@ -2,12 +2,15 @@ import React, { useRef, useState } from "react";
 import { X } from "lucide-react";
 import { Player } from "../types";
 import { useModalFocus } from "../hooks/useModalFocus";
+import { normalizeAssetUrl } from "../lib/format";
 
 /** Perfil do jogador em diálogo modal acessível (Home e Elenco). */
 export const PlayerDialog: React.FC<{ player: Player; onClose: () => void }> = ({ player, onClose }) => {
   const boxRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   useModalFocus(true, boxRef, onClose, closeRef);
+
+  const normalizedPhoto = normalizeAssetUrl(player.photoUrl);
 
   return (
     <div className="modal is-open">
@@ -24,7 +27,7 @@ export const PlayerDialog: React.FC<{ player: Player; onClose: () => void }> = (
         </button>
         <div className="profile">
           <div className={`profile__media ${player.position === "Goleiro" ? "gk" : ""}`}>
-            <img src={player.photoUrl} alt="" />
+            <img src={normalizedPhoto || "/assets/img/escudo-mono.png"} alt="" />
             <span className="num" aria-hidden="true">{player.number}</span>
           </div>
           <div className="profile__body">
@@ -77,19 +80,22 @@ export const PlayerDialog: React.FC<{ player: Player; onClose: () => void }> = (
 // Fotos do elenco têm versão reduzida em /players/thumbs/ para os cards (~4x mais leve).
 // Fotos enviadas pelo painel não têm thumb: nesse caso (ou se a thumb falhar) usa a original.
 function thumbOf(url: string): string {
-  return url.startsWith("/assets/players/") ? url.replace("/assets/players/", "/assets/players/thumbs/") : url;
+  const norm = normalizeAssetUrl(url);
+  return norm.startsWith("/assets/players/") ? norm.replace("/assets/players/", "/assets/players/thumbs/") : norm;
 }
 
 const CardPhoto: React.FC<{ src: string }> = ({ src }) => {
-  const [useFull, setUseFull] = useState(false);
-  const thumb = thumbOf(src);
+  const [failedThumb, setFailedThumb] = useState<string | null>(null);
+  const normSrc = normalizeAssetUrl(src);
+  const thumb = thumbOf(normSrc);
+  const useFull = failedThumb === thumb;
   return (
     <img
-      src={useFull ? src : thumb}
+      src={useFull ? normSrc : thumb}
       alt=""
       loading="lazy"
       decoding="async"
-      onError={() => thumb !== src && setUseFull(true)}
+      onError={() => thumb !== normSrc && setFailedThumb(thumb)}
     />
   );
 };
@@ -103,7 +109,7 @@ export const PlayerCard: React.FC<{ player: Player; onOpen: (p: Player) => void 
     aria-haspopup="dialog"
     aria-label={`${p.name}, ${p.position}, camisa ${p.number}${p.isCaptain ? ", capitão" : ""}. Ver perfil`}
   >
-    <CardPhoto src={p.photoUrl} />
+    <CardPhoto src={normalizeAssetUrl(p.photoUrl)} />
     <span className="player-card__num" aria-hidden="true">{p.number}</span>
     <div className="player-card__info" aria-hidden="true">
       <div>

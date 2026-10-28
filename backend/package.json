@@ -4,6 +4,9 @@
   "private": true,
   "description": "Backend API para Meldina FC (Node.js + Express + TypeScript + MVC)",
   "main": "dist/server.js",
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",

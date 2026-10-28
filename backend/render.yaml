@@ -14,5 +14,15 @@ services:
         sync: false
       - key: JWT_SECRET
         generateValue: true
+      - key: ADMIN_REGISTRATION_KEY
+        sync: false
+      - key: ADMIN_EMAIL
+        value: admin@meldinafc.com
       - key: CORS_ORIGIN
         sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_STORAGE_BUCKET
+        value: meldina-assets

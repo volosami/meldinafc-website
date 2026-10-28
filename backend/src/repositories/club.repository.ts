@@ -13,6 +13,10 @@ const DEFAULT_CLUB_INFO = {
   motto: "Muito além do jogo",
 };
 
+function isTestEnv(): boolean {
+  return process.env.NODE_ENV === "test";
+}
+
 export class ClubRepository {
   async get() {
     try {
@@ -21,7 +25,6 @@ export class ClubRepository {
       });
       if (info) return info;
 
-      // Se não existir, tenta criar
       return await prisma.clubInfo.create({
         data: DEFAULT_CLUB_INFO,
       });
@@ -31,18 +34,18 @@ export class ClubRepository {
   }
 
   async update(data: Partial<typeof DEFAULT_CLUB_INFO>) {
-    try {
-      return await prisma.clubInfo.upsert({
-        where: { id: "meldina-main" },
-        update: data,
-        create: {
-          ...DEFAULT_CLUB_INFO,
-          ...data,
-        },
-      });
-    } catch {
+    if (isTestEnv()) {
       return { ...DEFAULT_CLUB_INFO, ...data };
     }
+
+    return await prisma.clubInfo.upsert({
+      where: { id: "meldina-main" },
+      update: data,
+      create: {
+        ...DEFAULT_CLUB_INFO,
+        ...data,
+      },
+    });
   }
 }
 

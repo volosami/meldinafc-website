@@ -4,7 +4,13 @@ import { NewsArticle } from "../types";
 import { FallbackImage } from "./ui/FallbackImage";
 import { formatDateShort, safeDate } from "../lib/format";
 
-const TAG_CLASS: Record<string, string> = { clube: "t-clube", tv: "t-tv" };
+export const TAG_CLASS: Record<string, string> = {
+  clube: "t-clube",
+  tv: "t-tv",
+  "nota-oficial": "t-nota",
+  entrevistas: "t-entrevistas",
+  jogos: "t-jogos",
+};
 
 export type NewsLayout = "feature" | "wide" | "half" | "default";
 
@@ -29,11 +35,12 @@ export const NewsCard: React.FC<{ item: NewsArticle; layout?: NewsLayout; eager?
   eager,
 }) => {
   const date = safeDate(item.publishedAt);
+  const tagKey = (item.category || "").toLowerCase();
   return (
     <article className={`news-card${layout === "default" ? "" : ` news-card--${layout}`}`}>
       <div className="news-card__img">
         <FallbackImage src={item.imageUrl || undefined} alt="" loading={eager ? undefined : "lazy"} />
-        <span className={`news-card__tag ${TAG_CLASS[item.category] ?? ""}`}>{item.category}</span>
+        <span className={`news-card__tag ${TAG_CLASS[tagKey] ?? ""}`}>{item.category}</span>
       </div>
       <div className="news-card__body">
         <span className="news-card__meta">

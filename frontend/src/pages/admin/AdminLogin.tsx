@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 
 export const AdminLogin: React.FC = () => {
-  const [email, setEmail] = useState("admin@meldinafc.com");
-  const [password, setPassword] = useState("meldina2026!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { login } = useAdminAuth();
@@ -49,6 +49,8 @@ export const AdminLogin: React.FC = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="seu@email.com"
+              autoComplete="username"
               required
             />
           </div>
@@ -59,6 +61,8 @@ export const AdminLogin: React.FC = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              placeholder="Digite sua senha"
+              autoComplete="current-password"
               required
             />
           </div>
@@ -73,12 +77,12 @@ export const AdminLogin: React.FC = () => {
         </form>
 
         <div className="flex flex-col items-center gap-2 mt-6 text-xs text-gray-500">
-          <a href="/admin/register" className="text-gray-400 hover:text-ouro transition-colors">
+          <Link to="/admin/register" className="text-gray-400 hover:text-ouro transition-colors">
             Novo na diretoria? Cadastrar administrador
-          </a>
-          <a href="/" className="hover:text-ouro transition-colors">
+          </Link>
+          <Link to="/" className="hover:text-ouro transition-colors">
             ← Voltar ao site oficial
-          </a>
+          </Link>
         </div>
       </div>
     </div>

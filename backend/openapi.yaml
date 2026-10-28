@@ -1,0 +1,1411 @@
+openapi: 3.0.3
+info:
+  title: Meldina FC API
+  description: |
+    API RESTful oficial do **Meldina FC** (Pro Clubs Série A).
+
+    Esta especificação contempla todas as rotas públicas do portal e as rotas administrativas protegidas por autenticação JWT (Bearer Token).
+
+    ### Ambientes suportados:
+    - **Desenvolvimento Local:** `http://localhost:4000/api`
+    - **Produção (Render):** `https://meldina-backend.onrender.com/api`
+
+    ### Como testar no Postman / Insomnia:
+    1. Importe este arquivo `openapi.yaml` diretamente no Postman ou Insomnia.
+    2. Faça uma requisição em `POST /auth/login` com as credenciais administrativas (`admin@meldinafc.com` / `meldina2026!`).
+    3. Copie o `token` retornado e insira no cabeçalho `Authorization: Bearer <seu_token>` das rotas protegidas.
+  version: 1.0.0
+  contact:
+    name: Diretoria Meldina FC
+    email: admin@meldinafc.com
+
+servers:
+  - url: http://localhost:4000/api
+    description: Servidor Local (Desenvolvimento)
+  - url: https://meldina-backend.onrender.com/api
+    description: Servidor de Produção (Render)
+
+tags:
+  - name: Health
+    description: Verificação de integridade e disponibilidade da API
+  - name: Autenticação
+    description: Login de administradores, registro e verificação de perfil
+  - name: Notícias
+    description: Gestão e publicação de matérias e reportagens do clube
+  - name: Elenco
+    description: Gestão de atletas, estatísticas (gols/assistências) e detalhes do elenco
+  - name: Partidas
+    description: Calendário de jogos, próximo confronto e atualização de placares
+  - name: Classificação
+    description: Tabela e pontuação do campeonato
+  - name: Sócios Torcedores
+    description: Adesão ao programa Clube Meldina e gestão administrativa de sócios
+  - name: Upload
+    description: Upload de imagens para Supabase Storage ou armazenamento local
+  - name: Clube
+    description: Informações institucionais, estádio, comissão técnica e lema
+
+paths:
+  # =========================================================================
+  # 1. HEALTHCHECK
+  # =========================================================================
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Healthcheck da API
+      description: Retorna o status de operação do servidor, timestamp e versão.
+      operationId: getHealth
+      responses:
+        "200":
+          description: API operacional
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+              example:
+                status: "ok"
+                club: "Meldina FC"
+                timestamp: "2026-10-09T18:30:00.000Z"
+                version: "1.0.0"
+
+  # =========================================================================
+  # 2. AUTENTICAÇÃO
+  # =========================================================================
+  /auth/login:
+    post:
+      tags:
+        - Autenticação
+      summary: Login de Administrador
+      description: Autentica um usuário administrativo e retorna o token JWT.
+      operationId: loginAdmin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+            example:
+              email: "admin@meldinafc.com"
+              password: "meldina2026!"
+      responses:
+        "200":
+          description: Autenticado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+              example:
+                success: true
+                data:
+                  user:
+                    id: "admin-default"
+                    name: "Diretoria Meldina"
+                    email: "admin@meldinafc.com"
+                    role: "ADMIN"
+                  token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                success: false
+                error: "E-mail ou senha incorretos"
+
+  /auth/register:
+    post:
+      tags:
+        - Autenticação
+      summary: Cadastro de Novo Administrador
+      description: Registra um novo usuário administrativo mediante validação da chave mestra `ADMIN_REGISTRATION_KEY`.
+      operationId: registerAdmin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterAdminRequest"
+            example:
+              name: "Novo Administrador"
+              email: "gestor@meldinafc.com"
+              password: "senhaSegura123!"
+              adminKey: "meldina-admin-2026-secret"
+      responses:
+        "201":
+          description: Administrador registrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          description: Chave de administrador incorreta
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                success: false
+                error: "Chave de administrador inválida ou não autorizada"
+
+  /auth/me:
+    get:
+      tags:
+        - Autenticação
+      summary: Dados do Administrador Logado
+      description: Retorna as informações do usuário associado ao token JWT enviado no cabeçalho Authorization.
+      operationId: getAuthMe
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Perfil do usuário autenticado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/User"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  # =========================================================================
+  # 3. NOTÍCIAS
+  # =========================================================================
+  /news:
+    get:
+      tags:
+        - Notícias
+      summary: Listar todas as notícias
+      description: Retorna a lista de todas as matérias publicadas, ordenadas por data.
+      operationId: listNews
+      responses:
+        "200":
+          description: Lista de notícias
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/NewsArticle"
+    post:
+      tags:
+        - Notícias
+      summary: Criar nova notícia
+      description: Cria e publica uma nova matéria no portal. Requer autenticação de administrador.
+      operationId: createNews
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNewsRequest"
+            example:
+              title: "Meldina goleia no clássico contra De Sola"
+              slug: "meldina-goleia-classico-de-sola"
+              summary: "Com hat-trick e atuação de gala, o Meldina FC triunfou na Lovebomb Arena."
+              content: "Em uma noite mágica na Lovebomb Arena, o Meldina FC dominou todas as ações da partida e venceu por 4 a 0..."
+              category: "jogos"
+              imageUrl: "https://xyz.supabase.co/storage/v1/object/public/meldina-assets/1791556960-destaque.jpg"
+              author: "Redação Meldina"
+              isFeatured: true
+      responses:
+        "201":
+          description: Notícia criada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/NewsArticle"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /news/{slug}:
+    get:
+      tags:
+        - Notícias
+      summary: Obter notícia por slug
+      description: Retorna os detalhes completos de uma matéria a partir de sua URL amigável (slug).
+      operationId: getNewsBySlug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: Slug único da matéria
+          schema:
+            type: string
+            example: "meldina-anuncia-temporada-2026"
+      responses:
+        "200":
+          description: Notícia encontrada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/NewsArticle"
+        "404":
+          description: Notícia não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      tags:
+        - Notícias
+      summary: Atualizar notícia existente
+      description: Atualiza campos de uma notícia publicada. Requer token de administrador.
+      operationId: updateNews
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: Slug da matéria a ser editada
+          schema:
+            type: string
+            example: "meldina-anuncia-temporada-2026"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateNewsRequest"
+            example:
+              title: "Meldina anuncia novidades para a temporada 2026"
+              summary: "Confira o resumo completo com reforços e metas da diretoria."
+              isFeatured: false
+      responses:
+        "200":
+          description: Notícia atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/NewsArticle"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          description: Notícia não encontrada
+    delete:
+      tags:
+        - Notícias
+      summary: Excluir notícia
+      description: Remove permanentemente uma matéria do portal. Requer token de administrador.
+      operationId: deleteNews
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: Slug da matéria a ser excluída
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Notícia excluída com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Notícia removida com sucesso"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  # =========================================================================
+  # 4. ELENCO & ATLETAS
+  # =========================================================================
+  /players:
+    get:
+      tags:
+        - Elenco
+      summary: Listar todos os jogadores do elenco
+      description: Retorna a lista completa de atletas, divididos por posição/grupo com estatísticas.
+      operationId: listPlayers
+      responses:
+        "200":
+          description: Lista de atletas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Player"
+
+  /players/{id}:
+    get:
+      tags:
+        - Elenco
+      summary: Obter detalhes de um atleta
+      description: Retorna biografia, foto, número, posição e estatísticas de um jogador.
+      operationId: getPlayerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identificador do atleta (10, 9, 1)
+          schema:
+            type: string
+            example: "10"
+      responses:
+        "200":
+          description: Dados do jogador
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/Player"
+        "404":
+          description: Atleta não encontrado
+    put:
+      tags:
+        - Elenco
+      summary: Atualizar cadastro completo do atleta
+      description: Permite alterar dados cadastrais, foto, biografia e atributos do jogador. Requer token de administrador.
+      operationId: updatePlayer
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do atleta
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePlayerRequest"
+            example:
+              name: "Jota G."
+              number: 10
+              position: "Meia Atacante"
+              photoUrl: "https://xyz.supabase.co/storage/v1/object/public/meldina-assets/jota.png"
+              isCaptain: true
+              bio: "Maestro do meio-campo e capitão do Meldina FC."
+      responses:
+        "200":
+          description: Jogador atualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/Player"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /players/{id}/stats:
+    patch:
+      tags:
+        - Elenco
+      summary: Atualizar estatísticas do jogador
+      description: Atualiza rapidamente número de partidas, gols e assistências do atleta. Requer token de administrador.
+      operationId: updatePlayerStats
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do atleta
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdatePlayerStatsRequest"
+            example:
+              matches: 12
+              goals: 8
+              assists: 5
+      responses:
+        "200":
+          description: Estatísticas atualizadas com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/Player"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  # =========================================================================
+  # 5. PARTIDAS & CONFRONTOS
+  # =========================================================================
+  /fixtures:
+    get:
+      tags:
+        - Partidas
+      summary: Listar todas as partidas
+      description: Retorna a tabela completa de confrontos do Meldina FC (jogos passados e futuros).
+      operationId: listFixtures
+      responses:
+        "200":
+          description: Calendário de partidas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Fixture"
+
+  /fixtures/next:
+    get:
+      tags:
+        - Partidas
+      summary: Obter próximo confronto
+      description: Retorna a partida marcada como o próximo jogo oficial do Meldina FC.
+      operationId: getNextMatch
+      responses:
+        "200":
+          description: Próxima partida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/Fixture"
+
+  /fixtures/{id}/score:
+    patch:
+      tags:
+        - Partidas
+      summary: Atualizar placar de uma partida
+      description: Define ou edita o placar (mandante e visitante) de um confronto. Requer token de administrador.
+      operationId: updateFixtureScore
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID único da partida
+          schema:
+            type: string
+            example: "fix-09"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateScoreRequest"
+            example:
+              homeScore: 3
+              awayScore: 1
+      responses:
+        "200":
+          description: Placar atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/Fixture"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  # =========================================================================
+  # 6. CLASSIFICAÇÃO
+  # =========================================================================
+  /standings:
+    get:
+      tags:
+        - Classificação
+      summary: Obter tabela de classificação
+      description: Retorna a tabela do campeonato com pontos, vitórias, empates, saldo de gols e histórico recente.
+      operationId: getStandings
+      responses:
+        "200":
+          description: Tabela de classificação ordenada por pontuação
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Standing"
+
+  # =========================================================================
+  # 7. SÓCIOS TORCEDORES
+  # =========================================================================
+  /members/register:
+    post:
+      tags:
+        - Sócios Torcedores
+      summary: Cadastrar novo sócio torcedor
+      description: Registra um torcedor no programa Clube Meldina (Planos BRONZE, PRATA ou OURO).
+      operationId: registerMember
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterMemberRequest"
+            example:
+              name: "Carlos Eduardo Silva"
+              email: "carlos.silva@email.com"
+              cpf: "123.456.789-00"
+              phone: "(11) 98765-4321"
+              plan: "OURO"
+              paymentMethod: "PIX"
+      responses:
+        "201":
+          description: Cadastro de sócio concluído com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Cadastro realizado com sucesso!"
+                  data:
+                    $ref: "#/components/schemas/Member"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+
+  /members:
+    get:
+      tags:
+        - Sócios Torcedores
+      summary: Listar todos os sócios cadastrados
+      description: Retorna a lista de torcedores associados para o painel administrativo. Requer token de administrador.
+      operationId: listMembers
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Lista de sócios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Member"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  # =========================================================================
+  # 8. UPLOAD DE MÍDIA
+  # =========================================================================
+  /upload:
+    post:
+      tags:
+        - Upload
+      summary: Upload de imagem
+      description: |
+        Faz o upload de uma imagem (JPEG, PNG, WEBP, GIF, AVIF até 5MB).
+        - Se o Supabase Storage estiver configurado, salva no bucket público.
+        - Caso contrário, salva no diretório local do servidor `/public/uploads`.
+        Requer token de administrador.
+      operationId: uploadImage
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Arquivo de imagem a ser enviado
+      responses:
+        "200":
+          description: Upload realizado com sucesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Upload realizado com sucesso!"
+                  url:
+                    type: string
+                    example: "https://xyz.supabase.co/storage/v1/object/public/meldina-assets/1791556960-9a6583.png"
+        "400":
+          description: Arquivo ausente ou formato inválido
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                success: false
+                message: "Formato de arquivo inválido. Formatos permitidos: JPG, PNG, WEBP, GIF, AVIF."
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  # =========================================================================
+  # 9. INFORMAÇÕES DO CLUBE
+  # =========================================================================
+  /club:
+    get:
+      tags:
+        - Clube
+      summary: Obter informações do clube
+      description: Retorna dados institucionais, nome do estádio, presidente, técnico, lema e temporada.
+      operationId: getClubInfo
+      responses:
+        "200":
+          description: Informações do Meldina FC
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/ClubInfo"
+    put:
+      tags:
+        - Clube
+      summary: Atualizar informações do clube
+      description: Permite alterar dados institucionais como estádio, técnico e lema. Requer token de administrador.
+      operationId: updateClubInfo
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateClubInfoRequest"
+            example:
+              stadium: "Lovebomb Arena"
+              season: 2026
+              coach: "Celso Roth"
+              president: "André Almeida"
+              motto: "Muito além do jogo"
+      responses:
+        "200":
+          description: Dados institucionais atualizados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: "#/components/schemas/ClubInfo"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+# =============================================================================
+# COMPONENTES REUTILIZÁVEIS, SCHEMAS & SEGURANÇA
+# =============================================================================
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Insira o token JWT retornado no login. Exemplo: `Bearer <token>`"
+
+  responses:
+    UnauthorizedError:
+      description: Não autorizado ou token ausente/inválido
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            success: false
+            error: "Sessão inválida ou expirada. Faça login novamente."
+
+    ValidationError:
+      description: Erro de validação nos campos fornecidos
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ValidationErrorResponse"
+          example:
+            success: false
+            error: "Validation error"
+            details:
+              - path: "email"
+                message: "E-mail inválido"
+              - path: "password"
+                message: "A senha deve ter no mínimo 6 caracteres"
+
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: "ok"
+        club:
+          type: string
+          example: "Meldina FC"
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: string
+          example: "1.0.0"
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Recurso não encontrado"
+
+    ValidationErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          example: "Validation error"
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+                example: "summary"
+              message:
+                type: string
+                example: "Resumo deve ter pelo menos 5 caracteres"
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "usr-12345"
+        name:
+          type: string
+          example: "Diretoria Meldina"
+        email:
+          type: string
+          example: "admin@meldinafc.com"
+        role:
+          type: string
+          example: "ADMIN"
+
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: "admin@meldinafc.com"
+        password:
+          type: string
+          format: password
+          example: "meldina2026!"
+
+    RegisterAdminRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - adminKey
+      properties:
+        name:
+          type: string
+          example: "Novo Diretor"
+        email:
+          type: string
+          format: email
+          example: "diretor@meldinafc.com"
+        password:
+          type: string
+          format: password
+          example: "senha123456"
+        adminKey:
+          type: string
+          example: "meldina-admin-2026-secret"
+
+    AuthResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Operação realizada com sucesso"
+        data:
+          type: object
+          properties:
+            user:
+              $ref: "#/components/schemas/User"
+            token:
+              type: string
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    NewsArticle:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "news-01"
+        slug:
+          type: string
+          example: "vitoria-classico-lovebomb"
+        title:
+          type: string
+          example: "Meldina vence clássico contra De Sola"
+        summary:
+          type: string
+          example: "Com grande exibição tática, o Meldina FC garantiu mais 3 pontos."
+        content:
+          type: string
+          example: "A partida foi repleta de emoção do início ao fim..."
+        category:
+          type: string
+          example: "jogos"
+        imageUrl:
+          type: string
+          nullable: true
+          example: "https://xyz.supabase.co/storage/v1/object/public/meldina-assets/noticia1.jpg"
+        author:
+          type: string
+          example: "Redação Meldina"
+        isFeatured:
+          type: boolean
+          example: true
+        publishedAt:
+          type: string
+          format: date-time
+          example: "2026-10-09T12:00:00.000Z"
+
+    CreateNewsRequest:
+      type: object
+      required:
+        - title
+        - slug
+        - summary
+        - content
+      properties:
+        title:
+          type: string
+          minLength: 3
+          example: "Meldina FC anuncia reforço de peso"
+        slug:
+          type: string
+          minLength: 2
+          example: "reforco-temporada-2026"
+        summary:
+          type: string
+          minLength: 5
+          example: "Novo meio-campista chega para a disputa da Série A."
+        content:
+          type: string
+          minLength: 5
+          example: "A diretoria do Meldina FC confirmou na tarde de hoje a contratação..."
+        category:
+          type: string
+          default: "geral"
+          example: "clube"
+        imageUrl:
+          type: string
+          nullable: true
+        author:
+          type: string
+          default: "Redação Meldina"
+        isFeatured:
+          type: boolean
+          default: false
+        publishedAt:
+          type: string
+
+    UpdateNewsRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        summary:
+          type: string
+        content:
+          type: string
+        category:
+          type: string
+        imageUrl:
+          type: string
+        author:
+          type: string
+        isFeatured:
+          type: boolean
+
+    Player:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "10"
+        name:
+          type: string
+          example: "Jota G."
+        number:
+          type: integer
+          example: 10
+        position:
+          type: string
+          example: "Meia Atacante"
+        group:
+          type: string
+          example: "Meio-Campo"
+        photoUrl:
+          type: string
+          example: "/assets/players/jota.png"
+        preferredFoot:
+          type: string
+          example: "Destro"
+        joinedYear:
+          type: integer
+          example: 2024
+        matches:
+          type: integer
+          example: 14
+        goals:
+          type: integer
+          example: 9
+        assists:
+          type: integer
+          example: 6
+        extraKey:
+          type: string
+          nullable: true
+          example: "Especialidade"
+        extraValue:
+          type: string
+          nullable: true
+          example: "Finalização e Bolas Paradas"
+        bio:
+          type: string
+          example: "Camisa 10 e capitão do time."
+        isCaptain:
+          type: boolean
+          example: true
+        roleTitle:
+          type: string
+          nullable: true
+          example: "Capitão"
+
+    UpdatePlayerRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        number:
+          type: integer
+        position:
+          type: string
+        group:
+          type: string
+        photoUrl:
+          type: string
+        preferredFoot:
+          type: string
+        joinedYear:
+          type: integer
+        matches:
+          type: integer
+        goals:
+          type: integer
+        assists:
+          type: integer
+        extraKey:
+          type: string
+          nullable: true
+        extraValue:
+          type: string
+          nullable: true
+        bio:
+          type: string
+        isCaptain:
+          type: boolean
+        roleTitle:
+          type: string
+          nullable: true
+
+    UpdatePlayerStatsRequest:
+      type: object
+      properties:
+        matches:
+          type: integer
+          minimum: 0
+        goals:
+          type: integer
+          minimum: 0
+        assists:
+          type: integer
+          minimum: 0
+
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "mfc"
+        name:
+          type: string
+          example: "Meldina FC"
+        shortName:
+          type: string
+          example: "Meldina"
+        acronym:
+          type: string
+          example: "MFC"
+        logoUrl:
+          type: string
+          nullable: true
+        color1:
+          type: string
+          nullable: true
+          example: "#6B1D2F"
+        color2:
+          type: string
+          nullable: true
+          example: "#D4AF37"
+        shape:
+          type: string
+          nullable: true
+        isUs:
+          type: boolean
+          example: true
+        isRival:
+          type: boolean
+          example: false
+
+    Fixture:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "fix-09"
+        matchDate:
+          type: string
+          format: date-time
+          example: "2026-10-15T20:00:00.000Z"
+        competition:
+          type: string
+          example: "Liga Pro Clubs"
+        round:
+          type: string
+          example: "Rodada 9"
+        isHome:
+          type: boolean
+          example: true
+        opponentId:
+          type: string
+          example: "desola"
+        opponent:
+          $ref: "#/components/schemas/Team"
+        homeScore:
+          type: integer
+          nullable: true
+          example: 3
+        awayScore:
+          type: integer
+          nullable: true
+          example: 0
+        venue:
+          type: string
+          nullable: true
+          example: "Lovebomb Arena"
+        newsId:
+          type: string
+          nullable: true
+        isNext:
+          type: boolean
+          example: true
+
+    UpdateScoreRequest:
+      type: object
+      required:
+        - homeScore
+        - awayScore
+      properties:
+        homeScore:
+          type: integer
+          minimum: 0
+          example: 2
+        awayScore:
+          type: integer
+          minimum: 0
+          example: 1
+
+    Standing:
+      type: object
+      properties:
+        id:
+          type: string
+        teamId:
+          type: string
+        team:
+          $ref: "#/components/schemas/Team"
+        matches:
+          type: integer
+          example: 8
+        wins:
+          type: integer
+          example: 6
+        draws:
+          type: integer
+          example: 1
+        losses:
+          type: integer
+          example: 1
+        goalsFor:
+          type: integer
+          example: 18
+        goalsAgainst:
+          type: integer
+          example: 7
+        goalDifference:
+          type: integer
+          example: 11
+        points:
+          type: integer
+          example: 19
+        form:
+          type: string
+          example: "V,V,E,V,V"
+
+    RegisterMemberRequest:
+      type: object
+      required:
+        - name
+        - email
+        - cpf
+        - phone
+        - plan
+      properties:
+        name:
+          type: string
+          minLength: 3
+          example: "Carlos Eduardo Silva"
+        email:
+          type: string
+          format: email
+          example: "carlos.silva@email.com"
+        cpf:
+          type: string
+          description: CPF do associado (formatado ou apenas dígitos)
+          example: "123.456.789-00"
+        phone:
+          type: string
+          example: "(11) 98765-4321"
+        plan:
+          type: string
+          enum: [BRONZE, PRATA, OURO]
+          example: "OURO"
+        paymentMethod:
+          type: string
+          default: "PIX"
+          example: "PIX"
+
+    Member:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "mem-172847"
+        name:
+          type: string
+          example: "Carlos Eduardo Silva"
+        email:
+          type: string
+          example: "carlos.silva@email.com"
+        cpf:
+          type: string
+          example: "12345678900"
+        phone:
+          type: string
+          example: "(11) 98765-4321"
+        plan:
+          type: string
+          example: "OURO"
+        status:
+          type: string
+          enum: [PENDING, ACTIVE, CANCELLED]
+          example: "PENDING"
+        paymentMethod:
+          type: string
+          example: "PIX"
+        createdAt:
+          type: string
+          format: date-time
+
+    ClubInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "meldina-main"
+        stadium:
+          type: string
+          example: "Lovebomb Arena"
+        season:
+          type: integer
+          example: 2026
+        foundationYear:
+          type: integer
+          example: 2024
+        coach:
+          type: string
+          example: "Celso Roth"
+        president:
+          type: string
+          example: "André Almeida"
+        league:
+          type: string
+          example: "Pro Clubs"
+        division:
+          type: string
+          example: "Série A"
+        programName:
+          type: string
+          example: "Clube Meldina"
+        motto:
+          type: string
+          example: "Muito além do jogo"
+
+    UpdateClubInfoRequest:
+      type: object
+      properties:
+        stadium:
+          type: string
+        season:
+          type: integer
+        foundationYear:
+          type: integer
+        coach:
+          type: string
+        president:
+          type: string
+        league:
+          type: string
+        division:
+          type: string
+        programName:
+          type: string
+        motto:
+          type: string

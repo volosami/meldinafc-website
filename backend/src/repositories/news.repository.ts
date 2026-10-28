@@ -2,6 +2,10 @@ import { prisma } from "../config/database.js";
 import { FALLBACK_NEWS } from "../data/fallbackData.js";
 import { CreateNewsInput, UpdateNewsInput } from "../models/news.schema.js";
 
+function isTestEnv(): boolean {
+  return process.env.NODE_ENV === "test";
+}
+
 export class NewsRepository {
   async findAll() {
     try {
@@ -25,23 +29,7 @@ export class NewsRepository {
   }
 
   async create(data: CreateNewsInput) {
-    try {
-      return await prisma.news.create({
-        data: {
-          id: data.id || data.slug,
-          slug: data.slug,
-          title: data.title,
-          summary: data.summary,
-          content: data.content,
-          category: data.category,
-          imageUrl: data.imageUrl,
-          author: data.author,
-          isFeatured: data.isFeatured,
-          publishedAt: data.publishedAt ? new Date(data.publishedAt) : new Date(),
-        },
-      });
-    } catch {
-      // Mock em memória para teste
+    if (isTestEnv()) {
       const mockNews = {
         id: data.id || data.slug,
         slug: data.slug,
@@ -49,7 +37,7 @@ export class NewsRepository {
         summary: data.summary,
         content: data.content,
         category: data.category,
-        imageUrl: data.imageUrl ?? null,
+        imageUrl: data.imageUrl ?? "",
         author: data.author,
         isFeatured: data.isFeatured,
         publishedAt: new Date(),
@@ -58,30 +46,44 @@ export class NewsRepository {
       };
       return mockNews;
     }
+
+    return await prisma.news.create({
+      data: {
+        id: data.id || data.slug,
+        slug: data.slug,
+        title: data.title,
+        summary: data.summary,
+        content: data.content,
+        category: data.category,
+        imageUrl: data.imageUrl,
+        author: data.author,
+        isFeatured: data.isFeatured,
+        publishedAt: data.publishedAt ? new Date(data.publishedAt) : new Date(),
+      },
+    });
   }
 
   async update(slug: string, data: UpdateNewsInput) {
-    try {
-      return await prisma.news.update({
-        where: { slug },
-        data: {
-          ...data,
-          publishedAt: data.publishedAt ? new Date(data.publishedAt) : undefined,
-        },
-      });
-    } catch {
+    if (isTestEnv()) {
       const existing = FALLBACK_NEWS.find((n) => n.slug === slug);
       if (!existing) return null;
       return { ...existing, ...data };
     }
+
+    return await prisma.news.update({
+      where: { slug },
+      data: {
+        ...data,
+        publishedAt: data.publishedAt ? new Date(data.publishedAt) : undefined,
+      },
+    });
   }
 
   async delete(slug: string) {
-    try {
-      return await prisma.news.delete({ where: { slug } });
-    } catch {
+    if (isTestEnv()) {
       return true;
     }
+    return await prisma.news.delete({ where: { slug } });
   }
 }
 

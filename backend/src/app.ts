@@ -3,19 +3,35 @@ import cors from "cors";
 import path from "path";
 import { logger } from "./config/logger.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { securityHeaders } from "./middlewares/securityHeaders.js";
+import { apiLimiter } from "./middlewares/rateLimiter.js";
 import { apiRouter } from "./routes/index.js";
 
 export const app = express();
 
+app.disable("x-powered-by");
+app.set("trust proxy", 1);
+
+const rawCorsOrigin = process.env.CORS_ORIGIN;
+const corsOrigin = rawCorsOrigin
+  ? rawCorsOrigin.includes(",")
+    ? rawCorsOrigin.split(",").map((s) => s.trim())
+    : rawCorsOrigin.trim()
+  : process.env.NODE_ENV === "production"
+  ? false
+  : "*";
+
+app.use(securityHeaders);
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "*",
+    origin: corsOrigin,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "1mb" }));
 
 // Servir arquivos estáticos de uploads locais
 app.use("/uploads", express.static(path.resolve(process.cwd(), "public", "uploads")));
@@ -35,8 +51,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rotas Base da API
-app.use("/api", apiRouter);
+// Rotas Base da API com limite geral de requisições
+app.use("/api", apiLimiter, apiRouter);
 
 // Handler global de erros
 app.use(errorHandler);

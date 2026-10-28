@@ -9,9 +9,15 @@ playersRouter.get("/", (req, res, next) => playersController.list(req, res, next
 playersRouter.get("/:id", (req, res, next) => playersController.getById(req, res, next));
 
 // Admin
+playersRouter.post("/", authMiddleware, (req, res, next) =>
+  playersController.create(req, res, next)
+);
 playersRouter.patch("/:id/stats", authMiddleware, (req, res, next) =>
   playersController.updateStats(req, res, next)
 );
 playersRouter.put("/:id", authMiddleware, (req, res, next) =>
   playersController.update(req, res, next)
+);
+playersRouter.delete("/:id", authMiddleware, (req, res, next) =>
+  playersController.remove(req, res, next)
 );

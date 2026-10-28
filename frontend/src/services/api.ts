@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   Player,
+  Team,
   Fixture,
   Standing,
   NewsArticle,
@@ -8,6 +9,7 @@ import {
 } from "../types";
 import {
   STATIC_PLAYERS,
+  STATIC_TEAMS,
   STATIC_FIXTURES,
   STATIC_STANDINGS,
   STATIC_NEWS,
@@ -27,6 +29,24 @@ apiClient.interceptors.request.use((config) => {
   }
   return config;
 });
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const url = error?.config?.url || "";
+    if (
+      error?.response?.status === 401 &&
+      url !== "/auth/login" &&
+      url !== "/auth/password" &&
+      !url.endsWith("/auth/login") &&
+      !url.endsWith("/auth/password")
+    ) {
+      localStorage.removeItem("meldina_admin_token");
+      window.dispatchEvent(new Event("meldina:unauthorized"));
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const api = {
   // Jogadores
@@ -48,7 +68,36 @@ export const api = {
     }
   },
 
-  // Partidas e Próximo Jogo
+  async createPlayer(data: Partial<Player>) {
+    const res = await apiClient.post("/players", data);
+    return res.data;
+  },
+
+  async updatePlayer(id: string, data: Partial<Player>) {
+    const res = await apiClient.put(`/players/${id}`, data);
+    return res.data;
+  },
+
+  async updatePlayerStats(id: string, stats: { matches?: number; goals?: number; assists?: number }) {
+    const res = await apiClient.patch(`/players/${id}/stats`, stats);
+    return res.data;
+  },
+
+  async deletePlayer(id: string) {
+    const res = await apiClient.delete(`/players/${id}`);
+    return res.data;
+  },
+
+  // Partidas, Times e Próximo Jogo
+  async getTeams(): Promise<Team[]> {
+    try {
+      const res = await apiClient.get<{ success: boolean; data: Team[] }>("/fixtures/teams");
+      return Array.isArray(res.data?.data) ? res.data.data : Object.values(STATIC_TEAMS);
+    } catch {
+      return Object.values(STATIC_TEAMS);
+    }
+  },
+
   async getFixtures(): Promise<Fixture[]> {
     try {
       const res = await apiClient.get<{ success: boolean; data: Fixture[] }>("/fixtures");
@@ -67,6 +116,26 @@ export const api = {
     }
   },
 
+  async createFixture(data: Partial<Fixture>) {
+    const res = await apiClient.post("/fixtures", data);
+    return res.data;
+  },
+
+  async updateFixture(id: string, data: Partial<Fixture>) {
+    const res = await apiClient.put(`/fixtures/${id}`, data);
+    return res.data;
+  },
+
+  async updateFixtureScore(id: string, homeScore: number, awayScore: number) {
+    const res = await apiClient.patch(`/fixtures/${id}/score`, { homeScore, awayScore });
+    return res.data;
+  },
+
+  async deleteFixture(id: string) {
+    const res = await apiClient.delete(`/fixtures/${id}`);
+    return res.data;
+  },
+
   // Classificação
   async getStandings(): Promise<Standing[]> {
     try {
@@ -75,6 +144,11 @@ export const api = {
     } catch {
       return STATIC_STANDINGS;
     }
+  },
+
+  async updateStanding(teamId: string, data: Partial<Standing>) {
+    const res = await apiClient.put(`/standings/${teamId}`, data);
+    return res.data;
   },
 
   // Notícias
@@ -96,12 +170,27 @@ export const api = {
     }
   },
 
+  async createNews(data: Partial<NewsArticle>) {
+    const res = await apiClient.post("/news", data);
+    return res.data;
+  },
+
+  async updateNews(slug: string, data: Partial<NewsArticle>) {
+    const res = await apiClient.put(`/news/${slug}`, data);
+    return res.data;
+  },
+
+  async deleteNews(slug: string) {
+    const res = await apiClient.delete(`/news/${slug}`);
+    return res.data;
+  },
+
   // Sócios
   async registerMember(data: {
     name: string;
     email: string;
-    cpf: string;
-    phone: string;
+    cpf?: string;
+    phone?: string;
     plan: string;
   }) {
     const res = await apiClient.post("/members/register", data);
@@ -109,8 +198,27 @@ export const api = {
   },
 
   async getMembers(): Promise<Member[]> {
-    const res = await apiClient.get<{ success: boolean; data: Member[] }>("/members");
-    return res.data.data;
+    try {
+      const res = await apiClient.get<{ success: boolean; data: Member[] }>("/members");
+      return Array.isArray(res.data?.data) ? res.data.data : [];
+    } catch {
+      return [];
+    }
+  },
+
+  async createMember(data: Partial<Member>) {
+    const res = await apiClient.post("/members", data);
+    return res.data;
+  },
+
+  async updateMember(id: string, data: Partial<Member>) {
+    const res = await apiClient.put(`/members/${id}`, data);
+    return res.data;
+  },
+
+  async deleteMember(id: string) {
+    const res = await apiClient.delete(`/members/${id}`);
+    return res.data;
   },
 
   // Autenticação Admin
@@ -129,6 +237,11 @@ export const api = {
     return res.data;
   },
 
+  async changePassword(data: { currentPassword: string; newPassword: string }) {
+    const res = await apiClient.patch("/auth/password", data);
+    return res.data;
+  },
+
   // Upload de Imagens (Local ou Supabase)
   async uploadImage(file: File): Promise<string> {
     const formData = new FormData();
@@ -137,37 +250,6 @@ export const api = {
       headers: { "Content-Type": "multipart/form-data" },
     });
     return res.data.url;
-  },
-
-  // Operações Admin (CRUDs)
-  async createNews(data: Partial<NewsArticle>) {
-    const res = await apiClient.post("/news", data);
-    return res.data;
-  },
-
-  async updateNews(slug: string, data: Partial<NewsArticle>) {
-    const res = await apiClient.put(`/news/${slug}`, data);
-    return res.data;
-  },
-
-  async deleteNews(slug: string) {
-    const res = await apiClient.delete(`/news/${slug}`);
-    return res.data;
-  },
-
-  async updateFixtureScore(id: string, homeScore: number, awayScore: number) {
-    const res = await apiClient.patch(`/fixtures/${id}/score`, { homeScore, awayScore });
-    return res.data;
-  },
-
-  async updatePlayerStats(id: string, stats: { matches?: number; goals?: number; assists?: number }) {
-    const res = await apiClient.patch(`/players/${id}/stats`, stats);
-    return res.data;
-  },
-
-  async updatePlayer(id: string, data: Partial<Player>) {
-    const res = await apiClient.put(`/players/${id}`, data);
-    return res.data;
   },
 
   // Informações do Clube

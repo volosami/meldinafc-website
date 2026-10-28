@@ -4,7 +4,90 @@ import { ArrowLeft } from "lucide-react";
 import { api } from "../services/api";
 import { NewsArticle } from "../types";
 import { FallbackImage } from "../components/ui/FallbackImage";
-import { formatDateLong, safeDate } from "../lib/format";
+import { formatDateLong, normalizeAssetUrl, safeDate } from "../lib/format";
+
+export const ArticleBody: React.FC<{ summary?: string; content: string }> = ({ summary, content }) => {
+  const paragraphs = (content || "")
+    .split(/\n\s*\n|\n(?=(?:QUOTE|IMG|LIST|SIGN):)/)
+    .flatMap((block) => {
+      const trimmed = block.trim();
+      if (/^(?:QUOTE|IMG|LIST|SIGN):/.test(trimmed) && trimmed.includes("\n")) {
+        return trimmed.split(/\n+/);
+      }
+      return [trimmed];
+    })
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+  return (
+    <div className="prose article-body text-tinta leading-relaxed text-lg space-y-6">
+      {summary && (
+        <p className="lead font-serif italic text-xl text-tinta/85">
+          {summary}
+        </p>
+      )}
+      {paragraphs.map((p, i) => {
+        if (p.startsWith("QUOTE:")) {
+          const [texto, autor] = p.slice(6).split("|").map((s) => s.trim());
+          return (
+            <blockquote key={i} className="article-quote">
+              <p>“{texto}”</p>
+              {autor && <cite>— {autor}</cite>}
+            </blockquote>
+          );
+        }
+        if (p.startsWith("LIST:")) {
+          const items = p.slice(5).split("|").map((s) => s.trim()).filter(Boolean);
+          return (
+            <ol key={i} className="article-list">
+              {items.map((it, idx) => (
+                <li key={idx}>{it}</li>
+              ))}
+            </ol>
+          );
+        }
+        if (p.startsWith("SIGN:")) {
+          const lines = p.slice(5).split("|").map((s) => s.trim()).filter(Boolean);
+          return (
+            <p key={i} className="article-sign">
+              {lines.map((l, idx) => (
+                <React.Fragment key={idx}>
+                  {idx > 0 && <br />}
+                  {l}
+                </React.Fragment>
+              ))}
+            </p>
+          );
+        }
+        if (p.startsWith("IMG:")) {
+          const [rawSrc, caption] = p.slice(4).split("|").map((s) => s.trim());
+          const src = rawSrc || "";
+          const resolvedSrc = normalizeAssetUrl(
+            src.startsWith("assets/")
+              ? `/${src}`
+              : src.startsWith("/") || src.startsWith("http")
+              ? src
+              : `/assets/${src}`
+          );
+          return (
+            <figure key={i} className="article-fig">
+              <FallbackImage src={resolvedSrc} alt={caption || ""} />
+              {caption && <figcaption>{caption}</figcaption>}
+            </figure>
+          );
+        }
+        if (p === p.toUpperCase() && p.length < 60) {
+          return (
+            <p key={i} className="article-kicker">
+              {p}
+            </p>
+          );
+        }
+        return <p key={i}>{p}</p>;
+      })}
+    </div>
+  );
+};
 
 export const NoticiaDetalhe: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -55,10 +138,6 @@ export const NoticiaDetalhe: React.FC = () => {
   }
 
   const date = safeDate(article.publishedAt);
-  const paragraphs = (article.content || "")
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean);
   const shareUrl = typeof window !== "undefined" ? window.location.href : "";
 
   return (
@@ -96,16 +175,7 @@ export const NoticiaDetalhe: React.FC = () => {
             </figure>
           )}
 
-          <div className="prose text-tinta leading-relaxed text-lg space-y-6">
-            {article.summary && (
-              <p className="font-serif italic text-xl text-tinta/85">
-                {article.summary}
-              </p>
-            )}
-            {paragraphs.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
+          <ArticleBody summary={article.summary} content={article.content} />
 
           <div className="mt-12 pt-8 border-t border-linha-clara flex flex-wrap gap-6 justify-between items-center">
             <Link to="/noticias" className="link-arrow">

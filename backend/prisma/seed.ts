@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
@@ -6,13 +7,22 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("🌱 Iniciando seed do banco de dados do Meldina FC...");
 
-  // 1. Admin User
-  const passwordHash = await bcrypt.hash("meldina2026!", 10);
+  // 1. Admin User (lê credenciais do ambiente sem deixar senha hardcoded no código)
+  const adminEmail = (process.env.ADMIN_EMAIL || "admin@meldinafc.com").trim().toLowerCase();
+  const initialPassword = process.env.ADMIN_INITIAL_PASSWORD;
+  if (!initialPassword || initialPassword.length < 8) {
+    throw new Error(
+      "Defina ADMIN_INITIAL_PASSWORD (mínimo 8 caracteres) no arquivo .env antes de rodar o seed."
+    );
+  }
+
+  const passwordHash = await bcrypt.hash(initialPassword, 12);
+  const forcePasswordReset = process.env.FORCE_ADMIN_PASSWORD_RESET === "true";
   await prisma.user.upsert({
-    where: { email: "admin@meldinafc.com" },
-    update: {},
+    where: { email: adminEmail },
+    update: forcePasswordReset ? { passwordHash } : {},
     create: {
-      email: "admin@meldinafc.com",
+      email: adminEmail,
       name: "Diretoria Meldina",
       passwordHash,
       role: "ADMIN",
@@ -22,7 +32,17 @@ async function main() {
   // 2. Club Info
   await prisma.clubInfo.upsert({
     where: { id: "meldina-main" },
-    update: {},
+    update: {
+      stadium: "Lovebomb Arena",
+      season: 2026,
+      foundationYear: 2017,
+      coach: "Celso Roth",
+      president: "André Almeida",
+      league: "Pro Clubs",
+      division: "Série A",
+      programName: "Clube Meldina",
+      motto: "Muito além do jogo",
+    },
     create: {
       id: "meldina-main",
       stadium: "Lovebomb Arena",
@@ -37,7 +57,7 @@ async function main() {
     },
   });
 
-  // 3. Teams
+  // 3. Teams (12 clubes)
   const teamsData = [
     { id: "mfc", name: "Meldina FC", shortName: "Meldina", acronym: "MFC", isUs: true },
     { id: "ipe", name: "Ipê FC", shortName: "Ipê", acronym: "IPÊ", color1: "#e26fa8", color2: "#2b2b2b", shape: "round" },
@@ -47,7 +67,7 @@ async function main() {
     { id: "setelagos", name: "Sete Lagos EC", shortName: "Sete Lagos", acronym: "7L", color1: "#1c7fc4", color2: "#ffffff", shape: "shield" },
     { id: "ventura", name: "Real Ventura", shortName: "R. Ventura", acronym: "RV", color1: "#6c2bd9", color2: "#ffffff", shape: "shield" },
     { id: "aurora", name: "Aurora EC", shortName: "Aurora", acronym: "AEC", color1: "#ff7a1a", color2: "#1d1d1d", shape: "round" },
-    { id: "desola", name: "De Sola FC", shortName: "De Sola", acronym: "DSF", logoUrl: "assets/img/desola.png", isRival: true },
+    { id: "desola", name: "De Sola FC", shortName: "De Sola", acronym: "DSF", logoUrl: "/assets/img/desola.png", isRival: true },
     { id: "tupinamba", name: "Tupinambá EC", shortName: "Tupinambá", acronym: "TEC", color1: "#111111", color2: "#e8e8e8", shape: "castle" },
     { id: "cerrado", name: "Unidos do Cerrado", shortName: "Cerrado", acronym: "UDC", color1: "#9b6b2f", color2: "#f0e3c8", shape: "round" },
     { id: "vilaserena", name: "Vila Serena FC", shortName: "V. Serena", acronym: "VSF", color1: "#0aa3a3", color2: "#ffffff", shape: "shield" },
@@ -61,62 +81,62 @@ async function main() {
     });
   }
 
-  // 4. Players
+  // 4. Players (11 jogadores com caminhos /assets/players/... e bios completas)
   const playersData = [
     {
-      id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026,
+      id: "muralha", name: "Muralha", number: 1, position: "Goleiro", group: "Goleiros", photoUrl: "/assets/players/muralha-1.jpg", preferredFoot: "Direito", joinedYear: 2026,
       matches: 8, goals: 0, assists: 0, extraKey: "Jogos sem sofrer gols", extraValue: "1",
-      bio: "Única contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área.",
+      bio: "Nova contratação para a temporada 2026, Muralha chegou depois do título da Segunda Divisão para dar ainda mais segurança ao gol. Reflexo rápido, voz de comando e presença absoluta na pequena área — o apelido não é por acaso.",
     },
     {
-      id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024,
+      id: "kiki", name: "Kiki", number: 2, position: "Lateral-direito", group: "Defensores", photoUrl: "/assets/players/kiki-2.jpg", preferredFoot: "Direito", joinedYear: 2024,
       matches: 8, goals: 0, assists: 2, extraKey: "Desarmes", extraValue: "19",
-      bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar.",
+      bio: "Forte, incansável e querido por todo mundo — dentro e fora do vestiário. Kiki faz parte da geração que assumiu o Meldina em 2024 e é daqueles jogadores que ninguém quer enfrentar e todo mundo quer ter ao lado.",
     },
     {
-      id: "jonga", name: "Jonga", number: 6, position: "Lateral-esquerdo", group: "Defensores", photoUrl: "assets/players/jonga-6.jpg", preferredFoot: "Esquerdo", joinedYear: 2024,
+      id: "jonga", name: "Jonga", number: 6, position: "Lateral-esquerdo", group: "Defensores", photoUrl: "/assets/players/jonga-6.jpg", preferredFoot: "Esquerdo", joinedYear: 2024,
       matches: 7, goals: 0, assists: 1, extraKey: "Cruzamentos certos", extraValue: "15",
-      bio: "O técnico da linha defensiva. Jonga resolve com a bola no pé: domínio limpo, passe preciso e leitura de jogo exemplar.",
+      bio: "O técnico da linha defensiva. Jonga resolve com a bola no pé: domínio limpo, passe preciso e leitura de jogo que faz a saída de bola do Meldina funcionar desde 2024.",
     },
     {
-      id: "gaab", name: "Gaab", number: 12, position: "Zagueiro", group: "Defensores", photoUrl: "assets/players/gaab-12.jpg", preferredFoot: "Direito", joinedYear: 2024,
+      id: "gaab", name: "Gaab", number: 12, position: "Zagueiro", group: "Defensores", photoUrl: "/assets/players/gaab-12.jpg", preferredFoot: "Direito", joinedYear: 2024,
       matches: 8, goals: 0, assists: 0, extraKey: "Interceptações", extraValue: "22",
-      bio: "O showman do Meldina. Carismático, energia lá em cima e coração do time: Gaab puxa o grupo nos momentos difíceis.",
+      bio: "O showman do Meldina. Carismático, energia lá em cima e coração do time: Gaab puxa o grupo nos momentos difíceis e transforma cada desarme em festa na arquibancada.",
     },
     {
-      id: "lacerda", name: "Lacerda", number: 78, position: "Zagueiro", group: "Defensores", photoUrl: "assets/players/lacerda-78.jpg", preferredFoot: "Esquerdo", joinedYear: 2024,
+      id: "lacerda", name: "Lacerda", number: 78, position: "Zagueiro", group: "Defensores", photoUrl: "/assets/players/lacerda-78.jpg", preferredFoot: "Esquerdo", joinedYear: 2024,
       matches: 8, goals: 1, assists: 0, extraKey: "Duelos aéreos vencidos", extraValue: "27",
-      bio: "O criativo do time. Zagueiro canhoto que pensa o jogo de trás, arrisca o passe que ninguém vê e ainda aparece na área adversária.",
+      bio: "O criativo do time. Zagueiro canhoto que pensa o jogo de trás, Lacerda arrisca o passe que ninguém vê e ainda aparece na área adversária — marcou contra o Castelo AC, fora de casa.",
     },
     {
-      id: "rafael", name: "Rafael", number: 21, position: "Volante", group: "Meio-campistas", photoUrl: "assets/players/rafael-21.jpg", preferredFoot: "Direito", joinedYear: 2024,
+      id: "rafael", name: "Rafael", number: 21, position: "Volante", group: "Meio-campistas", photoUrl: "/assets/players/rafael-21.jpg", preferredFoot: "Direito", joinedYear: 2024,
       matches: 8, goals: 0, assists: 1, extraKey: "Passes certos (%)", extraValue: "91",
-      bio: "O “loose cannon” do Meldina. Imprevisível, corre o campo inteiro e faz muito mais do que a posição pede.",
+      bio: "O “loose cannon” do Meldina. Imprevisível, corre o campo inteiro e faz muito mais do que a posição pede — e, no meio de tudo isso, sempre dá um jeito de se destacar. Nas palavras de Guigs: “O que o Rafael faz pelo time é indispensável”.",
     },
     {
-      id: "guigs", name: "Guigs", number: 18, position: "Volante", group: "Meio-campistas", photoUrl: "assets/players/guigs-18.jpg", preferredFoot: "Direito", joinedYear: 2024,
+      id: "guigs", name: "Guigs", number: 18, position: "Volante", group: "Meio-campistas", photoUrl: "/assets/players/guigs-18.jpg", preferredFoot: "Direito", joinedYear: 2024,
       matches: 8, goals: 0, assists: 3, extraKey: "Passes decisivos", extraValue: "12",
-      bio: "O volante certeiro. Visão de jogo fora do comum e passes que parecem impossíveis.",
+      bio: "O volante certeiro. Visão de jogo fora do comum e passes que parecem impossíveis — Guigs enxerga espaços que ninguém mais vê. Em setembro, renovou contrato com o clube: ele fica!",
     },
     {
-      id: "carrijo", name: "Carrijo", number: 10, position: "Meia", group: "Meio-campistas", photoUrl: "assets/players/carrijo-10.jpg", preferredFoot: "Esquerdo", joinedYear: 2024, roleTitle: "Vice-presidente",
+      id: "carrijo", name: "Carrijo", number: 10, position: "Meia", group: "Meio-campistas", photoUrl: "/assets/players/carrijo-10.jpg", preferredFoot: "Esquerdo", joinedYear: 2024, roleTitle: "Vice-presidente",
       matches: 6, goals: 3, assists: 5, extraKey: "Passes decisivos", extraValue: "18",
-      bio: "Vice-presidente do clube e maestro em campo. Carrijo é quem faz o meio-campo do Meldina funcionar: dita o ritmo, organiza e decide.",
+      bio: "Vice-presidente do clube e maestro em campo. Carrijo é quem faz o meio-campo do Meldina funcionar: dita o ritmo, organiza e decide. Depois de um início de temporada turbulento, respondeu com gols e um pedido de desculpas: “O Meldina é maior do que a gente”.",
     },
     {
-      id: "kristhian", name: "Kristhian", number: 87, position: "Meia", group: "Meio-campistas", photoUrl: "assets/players/kristhian-87.jpg", preferredFoot: "Esquerdo", joinedYear: 2024,
+      id: "kristhian", name: "Kristhian", number: 87, position: "Meia", group: "Meio-campistas", photoUrl: "/assets/players/kristhian-87.jpg", preferredFoot: "Esquerdo", joinedYear: 2024,
       matches: 8, goals: 2, assists: 2, extraKey: "Dribles certos", extraValue: "18",
-      bio: "O meia consistente. Sempre aparece no ataque para ajudar os atacantes, mantendo a consistência tática.",
+      bio: "O meia consistente. Sempre aparece no ataque para ajudar os atacantes, mas sabe exatamente o seu lugar. Foi decisivo na virada por 2 a 1 sobre o Real Ventura, fora de casa.",
     },
     {
-      id: "caio", name: "Caio", number: 7, position: "Atacante", group: "Atacantes", photoUrl: "assets/players/caio-7.jpg", preferredFoot: "Direito", joinedYear: 2024,
+      id: "caio", name: "Caio", number: 7, position: "Atacante", group: "Atacantes", photoUrl: "/assets/players/caio-7.jpg", preferredFoot: "Direito", joinedYear: 2024,
       matches: 8, goals: 2, assists: 3, extraKey: "Dribles certos", extraValue: "26",
-      bio: "O marrento que todo mundo adora. Drible, provocação e personalidade de sobra.",
+      bio: "O marrento que todo mundo adora. Drible, provocação e personalidade de sobra — e faz questão de que todos saibam que é um leitor ávido. Caio lê muito mesmo, e jura que isso aparece no jogo.",
     },
     {
-      id: "almeida", name: "Almeida", number: 9, position: "Atacante", group: "Atacantes", photoUrl: "assets/players/almeida-9.jpg", preferredFoot: "Direito", joinedYear: 2024, isCaptain: true, roleTitle: "Presidente",
+      id: "almeida", name: "Almeida", number: 9, position: "Atacante", group: "Atacantes", photoUrl: "/assets/players/almeida-9.jpg", preferredFoot: "Direito", joinedYear: 2024, isCaptain: true, roleTitle: "Presidente",
       matches: 8, goals: 11, assists: 1, extraKey: "Finalizações no alvo", extraValue: "29",
-      bio: "Presidente, capitão e camisa 9. André Almeida é quem faz o time inteiro funcionar — artilheiro disparado do Meldina.",
+      bio: "Presidente, capitão e camisa 9. André Almeida é quem faz o time inteiro funcionar — sem ele, nada dá certo. Matador, faro de gol absurdo e artilheiro disparado do Meldina: a bola procura ele.",
     },
   ];
 
@@ -128,7 +148,7 @@ async function main() {
     });
   }
 
-  // 5. Standings
+  // 5. Standings (12 clubes na tabela)
   const standingsData = [
     { teamId: "mfc", matches: 6, wins: 5, draws: 0, losses: 1, goalsFor: 15, goalsAgainst: 6, form: "WWWWW" },
     { teamId: "desola", matches: 6, wins: 4, draws: 1, losses: 1, goalsFor: 13, goalsAgainst: 7, form: "WDWWW" },
@@ -145,49 +165,424 @@ async function main() {
   ];
 
   for (const s of standingsData) {
+    const { teamId, matches, wins, draws, losses, goalsFor, goalsAgainst, form } = s;
     await prisma.standing.upsert({
-      where: { teamId: s.teamId },
-      update: s,
-      create: s,
+      where: { teamId },
+      update: { matches, wins, draws, losses, goalsFor, goalsAgainst, form },
+      create: { teamId, matches, wins, draws, losses, goalsFor, goalsAgainst, form },
     });
   }
 
-  // 6. News
+  // 6. News (23 artigos cobrindo todo o acervo de imagens e notícias de data.js)
   const newsData = [
     {
-      id: "vitoria-sete-lagos",
-      slug: "vitoria-sete-lagos",
-      title: "Meldina vence Sete Lagos por 3 a 0 e assume a liderança isolada da Série A",
-      summary: "Com hat-trick de Almeida e atuação segura de Muralha, time alcança a quinta vitória consecutiva na elite.",
-      content: "Uma noite mágica na Lovebomb Arena. O Meldina FC dominou o Sete Lagos do início ao fim e garantiu mais 3 pontos cruciais...",
+      id: "hoje-tem-meldina-tupinamba",
+      slug: "hoje-tem-meldina-tupinamba",
+      title: "Hoje tem Meldina: líder recebe o Tupinambá na Lovebomb Arena, com a nuFUT no peito",
+      summary: "Terça-feira, 22h, pela 7ª rodada da Série A. Pela primeira vez, a camisa I entra em campo com a marca da nova patrocinadora.",
+      content: [
+        "É dia de jogo na Lovebomb Arena. Nesta terça-feira, 6 de outubro, às 22h, o Meldina FC recebe o Tupinambá EC pela 7ª rodada da Série A do Pro Clubs.",
+        "O líder chega embalado por cinco vitórias seguidas e com a defesa como uma das armas da campanha. Do outro lado, o Tupinambá tenta se afastar da parte de baixo da tabela.",
+        "A noite também marca um momento especial fora das quatro linhas: pela primeira vez, a camisa I entra em campo com a marca da nuFUT, nova patrocinadora do clube, estampada no peito. Coube a Kiki puxar a fila no túnel em direção ao gramado.",
+        "QUOTE:Toda vez que a gente sai desse túnel é a mesma coisa: a torcida, a camisa, o peso da coroa. Hoje não vai ser diferente.|Kiki, lateral-direito do Meldina FC",
+        "A comissão técnica de Celso Roth deve manter a base da equipe que vem vencendo. Os portões da Lovebomb Arena abrem às 20h, e membros do Clube Meldina têm prioridade e desconto nos ingressos. Muito além do jogo. Vamo Meldina!",
+      ].join("\n\n"),
       category: "jogos",
-      imageUrl: "assets/news/sete-lagos.jpg",
-      publishedAt: new Date("2026-09-22T10:00:00Z"),
+      imageUrl: "/assets/news/kiki-tunel.jpg",
+      publishedAt: new Date("2026-10-06T12:00:00Z"),
+      author: "Redação Meldina",
       isFeatured: true,
     },
     {
-      id: "camisa-ii-lider",
-      slug: "camisa-ii-lider",
-      title: "A coroa pesa: Meldina FC lança nova camisa II oficial para a Série A",
-      summary: "Branca com detalhes em grená e dourado, a nova peça homenageia a conquista da Segunda Divisão e a chegada à elite.",
-      content: "O departamento de marketing do Meldina FC apresentou oficialmente o novo uniforme II da temporada 2026...",
+      id: "celso-classico",
+      slug: "celso-classico",
+      title: "Celso Roth sobre a liderança: “O time está unido, e a intenção é continuar assim”",
+      summary: "Técnico falou sobre a sequência de cinco vitórias, o peso da liderança na Série A e a importância de manter o elenco que conquistou a Segunda Divisão.",
+      content: [
+        "Com cinco vitórias seguidas e a liderança da Série A do Pro Clubs, o Meldina viveu uma semana de trabalho tranquilo na Lovebomb Arena. Em entrevista coletiva, o técnico Celso Roth falou sobre o momento da equipe.",
+        "Depois da derrota na estreia, o time reagiu rápido e chegou à ponta da tabela. Para o treinador, a virada de chave foi coletiva. “Não precisamos reinventar nada. Precisamos ser quem somos”, disse.",
+        "QUOTE:O time está unido, e a intenção é continuar assim.|Celso Roth, técnico do Meldina FC",
+        "Celso lembrou que o grupo atual é praticamente o mesmo que conquistou a Segunda Divisão em 2025 e pediu pés no chão. “A tabela só vale no fim. Estamos felizes, mas a Série A não perdoa. Cada jogo é uma final.”",
+        "Membros do Clube Meldina têm prioridade e desconto na compra de ingressos para os próximos jogos em casa. Vamo Meldina!",
+      ].join("\n\n"),
+      category: "entrevistas",
+      imageUrl: "/assets/news/quotes-celso-2.jpg",
+      publishedAt: new Date("2026-09-25T12:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "nota-presidencia",
+      slug: "nota-presidencia",
+      title: "Nota oficial da Presidência: Meldina FC adota o lema “Muito além do jogo”",
+      summary: "O presidente André Almeida se manifestou sobre a polêmica envolvendo o lema anterior e apresentou o novo lema oficial do clube.",
+      content: [
+        "NOTA OFICIAL DA PRESIDÊNCIA",
+        "A presidência do Meldina FC vem a público se manifestar sobre a recente polêmica envolvendo o lema “Ninguém é maior que o Meldina”.",
+        "A frase foi criada com a intenção de representar a força, a união e o orgulho de vestir a camisa do Meldina. No entanto, reconhecemos que sua interpretação poderia colocar o clube em uma posição que não representa os valores que queremos defender.",
+        "O Meldina é um clube cristão. Nossa fé faz parte da nossa identidade e, acima de qualquer resultado, competição ou instituição, reconhecemos a soberania de Deus.",
+        "Por isso, reconhecemos o erro na escolha do lema e respeitamos os questionamentos feitos por nossos torcedores.",
+        "O futebol é o que nos coloca em campo. Mas o Meldina representa algo maior.",
+        "Representa as amizades construídas, a união do elenco, a torcida, as histórias que vivemos juntos e os valores que carregamos dentro e fora das partidas.",
+        "QUOTE:Por isso, a partir de hoje, o Meldina FC passa a ter um novo lema: MUITO ALÉM DO JOGO.|André Almeida, presidente do Meldina FC",
+        "Porque o Meldina não se resume ao resultado de uma partida. Não somos apenas 90 minutos, uma vitória, uma derrota ou uma tabela. Somos muito além do jogo.",
+        "Agradecemos aos torcedores que questionaram, cobraram e nos fizeram refletir sobre aquilo que queremos que o Meldina represente.",
+        "O clube reconhece seu erro, aprende com ele e segue em frente. Mais unidos. Mais conscientes. E sempre muito além do jogo.",
+        "SIGN:Atenciosamente,|André Almeida|Presidente do Meldina FC",
+      ].join("\n\n"),
       category: "clube",
-      imageUrl: "assets/news/camisas.jpg",
-      publishedAt: new Date("2026-09-20T14:00:00Z"),
+      imageUrl: "/assets/news/story-meldina-alem-do-jogo.jpg",
+      publishedAt: new Date("2026-09-24T12:00:00Z"),
+      author: "Presidência Meldina FC",
+      isFeatured: false,
+    },
+    {
+      id: "nufut",
+      slug: "nufut",
+      title: "Novo patrocinador: nuFUT é a nova parceira oficial do Meldina FC",
+      summary: "O game de futebol chega ao clube para a sequência da Série A, com ações para a torcida e conteúdos especiais na Meldina TV.",
+      content: [
+        "O Meldina FC tem um novo patrocinador: a nuFUT, game de futebol que passa a estampar sua marca nos canais oficiais do clube a partir da 7ª rodada da Série A.",
+        "A parceria prevê ações exclusivas para membros do Clube Meldina, conteúdos especiais na Meldina TV e ativações em dias de jogo na Lovebomb Arena.",
+        "QUOTE:A nuFUT nasceu para quem vive o futebol muito além do jogo. Não existe parceiro mais natural do que o Meldina.|nuFUT",
+        "O acordo se soma à parceria com a Lider, fornecedora oficial de material esportivo, e reforça o crescimento do clube dentro e fora de campo. Vamo Meldina!",
+      ].join("\n\n"),
+      category: "clube",
+      imageUrl: "/assets/news/patrocinador.jpg",
+      publishedAt: new Date("2026-09-22T12:00:00Z"),
+      author: "Marketing Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "vitoria-sete-lagos",
+      slug: "vitoria-sete-lagos",
+      title: "Adiado para segunda, jogo contra o Sete Lagos termina em 3 a 0 e Meldina segue líder",
+      summary: "Transferida de domingo para segunda-feira, a partida da 6ª rodada teve casa cheia, a camisa II em campo e a quinta vitória seguida.",
+      content: [
+        "Depois de uma semana de expectativa — e de um fim de semana de interrogações, com a partida transferida de domingo para segunda-feira —, o Meldina recebeu o Sete Lagos EC na Lovebomb Arena e venceu por 3 a 0.",
+        "Com a nova camisa II, o time controlou o jogo do início ao fim. Almeida abriu o placar no primeiro tempo, Caio ampliou após jogada de Carrijo e Kristhian fechou a conta em chute de fora da área.",
+        "Foi a primeira partida sem sofrer gols de Muralha na Série A e a quinta vitória seguida do Meldina, que mantém a liderança isolada com 15 pontos.",
+        "QUOTE:Cinco vitórias seguidas não caem do céu. É trabalho, é grupo. Agora é seguir.|Almeida, capitão do Meldina FC",
+      ].join("\n\n"),
+      category: "jogos",
+      imageUrl: "/assets/news/escalacao-carrijo.jpg",
+      publishedAt: new Date("2026-09-21T23:30:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "meldcast-12",
+      slug: "meldcast-12",
+      title: "Meldcast #12: Caio abre o jogo sobre a boa fase e os bastidores do vestiário",
+      summary: "No novo episódio do podcast oficial, o camisa 7 fala sobre a sequência de vitórias, a relação com a torcida e as metas para a temporada.",
+      content: [
+        "O Meldcast, podcast oficial do Meldina FC, está de volta com o episódio 12. O convidado da vez é Caio, o marrento mais querido do elenco, que vive grande fase com dois gols e três assistências na temporada — e ainda conta qual livro está lendo agora.",
+        "Na conversa, o camisa 7 relembra os primeiros treinos no clube, comenta a jogada do segundo gol contra o Aurora e revela quem é o jogador mais engraçado do elenco — spoiler: a disputa é acirrada.",
+        "O episódio completo está disponível no canal Meldina TV, no YouTube. Inscreva-se e ative as notificações para não perder os próximos episódios do Meldcast e do MFC News.",
+      ].join("\n\n"),
+      category: "tv",
+      imageUrl: "/assets/players/caio-7.jpg",
+      publishedAt: new Date("2026-09-21T14:00:00Z"),
+      author: "Meldina TV",
+      isFeatured: false,
+    },
+    {
+      id: "hoje-tem-meldina-duvida",
+      slug: "hoje-tem-meldina-duvida",
+      title: "Hoje tem Meldina? Confronto contra o Sete Lagos na Lovebomb Arena é transferido para segunda-feira",
+      summary: "Previsto inicialmente para a noite de domingo (20), duelo da 6ª rodada ganha nova data às 22h de segunda-feira.",
+      content: [
+        "O domingo amanheceu com ponto de interrogação para a torcida grená. A partida entre Meldina FC e Sete Lagos EC, inicialmente agendada para este domingo (20), às 22h, na Lovebomb Arena, foi oficialmente transferida para segunda-feira (21), no mesmo horário.",
+        "A alteração foi confirmada pela organização da Série A do Pro Clubs em comum acordo entre as equipes. Com o elenco já concentrado, a comissão técnica de Celso Roth ajustou o cronograma de preparação.",
+        "QUOTE:Domingo ou segunda, nossa postura não muda. Quando a bola rolar na Lovebomb Arena, estaremos prontos.|Celso Roth, técnico do Meldina FC",
+        "Todos os ingressos adquiridos permanecem válidos para segunda-feira. Vamo Meldina!",
+      ].join("\n\n"),
+      category: "jogos",
+      imageUrl: "/assets/news/hoje-tem-meldina-group.jpg",
+      publishedAt: new Date("2026-09-20T12:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "socio-marca",
+      slug: "socio-marca",
+      title: "Clube Meldina bate recorde e ultrapassa a marca de mil membros",
+      summary: "Programa oficial de sócios cresce a cada rodada. Planos Coroa, Realeza e Majestade garantem prioridade em ingressos e descontos na loja.",
+      content: [
+        "O Clube Meldina, programa oficial de sócios, atingiu uma marca histórica: mais de mil torcedores associados. O crescimento acompanha a campanha do time, líder da Série A.",
+        "Os membros têm prioridade na compra de ingressos, descontos exclusivos na Loja Oficial, acesso a conteúdos da Meldina TV antes de todo mundo e experiências como visitas ao vestiário em dias de jogo.",
+        "Para fazer parte, basta escolher um dos planos — Coroa, Realeza ou Majestade — na página do Clube Meldina.",
+      ].join("\n\n"),
+      category: "clube",
+      imageUrl: "/assets/players/gaab-12.jpg",
+      publishedAt: new Date("2026-09-19T12:00:00Z"),
+      author: "Redação Meldina",
       isFeatured: false,
     },
     {
       id: "vitoria-aurora",
       slug: "vitoria-aurora",
-      title: "Meldina bate Aurora por 3 a 1 e embala na competição",
-      summary: "Gols de Almeida, Kristhian e Caio selam virada espetacular na Lovebomb Arena.",
-      content: "Em jogo disputado lance a lance, a equipe comandada por Celso Roth mostrou maturidade e poder de reação...",
+      title: "Almeida marca duas vezes e Meldina vence o Aurora para seguir na liderança",
+      summary: "Diante da torcida na Lovebomb Arena, o Meldina venceu por 3 a 1 e chegou à quarta vitória seguida na Série A.",
+      content: [
+        "A Lovebomb Arena viu mais uma atuação segura do líder da Série A do Pro Clubs. Nesta sexta-feira, o Meldina FC venceu o Aurora EC por 3 a 1, pela 5ª rodada, e chegou a 12 pontos.",
+        "O primeiro gol saiu aos 12 minutos: Carrijo cobrou escanteio fechado e Almeida, antecipando-se à zaga, desviou de cabeça. O Aurora empatou ainda na primeira etapa, mas o time grená voltou do intervalo com outra postura.",
+        "Aos 9 do segundo tempo, Caio arrancou pela direita, deixou dois marcadores para trás e serviu Almeida, que apenas empurrou para as redes. Já nos acréscimos, Carrijo fechou a conta em cobrança de falta no ângulo.",
+        "QUOTE:Jogar em casa, com essa torcida cantando o tempo todo, muda tudo. O grupo está fechado e sabe o que quer.|Almeida, capitão do Meldina FC",
+        "O Meldina volta a campo contra o Sete Lagos EC, novamente na Lovebomb Arena.",
+      ].join("\n\n"),
       category: "jogos",
-      imageUrl: "assets/news/aurora.jpg",
-      publishedAt: new Date("2026-09-19T09:00:00Z"),
+      imageUrl: "/assets/players/almeida-9.jpg",
+      publishedAt: new Date("2026-09-18T22:30:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "vitoria-ventura",
+      slug: "vitoria-ventura",
+      title: "Kristhian decide e Meldina vira sobre o Real Ventura fora de casa",
+      summary: "Em jogo tenso no Estádio Ventura, o camisa 87 marcou o gol da virada aos 38 do segundo tempo.",
+      content: [
+        "Fora de casa e atrás no placar, o Meldina mostrou força para buscar a virada sobre o Real Ventura por 2 a 1, pela 4ª rodada da Série A.",
+        "Almeida empatou no início do segundo tempo e, aos 38 minutos, Kristhian recebeu pela esquerda, cortou para dentro e bateu colocado no canto — um gol que já está entre os mais bonitos da temporada.",
+        "Com o resultado, o time grená chegou à terceira vitória seguida e assumiu a liderança da competição.",
+      ].join("\n\n"),
+      category: "jogos",
+      imageUrl: "/assets/players/kristhian-87.jpg",
+      publishedAt: new Date("2026-09-13T23:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "ele-fica",
+      slug: "ele-fica",
+      title: "Ele fica! Guigs renova contrato com o Meldina FC",
+      summary: "Dúvida durante a semana do último playoff, o volante camisa 18 apareceu para a decisão, jogou e acertou a renovação logo após a partida.",
+      content: [
+        "Foi uma semana de incerteza na Lovebomb Arena. Com o contrato perto do fim e sem uma resposta definitiva sobre o futuro, Guigs era um ponto de interrogação para o último playoff do ano — e para a sequência da temporada.",
+        "Na sexta-feira, 11 de setembro, a dúvida começou a ser respondida da melhor forma: o volante apareceu, foi relacionado e entrou em campo ao lado de Rafael, formando a dupla que dá equilíbrio ao meio-campo do Meldina.",
+        "Logo após a partida, o clube e o jogador selaram o acordo. Guigs renovou seu vínculo e segue vestindo a camisa 18.",
+        "QUOTE:Nunca foi sobre sair. Era sobre ter certeza. E eu tenho: meu lugar é aqui.|Guigs, volante do Meldina FC",
+        "Ele fica! Muito além do jogo.",
+      ].join("\n\n"),
+      category: "clube",
+      imageUrl: "/assets/news/ele-fica.jpg",
+      publishedAt: new Date("2026-09-12T12:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "ultimo-playoff",
+      slug: "ultimo-playoff",
+      title: "Hoje tem Meldina: é dia do último playoff do ano na Lovebomb Arena",
+      summary: "Sexta-feira, 22h. Depois de tudo o que aconteceu no playoff anterior, o Meldina entra em campo para a última decisão do ano.",
+      content: [
+        "Chegou o dia. Nesta sexta-feira, 11 de setembro, às 22h, o Meldina FC entra em campo na Lovebomb Arena para o último playoff do ano — o jogo mais esperado da temporada pela torcida grená.",
+        "A partida carrega um peso especial. No playoff anterior, o time teve três de seus cinco jogadores retirados no meio do jogo por uma verificação de idade da EA, perdeu a vantagem que tinha construído e saiu derrotado. O clube se manifestou em nota oficial, e o elenco prometeu dar a resposta dentro de campo.",
+        "A semana também foi de expectativa fora das quatro linhas: Guigs, dúvida até os últimos dias, confirmou presença. O clube ainda apresentou o editorial Meldina Magazine, com as camisas I e II da temporada.",
+        "QUOTE:Hoje vamos deixar nossos corações em campo.|Kiki, lateral-direito do Meldina FC",
+        "Os portões abrem às 20h. A orientação é chegar cedo, vestir grená — ou branco — e empurrar o time do primeiro ao último minuto. Hoje tem Meldina!",
+      ].join("\n\n"),
+      category: "jogos",
+      imageUrl: "/assets/news/ultimo-playoff.jpg",
+      publishedAt: new Date("2026-09-11T18:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "kiki-coracoes",
+      slug: "kiki-coracoes",
+      title: "Kiki convoca a torcida para o último playoff: “Hoje vamos deixar nossos corações em campo”",
+      summary: "Lateral-direito falou horas antes da decisão sobre a resposta que o elenco quer dar depois da derrota no playoff anterior.",
+      content: [
+        "Horas antes do último playoff do ano, o lateral-direito Kiki resumiu o sentimento do vestiário. Depois da derrota polêmica no jogo anterior, o elenco quer transformar a revolta em entrega.",
+        "QUOTE:Hoje vamos deixar nossos corações em campo.|Kiki, lateral-direito do Meldina FC",
+        "No Meldina desde 2024, Kiki é um dos jogadores mais queridos do elenco e uma das vozes do grupo nos jogos grandes. “A gente sabe o que aconteceu no último jogo. Não dá para mudar. O que dá é fazer diferente hoje”, completou.",
+        "A bola rola às 22h, na Lovebomb Arena.",
+      ].join("\n\n"),
+      category: "entrevistas",
+      imageUrl: "/assets/news/quotes-kiki.jpg",
+      publishedAt: new Date("2026-09-11T15:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "meldina-magazine",
+      slug: "meldina-magazine",
+      title: "Meldina Magazine: editorial apresenta as camisas I e II da temporada",
+      summary: "Em clima de revista de moda, o clube apresentou os uniformes 2026 da Lider com os próprios jogadores como modelos. A coroa pesa.",
+      content: [
+        "No dia do último playoff do ano, o Meldina FC lançou o Meldina Magazine, editorial que apresenta os uniformes da temporada 2026 com os próprios atletas como modelos.",
+        "A capa grená traz a camisa I, com gola em ouro, textura exclusiva e punhos em marinho. A segunda edição apresenta a camisa II, branca, com gola transpassada e acabamentos em grená e dourado — a novidade da temporada.",
+        "IMG:/assets/news/meldina-magazine-2.jpg|Meldina Magazine — camisa II 2026",
+        "As duas camisas estão à venda na Loja Oficial, com 15% de desconto para membros do Clube Meldina.",
+      ].join("\n\n"),
+      category: "clube",
+      imageUrl: "/assets/news/meldina-magazine.jpg",
+      publishedAt: new Date("2026-09-11T12:00:00Z"),
+      author: "Marketing Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "concentracao-playoff",
+      slug: "concentracao-playoff",
+      title: "Malas prontas para a decisão: elenco chega à Lovebomb Arena com a nova camisa II",
+      summary: "Delegação do Meldina desembarca para o último playoff do ano contra o Unidos do Cerrado em clima de foco total.",
+      content: [
+        "O clima já é de decisão na Lovebomb Arena. Na tarde desta sexta-feira (11), os atletas do Meldina FC se apresentaram para a concentração do último playoff do ano vestindo a nova camisa II da temporada 2026.",
+        "Contra o Unidos do Cerrado, às 22h, a equipe busca encerrar a fase de Playoffs de Elite com vitória diante da torcida grená.",
+        "QUOTE:A concentração começou no minuto em que terminou o último jogo. Hoje é dia de honrar essa camisa do início ao fim.|Almeida, capitão do Meldina FC",
+        "Dentro de campo, o Meldina confirmou a festa na Lovebomb Arena e venceu o Unidos do Cerrado por 2 a 1.",
+      ].join("\n\n"),
+      category: "jogos",
+      imageUrl: "/assets/news/hoje-tem-meldina-4.jpg",
+      publishedAt: new Date("2026-09-11T10:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "carrijo-desculpas",
+      slug: "carrijo-desculpas",
+      title: "Carrijo responde em campo e pede desculpas à torcida: “O Meldina é maior do que a gente”",
+      summary: "Depois de uma declaração ofensiva à torcida, o camisa 10 marcou em dois jogos seguidos, foi decisivo e se retratou publicamente.",
+      content: [
+        "Foram dias difíceis para Carrijo. No dia 4 de setembro, questionado sobre sua ausência nos jogos anteriores, o camisa 10 respondeu aos torcedores com uma declaração ofensiva, que gerou revolta nas arquibancadas e também dentro do elenco.",
+        "O jogador baixou a cabeça e deixou o futebol falar. Contra os Leões da Serra, marcou e ajudou na vitória por 3 a 1. Fora de casa, contra o Castelo AC, voltou a balançar as redes e distribuiu passes decisivos no triunfo por 3 a 1.",
+        "Depois da partida, Carrijo fez questão de se dirigir à torcida e pedir desculpas publicamente.",
+        "QUOTE:O Meldina é maior do que a gente.|Carrijo, camisa 10 do Meldina FC",
+        "O clube considera o episódio encerrado. Muito além do jogo, o Meldina é feito de pessoas — e pessoas erram, reconhecem e seguem em frente juntas.",
+      ].join("\n\n"),
+      category: "entrevistas",
+      imageUrl: "/assets/news/quotes-carrijo.jpg",
+      publishedAt: new Date("2026-09-09T12:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "vitoria-leoes",
+      slug: "vitoria-leoes",
+      title: "União em campo: Meldina vence Leões da Serra por 3 a 1 e conquista primeira vitória na Série A",
+      summary: "Com atuação coletiva impecável na Lovebomb Arena, equipe grená reage na 2ª rodada e inicia arrancada na elite.",
+      content: [
+        "A resposta que a torcida esperava veio em grande estilo. Pela 2ª rodada da Série A do Pro Clubs, o Meldina FC recebeu os Leões da Serra na Lovebomb Arena e venceu por 3 a 1.",
+        "Antes de a bola rolar, a roda formada por todo o elenco no gramado deu o tom da noite: união total para buscar os primeiros três pontos na elite.",
+        "Com gols de Almeida, Carrijo e Caio, o Meldina dominou as ações e iniciou a sequência de vitórias que levaria o clube ao topo da tabela.",
+        "QUOTE:Esse abraço antes do apito inicial diz tudo sobre nós. Quando jogamos juntos, somos muito fortes.|Gaab, zagueiro do Meldina FC",
+      ].join("\n\n"),
+      category: "jogos",
+      imageUrl: "/assets/news/group-photo.jpg",
+      publishedAt: new Date("2026-09-06T23:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "nota-ea",
+      slug: "nota-ea",
+      title: "Nota oficial: Meldina FC envia ofício à EA Sports após interrupção de playoff",
+      summary: "Três dos cinco atletas do Meldina foram retirados no meio da partida para uma “verificação de idade”. O clube cobra providências e propõe medidas.",
+      content: [
+        "O Meldina FC enviou, nesta sexta-feira (4), um ofício ao Presidente do Comitê Disciplinar da EA Sports, e ao Diretor de Integridade e Fair Play Digital, solicitando que sejam tomadas providências imediatas com base em relatórios independentes emitidos por uma respeitada empresa de auditoria de servidores e detecção de manipulação algorítmica que prepara rotineiramente avaliações de código-fonte e interferência em partidas de EA FC, relatórios para órgãos desportivos e como testemunha especializada em questões perante os tribunais. O ofício é apoiado por uma análise completa da conduta do sistema e da engine da partida no impactante playoff de acesso à divisão de Elite.",
+        "O Meldina também sugeriu a intervenção da desenvolvedora para a elaboração de propostas e a adoção de medidas efetivas voltadas à melhoria e ao desenvolvimento do esporte e do cenário competitivo:",
+        "LIST:Regulamentação e auditoria transparente do sistema de “verificação de idade” e expulsões arbitrárias de atletas virtuais em partidas oficiais;|Obrigatoriedade de que qualquer procedimento de verificação de idade ou checagem de cadastro seja realizado exclusivamente após o término da partida, sendo terminantemente proibida a interrupção ou retirada de atletas durante o tempo regulamentar e acréscimos;|O acompanhamento técnico-científico dos lances, bugs de conexão e indicadores estatísticos das partidas de futebol, com a contratação de empresas de auditoria independente, especializadas na análise de dados de servidores;|Transparência nos algoritmos de acréscimo e balanceamento de gameplay para partidas profissionais; além de outras medidas que venham a ser indicadas.",
+        "O Meldina reforça que envidará os maiores esforços no sentido de apurar os fatos narrados e contribuir para a evolução do cenário competitivo, inclusive acionando a Justiça Comum, após esgotadas as instâncias da Justiça Desportiva.",
+        "SIGN:Assessoria de Comunicação|Meldina Futebol Clube",
+      ].join("\n\n"),
+      category: "clube",
+      imageUrl: "/assets/news/nota-oficial.jpg",
+      publishedAt: new Date("2026-09-04T12:00:00Z"),
+      author: "Assessoria de Comunicação",
+      isFeatured: false,
+    },
+    {
+      id: "celso-estreia",
+      slug: "celso-estreia",
+      title: "Celso Roth após derrota na estreia da Série A: “Não foi a melhor estreia”",
+      summary: "O Meldina perdeu para o Ipê FC por 2 a 1 na Lovebomb Arena. O técnico reconheceu a atuação abaixo, mas garantiu que o grupo vai reagir.",
+      content: [
+        "A estreia do Meldina FC na elite não saiu como a torcida sonhava. Na noite de terça-feira, 1º de setembro, o time foi superado pelo Ipê FC por 2 a 1, na Lovebomb Arena, pela 1ª rodada da Série A do Pro Clubs.",
+        "Na entrevista coletiva, o técnico Celso Roth não fugiu da responsabilidade.",
+        "QUOTE:Não foi a melhor estreia.|Celso Roth, técnico do Meldina FC",
+        "O treinador lembrou que o grupo é o mesmo que conquistou a Segunda Divisão em 2025 e pediu paciência. “A Série A tem outro ritmo. Vamos corrigir, vamos trabalhar. Esse time já mostrou do que é capaz e vai mostrar de novo.”",
+        "A resposta veio rápido: depois da derrota, o Meldina não perdeu mais na Série A e emendou cinco vitórias seguidas até a liderança.",
+      ].join("\n\n"),
+      category: "entrevistas",
+      imageUrl: "/assets/news/quotes-celso.jpg",
+      publishedAt: new Date("2026-09-02T14:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "rafael-passes",
+      slug: "rafael-passes",
+      title: "91% de acerto: os números que explicam a importância de Rafael no meio-campo",
+      summary: "Após críticas às notas do volante na estreia, Guigs saiu em defesa do companheiro: “O que o Rafael faz pelo time é indispensável”.",
+      content: [
+        "Nem sempre o protagonista aparece nos melhores momentos da rodada. No Meldina, boa parte do controle das partidas passa pelos pés de Rafael, volante camisa 21.",
+        "Depois da estreia na Série A, a nota de Rafael na partida virou assunto entre os torcedores. Quem saiu em defesa do volante foi o companheiro de setor, Guigs.",
+        "QUOTE:As notas são apenas números. O que o Rafael faz pelo time é indispensável.|Guigs, volante do Meldina FC",
+        "Os números, aliás, também estão do lado de Rafael: na campanha do título da Segunda Divisão, ele acertou 91% dos passes tentados — o maior índice do elenco — e foi o segundo jogador com mais recuperações de bola, atrás apenas do zagueiro Gaab.",
+        "A comissão técnica destaca a leitura de jogo do volante, capaz de antecipar as jogadas adversárias e iniciar os contra-ataques com um único toque. Ao lado de Guigs, forma a dupla que dá equilíbrio ao Meldina.",
+      ].join("\n\n"),
+      category: "entrevistas",
+      imageUrl: "/assets/news/quotes-guigs.jpg",
+      publishedAt: new Date("2026-09-02T10:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "hoje-tem-meldina-estreia",
+      slug: "hoje-tem-meldina-estreia",
+      title: "Hoje tem Meldina: começa a caminhada na Série A diante do Ipê FC na Lovebomb Arena",
+      summary: "Terça-feira, 1º de setembro, às 21h. De volta à elite após o título da Segunda Divisão, o Meldina estreia em casa.",
+      content: [
+        "A espera acabou. Nesta terça-feira, 1º de setembro, às 21h, o Meldina FC faz sua estreia na Série A do Pro Clubs 2026 diante do Ipê FC, na Lovebomb Arena.",
+        "Campeão da Segunda Divisão em 2025, o time grená retorna à primeira divisão mantendo a base vitoriosa e apresentando o goleiro Muralha como reforço para a temporada.",
+        "QUOTE:Trabalhamos duro pelo retorno à Série A. Agora é desfrutar de cada rodada e competir no mais alto nível.|André Almeida, presidente e capitão do Meldina FC",
+        "Os portões da Lovebomb Arena abrem às 19h30. Vista o manto e venha apoiar o Meldina!",
+      ].join("\n\n"),
+      category: "jogos",
+      imageUrl: "/assets/news/hoje-tem-meldina-2.jpg",
+      publishedAt: new Date("2026-09-01T12:00:00Z"),
+      author: "Redação Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "camisa-2026",
+      slug: "camisa-2026",
+      title: "A coroa pesa: Meldina e Lider lançam a nova camisa II",
+      summary: "Branca, com gola e punhos em grená e ouro, a nova camisa II chega para a estreia do Meldina na Série A do Pro Clubs.",
+      content: [
+        "A coroa pesa — e agora ela também veste branco. O Meldina FC e a Lider, fornecedora oficial de material esportivo do clube, apresentaram a nova camisa II, que o time usará na temporada 2026 da Série A do Pro Clubs.",
+        "A peça é branca, com gola transpassada em grená e dourado, faixas grená nos ombros e punhos com o mesmo acabamento. O escudo aparece em versão monocromática grená, bordado do lado do coração, reforçando a elegância que o clube quer levar para a elite.",
+        "A nova camisa se junta à camisa I grená, que segue como o uniforme principal da equipe.",
+        "QUOTE:Queríamos uma camisa à altura do momento do clube. Somos campeões da Segunda Divisão e chegamos à elite: a coroa pesa.|Departamento de Marketing do Meldina FC",
+        "A camisa II já está à venda na Loja Oficial, em versões torcedor e jogador, com personalização de nome e número. Membros do Clube Meldina têm 15% de desconto.",
+      ].join("\n\n"),
+      category: "clube",
+      imageUrl: "/assets/img/camisa-2.jpg",
+      publishedAt: new Date("2026-08-30T12:00:00Z"),
+      author: "Marketing Meldina",
+      isFeatured: false,
+    },
+    {
+      id: "campeao-serie-b",
+      slug: "campeao-serie-b",
+      title: "Campeão! Meldina conquista a Segunda Divisão e garante a volta à elite do Pro Clubs",
+      summary: "Título da reconstrução coroa a nova geração do clube. Em 2026, o Meldina volta a jogar a primeira divisão.",
+      content: [
+        "Está escrito na história: o Meldina FC é campeão da Segunda Divisão do Pro Clubs. Com a nova geração que assumiu o elenco em 2024, o clube conquistou o título e garantiu a volta à primeira divisão — onde já foi campeão dez vezes.",
+        "A campanha foi construída com uma defesa sólida, um ataque decisivo e, principalmente, um grupo fechado. Pelo acesso, o time superou os playoffs e confirmou a taça diante da torcida.",
+        "A taça da Segunda Divisão se junta à Copa EA e aos dez títulos da primeira divisão na sala de troféus. Em 2026, o desafio é reencontrar a glória na elite. Muito além do jogo. Meldina pra sempre.",
+      ].join("\n\n"),
+      category: "clube",
+      imageUrl: "/assets/news/pelo-acesso.jpg",
+      publishedAt: new Date("2025-12-14T22:00:00Z"),
+      author: "Redação Meldina",
       isFeatured: false,
     },
   ];
+
+  await prisma.news.deleteMany({ where: { slug: "camisa-ii-lider" } });
 
   for (const n of newsData) {
     await prisma.news.upsert({
@@ -197,7 +592,261 @@ async function main() {
     });
   }
 
-  console.log("✅ Seed concluído com sucesso!");
+  // 7. Fixtures (13 jogos com IDs determinísticos fx-1 a fx-13)
+  await prisma.fixture.deleteMany({});
+
+  const fixturesData = [
+    {
+      id: "fx-1",
+      matchDate: new Date("2026-09-01T21:00:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "1ª rodada · Estreia",
+      isHome: true,
+      opponentId: "ipe",
+      homeScore: 1,
+      awayScore: 2,
+      venue: "Lovebomb Arena",
+      newsId: "celso-estreia",
+      isNext: false,
+    },
+    {
+      id: "fx-2",
+      matchDate: new Date("2026-09-03T22:00:00Z"),
+      competition: "Playoffs de Elite",
+      round: "Jogo decisivo",
+      isHome: false,
+      opponentId: "vilaserena",
+      homeScore: 3,
+      awayScore: 2,
+      venue: "Arena Vila Serena",
+      newsId: "nota-ea",
+      isNext: false,
+    },
+    {
+      id: "fx-3",
+      matchDate: new Date("2026-09-06T20:30:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "2ª rodada",
+      isHome: true,
+      opponentId: "leoes",
+      homeScore: 3,
+      awayScore: 1,
+      venue: "Lovebomb Arena",
+      newsId: "vitoria-leoes",
+      isNext: false,
+    },
+    {
+      id: "fx-4",
+      matchDate: new Date("2026-09-08T22:00:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "3ª rodada",
+      isHome: false,
+      opponentId: "castelo",
+      homeScore: 1,
+      awayScore: 3,
+      venue: "Estádio do Castelo",
+      newsId: "carrijo-desculpas",
+      isNext: false,
+    },
+    {
+      id: "fx-5",
+      matchDate: new Date("2026-09-11T22:00:00Z"),
+      competition: "Playoffs de Elite",
+      round: "Último playoff do ano",
+      isHome: true,
+      opponentId: "cerrado",
+      homeScore: 2,
+      awayScore: 1,
+      venue: "Lovebomb Arena",
+      newsId: "ultimo-playoff",
+      isNext: false,
+    },
+    {
+      id: "fx-6",
+      matchDate: new Date("2026-09-13T20:30:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "4ª rodada",
+      isHome: false,
+      opponentId: "ventura",
+      homeScore: 1,
+      awayScore: 2,
+      venue: "Estádio Ventura",
+      newsId: "vitoria-ventura",
+      isNext: false,
+    },
+    {
+      id: "fx-7",
+      matchDate: new Date("2026-09-18T20:00:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "5ª rodada",
+      isHome: true,
+      opponentId: "aurora",
+      homeScore: 3,
+      awayScore: 1,
+      venue: "Lovebomb Arena",
+      newsId: "vitoria-aurora",
+      isNext: false,
+    },
+    {
+      id: "fx-8",
+      matchDate: new Date("2026-09-21T22:00:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "6ª rodada",
+      isHome: true,
+      opponentId: "setelagos",
+      homeScore: 3,
+      awayScore: 0,
+      venue: "Lovebomb Arena",
+      newsId: "vitoria-sete-lagos",
+      isNext: false,
+    },
+    {
+      id: "fx-9",
+      matchDate: new Date("2026-10-06T22:00:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "7ª rodada",
+      isHome: true,
+      opponentId: "tupinamba",
+      homeScore: null,
+      awayScore: null,
+      venue: "Lovebomb Arena",
+      newsId: "hoje-tem-meldina-tupinamba",
+      isNext: true,
+    },
+    {
+      id: "fx-10",
+      matchDate: new Date("2026-10-11T20:30:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "8ª rodada",
+      isHome: false,
+      opponentId: "solaris",
+      homeScore: null,
+      awayScore: null,
+      venue: "Arena Solaris",
+      newsId: null,
+      isNext: false,
+    },
+    {
+      id: "fx-11",
+      matchDate: new Date("2026-10-16T22:00:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "9ª rodada",
+      isHome: true,
+      opponentId: "ventura",
+      homeScore: null,
+      awayScore: null,
+      venue: "Lovebomb Arena",
+      newsId: null,
+      isNext: false,
+    },
+    {
+      id: "fx-12",
+      matchDate: new Date("2026-10-18T20:30:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "10ª rodada",
+      isHome: false,
+      opponentId: "leoes",
+      homeScore: null,
+      awayScore: null,
+      venue: "Estádio da Serra",
+      newsId: null,
+      isNext: false,
+    },
+    {
+      id: "fx-13",
+      matchDate: new Date("2026-10-23T22:00:00Z"),
+      competition: "Pro Clubs · Série A",
+      round: "11ª rodada",
+      isHome: true,
+      opponentId: "castelo",
+      homeScore: null,
+      awayScore: null,
+      venue: "Lovebomb Arena",
+      newsId: null,
+      isNext: false,
+    },
+  ];
+
+  for (const fx of fixturesData) {
+    await prisma.fixture.upsert({
+      where: { id: fx.id },
+      update: fx,
+      create: fx,
+    });
+  }
+
+  // 8. Initial Members (5 sócios ativos do Clube Meldina, No-Money Rule: paymentMethod NONE)
+  const membersData = [
+    {
+      id: "mem-1",
+      name: "Lucas Andrade",
+      email: "lucas.andrade@meldinafc.com",
+      cpf: "12345678901",
+      phone: "11991234501",
+      plan: "OURO",
+      status: "ACTIVE",
+      paymentMethod: "NONE",
+    },
+    {
+      id: "mem-2",
+      name: "Mariana Costa",
+      email: "mariana.costa@meldinafc.com",
+      cpf: "23456789012",
+      phone: "11991234502",
+      plan: "OURO",
+      status: "ACTIVE",
+      paymentMethod: "NONE",
+    },
+    {
+      id: "mem-3",
+      name: "Pedro Henrique",
+      email: "pedro.henrique@meldinafc.com",
+      cpf: "34567890123",
+      phone: "11991234503",
+      plan: "PRATA",
+      status: "ACTIVE",
+      paymentMethod: "NONE",
+    },
+    {
+      id: "mem-4",
+      name: "Beatriz Ferreira",
+      email: "beatriz.ferreira@meldinafc.com",
+      cpf: "45678901234",
+      phone: "11991234504",
+      plan: "PRATA",
+      status: "ACTIVE",
+      paymentMethod: "NONE",
+    },
+    {
+      id: "mem-5",
+      name: "Gabriel Martins",
+      email: "gabriel.martins@meldinafc.com",
+      cpf: "56789012345",
+      phone: "11991234505",
+      plan: "BRONZE",
+      status: "ACTIVE",
+      paymentMethod: "NONE",
+    },
+  ];
+
+  for (const m of membersData) {
+    await prisma.member.upsert({
+      where: { email: m.email },
+      update: {
+        name: m.name,
+        cpf: m.cpf,
+        phone: m.phone,
+        plan: m.plan,
+        status: m.status,
+        paymentMethod: m.paymentMethod,
+      },
+      create: m,
+    });
+  }
+
+  console.log(
+    `✅ Seed concluído com sucesso! (${teamsData.length} clubes, ${playersData.length} atletas, ${standingsData.length} posições, ${newsData.length} notícias, ${fixturesData.length} jogos, ${membersData.length} sócios)`
+  );
 }
 
 main()

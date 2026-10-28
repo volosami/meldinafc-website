@@ -25,6 +25,22 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   );
   const [isLoading, setIsLoading] = useState(true);
 
+  const logout = () => {
+    localStorage.removeItem("meldina_admin_token");
+    setToken(null);
+    setUser(null);
+  };
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      logout();
+    };
+    window.addEventListener("meldina:unauthorized", handleUnauthorized);
+    return () => {
+      window.removeEventListener("meldina:unauthorized", handleUnauthorized);
+    };
+  }, []);
+
   useEffect(() => {
     async function checkAuth() {
       if (token) {
@@ -36,13 +52,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             logout();
           }
         } catch {
-          // Token pode ser válido no fallback
-          setUser({
-            id: "admin-default",
-            email: "admin@meldinafc.com",
-            name: "Diretoria Meldina",
-            role: "ADMIN",
-          });
+          logout();
         }
       }
       setIsLoading(false);
@@ -61,27 +71,8 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       }
       return false;
     } catch {
-      // Fallback local se estiver offline
-      if (email === "admin@meldinafc.com" && pass === "meldina2026!") {
-        const mockToken = "mock-jwt-admin-token";
-        localStorage.setItem("meldina_admin_token", mockToken);
-        setToken(mockToken);
-        setUser({
-          id: "admin-default",
-          email: "admin@meldinafc.com",
-          name: "Diretoria Meldina",
-          role: "ADMIN",
-        });
-        return true;
-      }
       return false;
     }
-  };
-
-  const logout = () => {
-    localStorage.removeItem("meldina_admin_token");
-    setToken(null);
-    setUser(null);
   };
 
   return (

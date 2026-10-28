@@ -19,8 +19,8 @@ export const AdminRegister: React.FC = () => {
     setSuccess("");
     setLoading(false);
 
-    if (password.length < 6) {
-      setError("A senha deve possuir pelo menos 6 caracteres.");
+    if (password.length < 8) {
+      setError("A senha deve possuir pelo menos 8 caracteres.");
       return;
     }
 
@@ -42,6 +42,7 @@ export const AdminRegister: React.FC = () => {
       }
     } catch (err: any) {
       const msg =
+        err.response?.data?.error ||
         err.response?.data?.message ||
         "Erro ao cadastrar administrador. Verifique se a Chave da Diretoria está correta.";
       setError(msg);
@@ -106,7 +107,7 @@ export const AdminRegister: React.FC = () => {
             </label>
             <input
               type="password"
-              placeholder="Mínimo 6 caracteres"
+              placeholder="Mínimo 8 caracteres"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
